@@ -85,7 +85,7 @@ The local database uses:
 ```text
 User:     postgres
 Password: your-password
-Database: marginalia_db
+Database: atelier_db
 ```
 
 These are local development credentials only.
@@ -101,7 +101,7 @@ The script can be run repeatedly. It does not delete existing books.
 Inspect the database directly:
 
 ```bash
-docker exec -it marginalia-postgres psql -U postgres -d marginalia_db
+docker exec -it atelier-postgres psql -U postgres -d atelier_db
 ```
 
 Useful PostgreSQL commands:
@@ -119,7 +119,7 @@ Stop the services with `Ctrl+C` when `docker compose up` is running, or use:
 docker compose down
 ```
 
-The database data is kept in the `marginalia_pgdata` Docker volume. To delete the data too:
+The database data is kept in the `atelier_pgdata` Docker volume. To delete the data too:
 
 ```bash
 docker compose down -v
