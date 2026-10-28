@@ -90,13 +90,8 @@ Database: atelier_db
 
 These are local development credentials only.
 
-Create the `books` table from the repository root:
-
-```bash
-./scripts/migrate.sh
-```
-
-The script can be run repeatedly. It does not delete existing books.
+The backend applies the SQL files in `packages/backend/migrations/` on every start.
+They can run repeatedly and do not delete existing data.
 
 Inspect the database directly:
 
@@ -108,8 +103,9 @@ Useful PostgreSQL commands:
 
 ```sql
 \dt
-\d books
-SELECT * FROM books;
+\d catalog_books
+SELECT title, author, language FROM catalog_books;
+SELECT * FROM favorites;
 \q
 ```
 
@@ -127,13 +123,12 @@ docker compose down -v
 
 ## Data model and generated files
 
-`Book`, `Label`, and `Status` are defined as JSON Schema in `api/models/*.yaml`.
+`Book` and `FavoriteBook` are defined as JSON Schema in `api/models/*.yaml`.
 
 After changing a schema, regenerate the frontend types:
 
 ```bash
-cd packages/frontend
-npm run generate:types
+pnpm --filter atelier generate:types
 ```
 
 Regenerate the backend model types with:
@@ -146,18 +141,16 @@ go generate ./...
 The API contract is defined in `api/openapi.yaml`. After changing it, regenerate the typed frontend API client:
 
 ```bash
-cd packages/frontend
-npm run generate:api-client
+pnpm --filter atelier generate:api-client
 ```
 
-Current book statuses are:
+## Book library
 
-```text
-will-read
-reading
-finished
-quit
-```
+Visitors pick favorites from a fixed library of 50 English and 50 German feminist books,
+listed in `packages/backend/catalog/books.txt` by Open Library work ID. On startup the
+backend imports author and cover for all of them from the Open Library API in a single
+request and stores them in PostgreSQL. Only books from this library can be added as
+favorites.
 
 Generated and local-only files such as `node_modules/` and `dist/` must not be committed.
 
@@ -167,8 +160,7 @@ Use separate terminals:
 
 ```text
 Terminal 1: docker compose up --build
-Terminal 2: ./scripts/migrate.sh
-Terminal 3: cd packages/frontend && npm run dev
+Terminal 2: pnpm dev
 ```
 
 The frontend runs at `http://localhost:5173` and the backend at `http://localhost:8080`.

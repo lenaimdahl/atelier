@@ -7,29 +7,52 @@ import "fmt"
 import "reflect"
 import "time"
 
-// A book tracked in Atelier.
+// A book from the Atelier library, imported from the Open Library API.
 type Book struct {
 	// Author of the book.
 	Author string `json:"author"`
 
-	// RFC 3339 timestamp in UTC of when the book was added. The frontend converts
-	// this to UTC+1 for display, per AGENTS.md section 13.
-	DateAdded time.Time `json:"dateAdded"`
+	// URL of a cover image from Open Library. Optional.
+	CoverUrl *string `json:"coverUrl,omitempty,omitzero"`
 
-	// Unique identifier of the book.
+	// Open Library work ID of the book, e.g. "OL675783W".
 	ID string `json:"id"`
 
-	// Labels attached to the book. Optional, defaults to an empty list.
-	Labels []Label `json:"labels,omitempty,omitzero"`
-
-	// Free-form notes about the book. Optional.
-	Notes *string `json:"notes,omitempty,omitzero"`
-
-	// Status corresponds to the JSON schema field "status".
-	Status Status `json:"status"`
+	// Language of the book.
+	Language BookLanguage `json:"language"`
 
 	// Title of the book.
 	Title string `json:"title"`
+}
+
+type BookLanguage string
+
+const BookLanguageDe BookLanguage = "de"
+const BookLanguageEn BookLanguage = "en"
+
+var enumValues_BookLanguage = []interface{}{
+	"en",
+	"de",
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (j *BookLanguage) UnmarshalJSON(value []byte) error {
+	var v string
+	if err := json.Unmarshal(value, &v); err != nil {
+		return err
+	}
+	var ok bool
+	for _, expected := range enumValues_BookLanguage {
+		if reflect.DeepEqual(v, expected) {
+			ok = true
+			break
+		}
+	}
+	if !ok {
+		return fmt.Errorf("invalid value (expected one of %#v): %#v", enumValues_BookLanguage, v)
+	}
+	*j = BookLanguage(v)
+	return nil
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
@@ -41,14 +64,11 @@ func (j *Book) UnmarshalJSON(value []byte) error {
 	if _, ok := raw["author"]; raw != nil && !ok {
 		return fmt.Errorf("field author in Book: required")
 	}
-	if _, ok := raw["dateAdded"]; raw != nil && !ok {
-		return fmt.Errorf("field dateAdded in Book: required")
-	}
 	if _, ok := raw["id"]; raw != nil && !ok {
 		return fmt.Errorf("field id in Book: required")
 	}
-	if _, ok := raw["status"]; raw != nil && !ok {
-		return fmt.Errorf("field status in Book: required")
+	if _, ok := raw["language"]; raw != nil && !ok {
+		return fmt.Errorf("field language in Book: required")
 	}
 	if _, ok := raw["title"]; raw != nil && !ok {
 		return fmt.Errorf("field title in Book: required")
@@ -62,72 +82,39 @@ func (j *Book) UnmarshalJSON(value []byte) error {
 	return nil
 }
 
-// A tag that can be attached to a book.
-type Label struct {
-	// Hex color code used to render the label, e.g. "#FF5733".
-	Color string `json:"color"`
+// A book on the shared shelf, with how often visitors picked it.
+type FavoriteBook struct {
+	// Book corresponds to the JSON schema field "book".
+	Book Book `json:"book"`
 
-	// Unique identifier of the label.
-	ID string `json:"id"`
+	// Number of visitors who picked this book as a favorite.
+	Count int `json:"count"`
 
-	// Display name of the label.
-	Name string `json:"name"`
+	// RFC 3339 timestamp in UTC of the latest pick. The frontend converts this to
+	// UTC+1 for display, per AGENTS.md section 13.
+	LastAddedAt time.Time `json:"lastAddedAt"`
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (j *Label) UnmarshalJSON(value []byte) error {
+func (j *FavoriteBook) UnmarshalJSON(value []byte) error {
 	var raw map[string]interface{}
 	if err := json.Unmarshal(value, &raw); err != nil {
 		return err
 	}
-	if _, ok := raw["color"]; raw != nil && !ok {
-		return fmt.Errorf("field color in Label: required")
+	if _, ok := raw["book"]; raw != nil && !ok {
+		return fmt.Errorf("field book in FavoriteBook: required")
 	}
-	if _, ok := raw["id"]; raw != nil && !ok {
-		return fmt.Errorf("field id in Label: required")
+	if _, ok := raw["count"]; raw != nil && !ok {
+		return fmt.Errorf("field count in FavoriteBook: required")
 	}
-	if _, ok := raw["name"]; raw != nil && !ok {
-		return fmt.Errorf("field name in Label: required")
+	if _, ok := raw["lastAddedAt"]; raw != nil && !ok {
+		return fmt.Errorf("field lastAddedAt in FavoriteBook: required")
 	}
-	type Plain Label
+	type Plain FavoriteBook
 	var plain Plain
 	if err := json.Unmarshal(value, &plain); err != nil {
 		return err
 	}
-	*j = Label(plain)
-	return nil
-}
-
-type Status string
-
-const StatusFinished Status = "finished"
-const StatusQuit Status = "quit"
-const StatusReading Status = "reading"
-const StatusWillRead Status = "will-read"
-
-var enumValues_Status = []interface{}{
-	"will-read",
-	"reading",
-	"finished",
-	"quit",
-}
-
-// UnmarshalJSON implements json.Unmarshaler.
-func (j *Status) UnmarshalJSON(value []byte) error {
-	var v string
-	if err := json.Unmarshal(value, &v); err != nil {
-		return err
-	}
-	var ok bool
-	for _, expected := range enumValues_Status {
-		if reflect.DeepEqual(v, expected) {
-			ok = true
-			break
-		}
-	}
-	if !ok {
-		return fmt.Errorf("invalid value (expected one of %#v): %#v", enumValues_Status, v)
-	}
-	*j = Status(v)
+	*j = FavoriteBook(plain)
 	return nil
 }

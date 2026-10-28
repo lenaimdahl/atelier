@@ -5,7 +5,6 @@ import (
 	"embed"
 	"encoding/json"
 	"errors"
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 	"net/http"
@@ -17,20 +16,6 @@ import (
 
 //go:embed migrations/*.sql
 var migrationFiles embed.FS
-
-type createBookRequest struct {
-	Title  string `json:"title"`
-	Author string `json:"author"`
-	Status string `json:"status"`
-}
-
-type bookResponse struct {
-	ID        string    `json:"id"`
-	Title     string    `json:"title"`
-	Author    string    `json:"author"`
-	Status    string    `json:"status"`
-	DateAdded time.Time `json:"dateAdded"`
-}
 
 type errorResponse struct {
 	Error string `json:"error"`
@@ -66,11 +51,27 @@ func main() {
 		log.Fatal(err)
 	}
 
-	http.HandleFunc("GET /health", healthHandler)
-	http.HandleFunc("OPTIONS /books", optionsBooksHandler(corsAllowedOrigin))
-	http.HandleFunc("POST /books", createBookHandler(database, corsAllowedOrigin))
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+		defer cancel()
+		if err := importCatalog(ctx, database, &http.Client{Timeout: 30 * time.Second}); err != nil {
+			log.Printf("catalog import failed: %v", err)
+		}
+	}()
 
-	server := &http.Server{Addr: ":" + port}
+	http.HandleFunc("GET /health", healthHandler)
+	http.HandleFunc("GET /catalog", searchCatalogHandler(database, corsAllowedOrigin))
+	http.HandleFunc("OPTIONS /favorites", optionsHandler(corsAllowedOrigin))
+	http.HandleFunc("GET /favorites", listFavoritesHandler(database, corsAllowedOrigin))
+	http.HandleFunc("POST /favorites", addFavoriteHandler(database, corsAllowedOrigin, newRateLimiter(10, time.Minute)))
+
+	server := &http.Server{
+		Addr:              ":" + port,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
 
 	go func() {
 		log.Printf("Atelier backend listening on http://localhost:%s", port)
@@ -113,60 +114,25 @@ func runMigrations(ctx context.Context, database *pgxpool.Pool) error {
 
 func setCORSHeaders(response http.ResponseWriter, allowedOrigin string) {
 	response.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
-	response.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	response.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	response.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 }
 
-func optionsBooksHandler(allowedOrigin string) http.HandlerFunc {
+func optionsHandler(allowedOrigin string) http.HandlerFunc {
 	return func(response http.ResponseWriter, request *http.Request) {
 		setCORSHeaders(response, allowedOrigin)
 		response.WriteHeader(http.StatusNoContent)
 	}
 }
 
-func writeJSONError(response http.ResponseWriter, status int, message string) {
+func writeJSON(response http.ResponseWriter, status int, value any) {
 	response.Header().Set("Content-Type", "application/json")
 	response.WriteHeader(status)
-	_ = json.NewEncoder(response).Encode(errorResponse{Error: message})
+	_ = json.NewEncoder(response).Encode(value)
 }
 
-func createBookHandler(database *pgxpool.Pool, allowedOrigin string) http.HandlerFunc {
-	return func(response http.ResponseWriter, request *http.Request) {
-		setCORSHeaders(response, allowedOrigin)
-
-		var input createBookRequest
-		if err := json.NewDecoder(request.Body).Decode(&input); err != nil || input.Title == "" || input.Author == "" {
-			writeJSONError(response, http.StatusBadRequest, "title and author are required")
-			return
-		}
-
-		status := input.Status
-		if status == "" {
-			status = "will-read"
-		}
-
-		book := bookResponse{
-			ID:     uuid.NewString(),
-			Title:  input.Title,
-			Author: input.Author,
-			Status: status,
-		}
-
-		err := database.QueryRow(request.Context(), `
-			INSERT INTO books (id, title, author, status)
-			VALUES ($1, $2, $3, $4)
-			RETURNING date_added
-		`, book.ID, book.Title, book.Author, book.Status).Scan(&book.DateAdded)
-		if err != nil {
-			log.Printf("could not save book: %v", err)
-			writeJSONError(response, http.StatusInternalServerError, "could not save book")
-			return
-		}
-
-		response.Header().Set("Content-Type", "application/json")
-		response.WriteHeader(http.StatusCreated)
-		_ = json.NewEncoder(response).Encode(book)
-	}
+func writeJSONError(response http.ResponseWriter, status int, message string) {
+	writeJSON(response, status, errorResponse{Error: message})
 }
 
 func healthHandler(response http.ResponseWriter, _ *http.Request) {

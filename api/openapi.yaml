@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Atelier API
   version: 0.1.0
-  description: HTTP API for the Atelier reading tracker.
+  description: HTTP API for the Atelier shelf of favorite feminist books.
 servers:
   - url: http://localhost:8080
     description: Local development server
@@ -24,3 +24,96 @@ paths:
                   status:
                     type: string
                     const: ok
+  /catalog:
+    get:
+      operationId: searchCatalog
+      summary: Search the library of 100 feminist books
+      description: >-
+        The library holds 50 English and 50 German books imported from the Open
+        Library API. Matches title and author. Without a query, the first 20
+        books ordered by title are returned.
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: language
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - en
+              - de
+      responses:
+        "200":
+          description: Matching books, at most 20
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./models/book.yaml"
+  /favorites:
+    get:
+      operationId: listFavorites
+      summary: List the shared shelf, most recently picked first
+      responses:
+        "200":
+          description: Books picked by visitors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./models/favorite-book.yaml"
+    post:
+      operationId: addFavorite
+      summary: Pick a book from the library as a favorite
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - bookId
+              properties:
+                bookId:
+                  type: string
+                  description: Open Library work ID of a book from the library.
+      responses:
+        "201":
+          description: The book on the shelf with its updated count
+          content:
+            application/json:
+              schema:
+                $ref: "./models/favorite-book.yaml"
+        "400":
+          description: Missing bookId or book is not in the library
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "415":
+          description: The request body is not sent as application/json
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "429":
+          description: Too many picks from the same client, at most 10 per minute
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string

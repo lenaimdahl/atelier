@@ -2,7 +2,9 @@ FROM golang:1.26.5-alpine AS build
 # hadolint global ignore=DL3059
 WORKDIR /src
 COPY go.mod ./ go.sum ./
-COPY main.go ./
+COPY *.go ./
+COPY catalog ./catalog
+COPY models ./models
 COPY migrations ./migrations
 RUN CGO_ENABLED=0 go build -o /atelier-backend .
 
