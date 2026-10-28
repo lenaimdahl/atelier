@@ -44,7 +44,7 @@ func main() {
 
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
-		databaseURL = "postgres://postgres:your-password@localhost:5432/marginalia_db"
+		databaseURL = "postgres://postgres:your-password@localhost:5432/atelier_db"
 	}
 
 	corsAllowedOrigin := os.Getenv("CORS_ALLOWED_ORIGIN")
