@@ -7,7 +7,7 @@ import "fmt"
 import "reflect"
 import "time"
 
-// A book tracked in Marginalia.
+// A book tracked in Atelier.
 type Book struct {
 	// Author of the book.
 	Author string `json:"author"`

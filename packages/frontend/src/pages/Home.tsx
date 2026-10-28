@@ -27,7 +27,7 @@ function Home() {
   return (
     <main className="home-page">
       <header className="topbar">
-        <span className="brand-mark">MARGINALIA</span>
+        <span className="brand-mark">ATELIER</span>
         <LanguageSwitcher />
       </header>
       <Banner isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} />

@@ -221,8 +221,8 @@ npm run dev
 The backend is packaged as a Docker image. It does not use MongoDB or another external database yet.
 
 ```bash
-docker build -t marginalia-backend:local packages/backend
-docker run --rm -p 8080:8080 marginalia-backend:local
+docker build -t atelier-backend:local packages/backend
+docker run --rm -p 8080:8080 atelier-backend:local
 ```
 
 The container listens on port `8080` and exposes `GET /health`.
@@ -295,4 +295,4 @@ npm run build
 
 ---
 
-_This AGENTS.md is the canonical source for coding and workflow standards for the Marginalia project._
+_This AGENTS.md is the canonical source for coding and workflow standards for the Atelier project._

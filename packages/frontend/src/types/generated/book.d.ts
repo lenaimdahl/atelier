@@ -11,7 +11,7 @@
 export type Status = "will-read" | "reading" | "finished" | "quit";
 
 /**
- * A book tracked in Marginalia.
+ * A book tracked in Atelier.
  */
 export interface Book {
   /**

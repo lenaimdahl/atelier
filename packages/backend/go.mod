@@ -1,4 +1,4 @@
-module github.com/lenaimdahl/marginalia/backend
+module github.com/lenaimdahl/atelier/backend
 
 go 1.26.5
 

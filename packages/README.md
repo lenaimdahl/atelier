@@ -1,6 +1,6 @@
-# Marginalia
+# Atelier
 
-Marginalia is a reading tracker for books, labels, personal notes, and a future reading journal.
+Atelier is a reading tracker for books, labels, personal notes, and a future reading journal.
 
 The project is split into a React frontend and a Go backend.
 

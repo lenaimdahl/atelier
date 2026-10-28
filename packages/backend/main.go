@@ -73,7 +73,7 @@ func main() {
 	server := &http.Server{Addr: ":" + port}
 
 	go func() {
-		log.Printf("Marginalia backend listening on http://localhost:%s", port)
+		log.Printf("Atelier backend listening on http://localhost:%s", port)
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatal(err)
 		}

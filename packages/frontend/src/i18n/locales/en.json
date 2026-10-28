@@ -26,7 +26,7 @@
     "home": {
       "title": "Welcome to your Book Page",
       "subTitle": "Find new books or have a look",
-      "eyebrow": "MARGINALIA / YOUR LIBRARY",
+      "eyebrow": "ATELIER / YOUR LIBRARY",
       "imageAlt": "Image of your library",
       "imagePlaceholder": "YOUR IMAGE HERE",
       "dialog": { "eyebrow": "NEW ENTRY", "title": "Which book is moving in?" },

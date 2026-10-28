@@ -21,8 +21,10 @@ import axios from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface FullRequestParams
-  extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
+export interface FullRequestParams extends Omit<
+  AxiosRequestConfig,
+  "data" | "params" | "url" | "responseType"
+> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -42,8 +44,10 @@ export type RequestParams = Omit<
   "body" | "method" | "query" | "path"
 >;
 
-export interface ApiConfig<SecurityDataType = unknown>
-  extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
+export interface ApiConfig<SecurityDataType = unknown> extends Omit<
+  AxiosRequestConfig,
+  "data" | "cancelToken"
+> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
@@ -186,11 +190,11 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title Marginalia API
+ * @title Atelier API
  * @version 0.1.0
  * @baseUrl http://localhost:8080
  *
- * HTTP API for the Marginalia reading tracker.
+ * HTTP API for the Atelier reading tracker.
  */
 export class Api<
   SecurityDataType extends unknown,
