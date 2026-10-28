@@ -12,6 +12,7 @@ RUN pnpm install --frozen-lockfile
 
 COPY packages/frontend packages/frontend
 COPY packages/bookshelf packages/bookshelf
+ARG VITE_API_URL
 RUN pnpm --filter atelier build
 
 # Serve

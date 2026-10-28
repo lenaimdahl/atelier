@@ -10,6 +10,11 @@ services:
       - "5432:5432"
     volumes:
       - marginalia_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d marginalia_db"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
 
   backend:
     build:
@@ -21,7 +26,20 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: packages/frontend/Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8080
+    container_name: atelier-frontend
+    ports:
+      - "5173:8080"
+    depends_on:
+      - backend
 
 volumes:
   marginalia_pgdata:
