@@ -14,8 +14,8 @@ export function BookList({ books }: BookListProps) {
         01
       </span>
       <div>
-        <h3>{t("pages.home.empty.title")}</h3>
-        <p>{t("pages.home.empty.description")}</p>
+        <h3>{t("pages.books.empty.title")}</h3>
+        <p>{t("pages.books.empty.description")}</p>
       </div>
     </div>
   ) : (
