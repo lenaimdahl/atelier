@@ -17,18 +17,15 @@ function Banner({ isFormOpen, setIsFormOpen }: BannerProps) {
   return (
     <section className="hero-banner">
       <div className="hero-copy">
-        <p className="eyebrow">{t("pages.home.eyebrow")}</p>
-        <h1>{t("pages.home.title")}</h1>
-        <p className="hero-subtitle">{t("pages.home.subTitle")}</p>
+        <p className="eyebrow">{t("pages.books.eyebrow")}</p>
+        <h1>{t("pages.books.title")}</h1>
+        <p className="hero-subtitle">{t("pages.books.subTitle")}</p>
         <Button type="button" onClick={handleButtonClick}>
           <span aria-hidden="true">+</span>
           {isFormOpen ? t("common.close") : t("common.addBook")}
         </Button>
       </div>
-      <div className="hero-image">
-        <img src="/hero-image.jpg" alt={t("pages.home.imageAlt")} />
-        <span>{t("pages.home.imagePlaceholder")}</span>
-      </div>
+      <div className="hero-image" aria-hidden="true" />
     </section>
   );
 }

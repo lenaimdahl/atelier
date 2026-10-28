@@ -24,12 +24,31 @@
   },
   "pages": {
     "home": {
+      "eyebrow": "ATELIER / PORTFOLIO",
+      "title": "Small projects, carefully built.",
+      "subTitle": "A workshop for ideas across frontend, backend and deployment.",
+      "cta": "Open the bookshelf",
+      "projects": {
+        "eyebrow": "PROJECTS",
+        "title": "From the workshop",
+        "books": {
+          "title": "Bookshelf",
+          "description": "Track books and their reading status. React frontend with a Go API and PostgreSQL."
+        }
+      },
+      "stack": {
+        "eyebrow": "TOOLS",
+        "title": "What this is built with"
+      }
+    },
+    "books": {
       "title": "Welcome to your Book Page",
       "subTitle": "Find new books or have a look",
       "eyebrow": "ATELIER / YOUR LIBRARY",
-      "imageAlt": "Image of your library",
-      "imagePlaceholder": "YOUR IMAGE HERE",
-      "dialog": { "eyebrow": "NEW ENTRY", "title": "Which book is moving in?" },
+      "dialog": {
+        "eyebrow": "NEW ENTRY",
+        "title": "Which book is moving in?"
+      },
       "library": {
         "eyebrow": "YOUR COLLECTION",
         "title": "Reading matter",
@@ -40,5 +59,10 @@
         "description": "Add your first book and keep track of what is on your mind."
       }
     }
+  },
+  "nav": {
+    "label": "Main menu",
+    "home": "Home",
+    "books": "Books"
   }
 }
