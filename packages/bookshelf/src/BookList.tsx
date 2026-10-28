@@ -1,5 +1,5 @@
-import type { Book } from "../types/generated/book";
 import { useTranslation } from "react-i18next";
+import type { Book } from "./types";
 
 type BookListProps = {
   books: Book[];

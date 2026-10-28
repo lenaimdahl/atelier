@@ -1,0 +1,10 @@
+{
+  "name": "atelier-workspace",
+  "private": true,
+  "packageManager": "pnpm@10.6.5",
+  "scripts": {
+    "dev": "pnpm --filter atelier dev",
+    "build": "pnpm --filter atelier build",
+    "lint": "pnpm --filter atelier lint"
+  }
+}

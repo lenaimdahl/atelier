@@ -2,21 +2,21 @@
 
 Atelier is a reading tracker for books, labels, personal notes, and a future reading journal.
 
-The project is split into a React frontend and a Go backend.
+The project is a pnpm workspace with a React frontend, a Go backend, and reusable feature packages. `@atelier/bookshelf` owns the book list and create-book UI; the frontend owns API access and the portfolio shell.
 
 ## Prerequisites
 
-- Node.js and npm
+- Node.js and pnpm
 - Go version specified in `backend/go.mod`
 - Docker Desktop
 
 ## Frontend
 
-Install dependencies and start the Vite development server:
+Install workspace dependencies and start the Vite development server from the repository root:
 
 ```bash
-cd packages/frontend
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 The frontend is normally available at `http://localhost:5173`.
@@ -24,9 +24,8 @@ The frontend is normally available at `http://localhost:5173`.
 Frontend checks:
 
 ```bash
-cd packages/frontend
-npm run build
-npm run lint
+pnpm build
+pnpm lint
 ```
 
 ## Backend API

@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "../../components/Button";
 
 interface CreateBookDialogProps {
   eyebrow: string;
@@ -29,15 +28,14 @@ export function CreateBookDialog({
             <p className="eyebrow">{eyebrow}</p>
             <h2 id="dialog-title">{title}</h2>
           </div>
-          <Button
+          <button
             className="icon-button"
-            variant="icon"
             type="button"
             aria-label={t("common.close")}
             onClick={onClose}
           >
             x
-          </Button>
+          </button>
         </div>
         {children}
       </dialog>
