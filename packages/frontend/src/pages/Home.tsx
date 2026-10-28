@@ -1,58 +1,74 @@
-import { useState } from "react";
-import {
-  BookList,
-  CreateBook,
-  CreateBookDialog,
-  type CreateBookInput,
-} from "@atelier/bookshelf";
-import type { Book } from "../types/generated/book";
-import { useCreateBook } from "../hooks/useCreateBook";
-import { LanguageSwitcher } from "../components/LanguageSwitcher";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Banner from "../components/Banner";
+
+const STACK = [
+  "React",
+  "TypeScript",
+  "Vite",
+  "pnpm workspaces",
+  "Go",
+  "PostgreSQL",
+  "Docker",
+];
 
 function Home() {
   const { t } = useTranslation();
-  const [books, setBooks] = useState<Book[]>([]);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const { createBook } = useCreateBook();
-
-  async function saveBook(book: CreateBookInput) {
-    const savedBook = await createBook(book);
-
-    setBooks((currentBooks) => [...currentBooks, savedBook]);
-    setIsFormOpen(false);
-  }
 
   return (
-    <main className="home-page">
-      <header className="topbar">
-        <span className="brand-mark">ATELIER</span>
-        <LanguageSwitcher />
-      </header>
-      <Banner isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} />
+    <main className="landing-page">
+      <section className="landing-hero">
+        <div className="landing-copy">
+          <p className="eyebrow">{t("pages.home.eyebrow")}</p>
+          <h1>{t("pages.home.title")}</h1>
+          <p className="landing-subtitle">{t("pages.home.subTitle")}</p>
+          <Link className="landing-cta" to="/books">
+            {t("pages.home.cta")}
+          </Link>
+        </div>
+        <div className="landing-art" aria-hidden="true">
+          <span />
+        </div>
+      </section>
 
-      {isFormOpen && (
-        <CreateBookDialog
-          eyebrow={t("pages.home.dialog.eyebrow")}
-          title={t("pages.home.dialog.title")}
-          onClose={() => setIsFormOpen(false)}
-        >
-          <CreateBook onSave={saveBook} />
-        </CreateBookDialog>
-      )}
-
-      <section className="library-section">
+      <section className="landing-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">{t("pages.home.library.eyebrow")}</p>
-            <h2>{t("pages.home.library.title")}</h2>
+            <p className="eyebrow">{t("pages.home.projects.eyebrow")}</p>
+            <h2>{t("pages.home.projects.title")}</h2>
           </div>
-          <span className="book-count">
-            {t("pages.home.library.count", { count: books.length })}
-          </span>
         </div>
-        <BookList books={books} />
+        <ul className="project-list">
+          <li>
+            <Link className="project-card" to="/books">
+              <span className="project-number">01</span>
+              <div>
+                <h3>{t("pages.home.projects.books.title")}</h3>
+                <p>{t("pages.home.projects.books.description")}</p>
+              </div>
+              <svg
+                className="project-arrow"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M4 12h15M13 6l6 6-6 6" />
+              </svg>
+            </Link>
+          </li>
+        </ul>
+      </section>
+
+      <section className="landing-section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">{t("pages.home.stack.eyebrow")}</p>
+            <h2>{t("pages.home.stack.title")}</h2>
+          </div>
+        </div>
+        <ul className="stack-list">
+          {STACK.map((tool) => (
+            <li key={tool}>{tool}</li>
+          ))}
+        </ul>
       </section>
     </main>
   );

@@ -24,11 +24,27 @@
   },
   "pages": {
     "home": {
+      "eyebrow": "ATELIER / PORTFOLIO",
+      "title": "Kleine Projekte, sauber gebaut.",
+      "subTitle": "Eine Werkstatt für Ideen rund um Frontend, Backend und Deployment.",
+      "cta": "Zum Bücherregal",
+      "projects": {
+        "eyebrow": "PROJEKTE",
+        "title": "Aus der Werkstatt",
+        "books": {
+          "title": "Bücherregal",
+          "description": "Bücher erfassen und den Lesestatus verfolgen. React-Frontend mit Go-API und PostgreSQL."
+        }
+      },
+      "stack": {
+        "eyebrow": "WERKZEUGE",
+        "title": "Womit hier gebaut wird"
+      }
+    },
+    "books": {
       "title": "Hi, hier ist deine Buchseite",
       "subTitle": "Finde neue Bücher oder schaue dich um.",
       "eyebrow": "ATELIER / DEINE BIBLIOTHEK",
-      "imageAlt": "Bild deiner Bibliothek",
-      "imagePlaceholder": "DEIN BILD HIER",
       "dialog": {
         "eyebrow": "NEUER EINTRAG",
         "title": "Welches Buch zieht bei dir ein?"
@@ -43,5 +59,10 @@
         "description": "Füge dein erstes Buch hinzu und halte fest, was dich gerade beschäftigt."
       }
     }
+  },
+  "nav": {
+    "label": "Hauptmenü",
+    "home": "Start",
+    "books": "Bücher"
   }
 }
