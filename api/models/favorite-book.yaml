@@ -12,9 +12,7 @@ properties:
   lastAddedAt:
     type: string
     format: date-time
-    description: >-
-      RFC 3339 timestamp in UTC of the latest pick. The frontend converts this
-      to UTC+1 for display, per AGENTS.md section 13.
+    description: RFC 3339 timestamp in UTC of the latest pick.
 required:
   - book
   - count

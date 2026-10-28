@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { api } from "src/api/client";
+import { api, withApiUrl } from "src/api/client";
 
 const SEARCH_DELAY_MS = 250;
 
@@ -18,7 +18,9 @@ export function useCatalogSearch(query: string) {
   return useQuery({
     queryKey: ["catalog", debouncedQuery],
     queryFn: async () =>
-      (await api.catalog.searchCatalog({ q: debouncedQuery })).data,
+      (await api.catalog.searchCatalog({ q: debouncedQuery })).data.map(
+        withApiUrl,
+      ),
     placeholderData: keepPreviousData,
   });
 }

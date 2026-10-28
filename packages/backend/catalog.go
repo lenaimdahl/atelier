@@ -9,8 +9,11 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"slices"
 	"strings"
+	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/lenaimdahl/atelier/backend/models"
 )
@@ -53,6 +56,29 @@ func parseCatalog(file string) ([]catalogEntry, error) {
 	return entries, nil
 }
 
+// importCatalogWithRetry keeps retrying when Open Library is unreachable, so the library
+// does not stay empty until the next restart.
+func importCatalogWithRetry(ctx context.Context, database *pgxpool.Pool, client *http.Client) {
+	delay := 10 * time.Second
+	for attempt := 1; ; attempt++ {
+		err := importCatalog(ctx, database, client)
+		if err == nil {
+			return
+		}
+		log.Printf("catalog import attempt %d failed: %v", attempt, err)
+		if attempt == 5 {
+			return
+		}
+
+		select {
+		case <-ctx.Done():
+			return
+		case <-time.After(delay):
+		}
+		delay *= 3
+	}
+}
+
 func importCatalog(ctx context.Context, database *pgxpool.Pool, client *http.Client) error {
 	entries, err := parseCatalog(catalogFile)
 	if err != nil {
@@ -73,53 +99,76 @@ func importCatalog(ctx context.Context, database *pgxpool.Pool, client *http.Cli
 		log.Printf("removed %d books that are no longer in the catalog", removed.RowsAffected())
 	}
 
-	var imported int
-	if err := database.QueryRow(ctx, `SELECT COUNT(*) FROM catalog_books WHERE id = ANY($1)`, ids).Scan(&imported); err != nil {
+	// Title and language are curated in books.txt, so corrections apply on every start.
+	for _, entry := range entries {
+		if _, err := database.Exec(ctx, `UPDATE catalog_books SET title = $2, language = $3 WHERE id = $1`, entry.id, entry.title, entry.language); err != nil {
+			return err
+		}
+	}
+
+	rows, err := database.Query(ctx, `SELECT id FROM catalog_books WHERE id = ANY($1) AND cover_image IS NOT NULL`, ids)
+	if err != nil {
 		return err
 	}
-	if imported == len(ids) {
-		log.Printf("catalog up to date with %d books", imported)
+	complete, err := pgx.CollectRows(rows, pgx.RowTo[string])
+	if err != nil {
+		return err
+	}
+
+	var missing []catalogEntry
+	for _, entry := range entries {
+		if !slices.Contains(complete, entry.id) {
+			missing = append(missing, entry)
+		}
+	}
+	if len(missing) == 0 {
+		log.Printf("catalog up to date with %d books", len(entries))
 		return nil
 	}
 
-	works, err := fetchOpenLibraryWorks(ctx, client, ids)
+	missingIDs := make([]string, len(missing))
+	for i, entry := range missing {
+		missingIDs[i] = entry.id
+	}
+	works, err := fetchOpenLibraryWorks(ctx, client, missingIDs)
 	if err != nil {
 		return fmt.Errorf("open library: %w", err)
 	}
-	// The import runs again on the next start, because the catalog is still incomplete.
-	if len(works) == 0 {
-		return fmt.Errorf("open library returned no books")
-	}
 
-	for _, entry := range entries {
+	var imported int
+	for _, entry := range missing {
 		work, ok := works[entry.id]
-		if !ok || len(work.AuthorName) == 0 {
-			log.Printf("skipping %s: not found in Open Library", entry.id)
+		if !ok || len(work.AuthorName) == 0 || work.CoverID <= 0 {
+			log.Printf("skipping %s: no author or cover in Open Library", entry.id)
 			continue
 		}
 
-		var coverURL *string
-		if work.CoverID > 0 {
-			url := fmt.Sprintf("https://covers.openlibrary.org/b/id/%d-M.jpg", work.CoverID)
-			coverURL = &url
+		cover, err := fetchCover(ctx, client, work.CoverID)
+		if err != nil {
+			log.Printf("skipping %s: %v", entry.id, err)
+			continue
 		}
 
-		_, err := database.Exec(ctx, `
-			INSERT INTO catalog_books (id, title, author, language, cover_url)
+		_, err = database.Exec(ctx, `
+			INSERT INTO catalog_books (id, title, author, language, cover_image)
 			VALUES ($1, $2, $3, $4, $5)
 			ON CONFLICT (id) DO UPDATE SET
 				title = EXCLUDED.title,
 				author = EXCLUDED.author,
 				language = EXCLUDED.language,
-				cover_url = EXCLUDED.cover_url,
+				cover_image = EXCLUDED.cover_image,
 				imported_at = NOW()
-		`, entry.id, entry.title, work.AuthorName[0], entry.language, coverURL)
+		`, entry.id, entry.title, work.AuthorName[0], entry.language, cover)
 		if err != nil {
 			return err
 		}
+		imported++
 	}
 
-	log.Printf("imported %d of %d catalog books from Open Library", len(works), len(entries))
+	log.Printf("imported %d of %d missing catalog books from Open Library", imported, len(missing))
+	if imported < len(missing) {
+		return fmt.Errorf("%d books could not be imported", len(missing)-imported)
+	}
 	return nil
 }
 
@@ -136,7 +185,27 @@ func fetchOpenLibraryWorks(ctx context.Context, client *http.Client, ids []strin
 		"fields": {"key,author_name,cover_i"},
 		"limit":  {fmt.Sprint(len(ids))},
 	}
-	request, err := http.NewRequestWithContext(ctx, http.MethodGet, openLibrarySearchURL+"?"+query.Encode(), nil)
+	body, err := download(ctx, client, openLibrarySearchURL+"?"+query.Encode(), 1<<20)
+	if err != nil {
+		return nil, err
+	}
+	return parseOpenLibraryWorks(body)
+}
+
+func fetchCover(ctx context.Context, client *http.Client, coverID int) ([]byte, error) {
+	cover, err := download(ctx, client, fmt.Sprintf("https://covers.openlibrary.org/b/id/%d-M.jpg", coverID), 1<<20)
+	if err != nil {
+		return nil, fmt.Errorf("cover: %w", err)
+	}
+	if http.DetectContentType(cover) != "image/jpeg" {
+		return nil, fmt.Errorf("cover %d is not a JPEG image", coverID)
+	}
+	return cover, nil
+}
+
+// download rejects responses larger than maxBytes instead of reading them into memory.
+func download(ctx context.Context, client *http.Client, url string, maxBytes int64) ([]byte, error) {
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -149,13 +218,16 @@ func fetchOpenLibraryWorks(ctx context.Context, client *http.Client, ids []strin
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("search returned %s", response.Status)
+		return nil, fmt.Errorf("%s returned %s", request.URL.Host, response.Status)
 	}
-	body, err := io.ReadAll(response.Body)
+	body, err := io.ReadAll(io.LimitReader(response.Body, maxBytes+1))
 	if err != nil {
 		return nil, err
 	}
-	return parseOpenLibraryWorks(body)
+	if int64(len(body)) > maxBytes {
+		return nil, fmt.Errorf("%s returned more than %d bytes", request.URL.Host, maxBytes)
+	}
+	return body, nil
 }
 
 func parseOpenLibraryWorks(body []byte) (map[string]openLibraryWork, error) {
@@ -173,18 +245,31 @@ func parseOpenLibraryWorks(body []byte) (map[string]openLibraryWork, error) {
 	return works, nil
 }
 
+const maxSearchLength = 100
+
 func searchCatalogHandler(database *pgxpool.Pool, allowedOrigin string) http.HandlerFunc {
 	return func(response http.ResponseWriter, request *http.Request) {
 		setCORSHeaders(response, allowedOrigin)
 
+		query := strings.TrimSpace(request.URL.Query().Get("q"))
+		if len(query) > maxSearchLength {
+			writeJSONError(response, http.StatusBadRequest, "q is too long")
+			return
+		}
+		language := request.URL.Query().Get("language")
+		if language != "" && language != string(models.BookLanguageEn) && language != string(models.BookLanguageDe) {
+			writeJSONError(response, http.StatusBadRequest, "language must be en or de")
+			return
+		}
+
 		rows, err := database.Query(request.Context(), `
-			SELECT id, title, author, language, cover_url
+			SELECT id, title, author, language
 			FROM catalog_books
 			WHERE ($1 = '' OR title ILIKE '%' || $1 || '%' OR author ILIKE '%' || $1 || '%')
 				AND ($2 = '' OR language = $2)
 			ORDER BY title
 			LIMIT 20
-		`, strings.TrimSpace(request.URL.Query().Get("q")), request.URL.Query().Get("language"))
+		`, query, language)
 		if err != nil {
 			log.Printf("could not search catalog: %v", err)
 			writeJSONError(response, http.StatusInternalServerError, "could not search catalog")
@@ -195,14 +280,47 @@ func searchCatalogHandler(database *pgxpool.Pool, allowedOrigin string) http.Han
 		books := []models.Book{}
 		for rows.Next() {
 			var book models.Book
-			if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Language, &book.CoverUrl); err != nil {
+			if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Language); err != nil {
 				log.Printf("could not read catalog book: %v", err)
 				writeJSONError(response, http.StatusInternalServerError, "could not search catalog")
 				return
 			}
+			book.CoverUrl = coverPath(book.ID)
 			books = append(books, book)
+		}
+		if err := rows.Err(); err != nil {
+			log.Printf("could not read catalog: %v", err)
+			writeJSONError(response, http.StatusInternalServerError, "could not search catalog")
+			return
 		}
 
 		writeJSON(response, http.StatusOK, books)
+	}
+}
+
+// coverPath is relative to the API base URL. Covers are served by the backend itself, so
+// visitors' browsers never contact Open Library.
+func coverPath(bookID string) *string {
+	path := "/covers/" + bookID
+	return &path
+}
+
+func coverHandler(database *pgxpool.Pool) http.HandlerFunc {
+	return func(response http.ResponseWriter, request *http.Request) {
+		var cover []byte
+		err := database.QueryRow(request.Context(), `SELECT cover_image FROM catalog_books WHERE id = $1 AND cover_image IS NOT NULL`, request.PathValue("id")).Scan(&cover)
+		if err == pgx.ErrNoRows {
+			http.NotFound(response, request)
+			return
+		}
+		if err != nil {
+			log.Printf("could not load cover: %v", err)
+			http.Error(response, "could not load cover", http.StatusInternalServerError)
+			return
+		}
+
+		response.Header().Set("Content-Type", "image/jpeg")
+		response.Header().Set("Cache-Control", "public, max-age=86400")
+		_, _ = response.Write(cover)
 	}
 }

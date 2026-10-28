@@ -31,7 +31,8 @@ paths:
       description: >-
         The library holds 50 English and 50 German books imported from the Open
         Library API. Matches title and author. Without a query, the first 20
-        books ordered by title are returned.
+        books ordered by title are returned. Returns 400 for a query longer than
+        100 characters or an unknown language.
       parameters:
         - name: q
           in: query
@@ -55,6 +56,26 @@ paths:
                 type: array
                 items:
                   $ref: "./models/book.yaml"
+  /covers/{id}:
+    get:
+      operationId: getCover
+      summary: Cover image of a book from the library
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: JPEG cover image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Book not in the library or without cover
   /favorites:
     get:
       operationId: listFavorites

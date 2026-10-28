@@ -1,7 +1,11 @@
 package main
 
 import (
+	"context"
+	"net/http"
+	"net/http/httptest"
 	"regexp"
+	"strings"
 	"testing"
 )
 
@@ -70,5 +74,30 @@ func TestParseOpenLibraryWorks(t *testing.T) {
 	}
 	if works["OL3494194W"].CoverID != 0 {
 		t.Errorf("expected no cover, got %d", works["OL3494194W"].CoverID)
+	}
+}
+
+func TestDownloadRejectsLargeResponses(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
+		_, _ = response.Write(make([]byte, 2048))
+	}))
+	defer server.Close()
+
+	if _, err := download(context.Background(), server.Client(), server.URL, 2048); err != nil {
+		t.Errorf("expected a response of exactly the limit to pass, got %v", err)
+	}
+	if _, err := download(context.Background(), server.Client(), server.URL, 1024); err == nil {
+		t.Error("expected a response over the limit to fail")
+	}
+}
+
+func TestSearchCatalogRejectsInvalidInput(t *testing.T) {
+	handler := searchCatalogHandler(nil, "http://localhost:5173")
+	for _, target := range []string{"/catalog?language=fr", "/catalog?q=" + strings.Repeat("a", maxSearchLength+1)} {
+		response := httptest.NewRecorder()
+		handler(response, httptest.NewRequest(http.MethodGet, target, nil))
+		if response.Code != http.StatusBadRequest {
+			t.Errorf("%s: expected 400, got %d", target, response.Code)
+		}
 	}
 }

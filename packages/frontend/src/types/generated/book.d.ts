@@ -26,7 +26,7 @@ export interface Book {
    */
   language: "en" | "de";
   /**
-   * URL of a cover image from Open Library. Optional.
+   * Path of the cover image, relative to the API base URL, e.g. "/covers/OL675783W". The backend serves the covers it imported from Open Library, so browsers never contact Open Library.
    */
   coverUrl?: string;
 }

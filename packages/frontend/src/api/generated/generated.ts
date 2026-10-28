@@ -27,7 +27,7 @@ export interface Book {
   author: string;
   /** Language of the book. */
   language: "en" | "de";
-  /** URL of a cover image from Open Library. Optional. */
+  /** Path of the cover image, relative to the API base URL, e.g. "/covers/OL675783W". The backend serves the covers it imported from Open Library, so browsers never contact Open Library. */
   coverUrl?: string;
 }
 
@@ -41,7 +41,7 @@ export interface FavoriteBook {
   /** Number of visitors who picked this book as a favorite. */
   count: number;
   /**
-   * RFC 3339 timestamp in UTC of the latest pick. The frontend converts this to UTC+1 for display, per AGENTS.md section 13.
+   * RFC 3339 timestamp in UTC of the latest pick.
    * @format date-time
    */
   lastAddedAt: string;
@@ -60,7 +60,7 @@ export interface Bookbook {
   author: string;
   /** Language of the book. */
   language: "en" | "de";
-  /** URL of a cover image from Open Library. Optional. */
+  /** Path of the cover image, relative to the API base URL, e.g. "/covers/OL675783W". The backend serves the covers it imported from Open Library, so browsers never contact Open Library. */
   coverUrl?: string;
 }
 
@@ -272,7 +272,7 @@ export class Api<
   };
   catalog = {
     /**
-     * @description The library holds 50 English and 50 German books imported from the Open Library API. Matches title and author. Without a query, the first 20 books ordered by title are returned.
+     * @description The library holds 50 English and 50 German books imported from the Open Library API. Matches title and author. Without a query, the first 20 books ordered by title are returned. Returns 400 for a query longer than 100 characters or an unknown language.
      *
      * @name SearchCatalog
      * @summary Search the library of 100 feminist books
@@ -290,6 +290,22 @@ export class Api<
         method: "GET",
         query: query,
         format: "json",
+        ...params,
+      }),
+  };
+  covers = {
+    /**
+     * No description
+     *
+     * @name GetCover
+     * @summary Cover image of a book from the library
+     * @request GET:/covers/{id}
+     */
+    getCover: (id: string, params: RequestParams = {}) =>
+      this.request<Blob, void>({
+        path: `/covers/${id}`,
+        method: "GET",
+        format: "blob",
         ...params,
       }),
   };

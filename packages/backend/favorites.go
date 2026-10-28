@@ -77,7 +77,7 @@ func clientIP(request *http.Request) string {
 // queryFavorites returns the shelf, most recently picked first.
 func queryFavorites(ctx context.Context, database *pgxpool.Pool) ([]models.FavoriteBook, error) {
 	rows, err := database.Query(ctx, `
-		SELECT id, title, author, language, cover_url, favorite_count, last_favorited_at
+		SELECT id, title, author, language, favorite_count, last_favorited_at
 		FROM catalog_books
 		WHERE favorite_count > 0
 		ORDER BY last_favorited_at DESC
@@ -91,9 +91,10 @@ func queryFavorites(ctx context.Context, database *pgxpool.Pool) ([]models.Favor
 	for rows.Next() {
 		var favorite models.FavoriteBook
 		book := &favorite.Book
-		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Language, &book.CoverUrl, &favorite.Count, &favorite.LastAddedAt); err != nil {
+		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Language, &favorite.Count, &favorite.LastAddedAt); err != nil {
 			return nil, err
 		}
+		book.CoverUrl = coverPath(book.ID)
 		favorites = append(favorites, favorite)
 	}
 	return favorites, rows.Err()
@@ -144,8 +145,8 @@ func addFavoriteHandler(database *pgxpool.Pool, allowedOrigin string, limiter *r
 			UPDATE catalog_books
 			SET favorite_count = favorite_count + 1, last_favorited_at = NOW()
 			WHERE id = $1
-			RETURNING id, title, author, language, cover_url, favorite_count, last_favorited_at
-		`, input.BookID).Scan(&book.ID, &book.Title, &book.Author, &book.Language, &book.CoverUrl, &favorite.Count, &favorite.LastAddedAt)
+			RETURNING id, title, author, language, favorite_count, last_favorited_at
+		`, input.BookID).Scan(&book.ID, &book.Title, &book.Author, &book.Language, &favorite.Count, &favorite.LastAddedAt)
 		if err == pgx.ErrNoRows {
 			writeJSONError(response, http.StatusBadRequest, "book is not in the library")
 			return
@@ -156,6 +157,7 @@ func addFavoriteHandler(database *pgxpool.Pool, allowedOrigin string, limiter *r
 			return
 		}
 
+		book.CoverUrl = coverPath(book.ID)
 		writeJSON(response, http.StatusCreated, favorite)
 	}
 }

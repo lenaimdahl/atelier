@@ -52,15 +52,14 @@ func main() {
 	}
 
 	go func() {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Minute)
 		defer cancel()
-		if err := importCatalog(ctx, database, &http.Client{Timeout: 30 * time.Second}); err != nil {
-			log.Printf("catalog import failed: %v", err)
-		}
+		importCatalogWithRetry(ctx, database, &http.Client{Timeout: 30 * time.Second})
 	}()
 
 	http.HandleFunc("GET /health", healthHandler)
 	http.HandleFunc("GET /catalog", searchCatalogHandler(database, corsAllowedOrigin))
+	http.HandleFunc("GET /covers/{id}", coverHandler(database))
 	http.HandleFunc("OPTIONS /favorites", optionsHandler(corsAllowedOrigin))
 	http.HandleFunc("GET /favorites", listFavoritesHandler(database, corsAllowedOrigin))
 	http.HandleFunc("POST /favorites", addFavoriteHandler(database, corsAllowedOrigin, newRateLimiter(10, time.Minute)))

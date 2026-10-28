@@ -8,7 +8,9 @@
     "bookPicker": {
       "search": "Titel oder Autorin",
       "empty": "Kein Treffer in meiner Bibliothek.",
-      "error": "Das hat nicht geklappt. Bitte versuch es noch einmal."
+      "error": "Das hat nicht geklappt. Bitte versuch es noch einmal.",
+      "loadError": "Die Bibliothek ist gerade nicht erreichbar. Bitte versuch es später noch einmal.",
+      "rateLimited": "Zu viele Versuche. Bitte warte kurz und versuch es dann noch einmal."
     }
   },
   "pages": {
@@ -42,7 +44,8 @@
         "eyebrow": "GEMEINSAMES REGAL",
         "title": "Lieblingsbücher",
         "count": "{{count}} Bücher",
-        "picked": "{{count}}x gewählt"
+        "picked": "{{count}}x gewählt",
+        "error": "Das Regal kann gerade nicht geladen werden. Bitte versuch es später noch einmal."
       },
       "empty": {
         "title": "Noch steht hier kein Buch.",

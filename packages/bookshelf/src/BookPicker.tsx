@@ -6,6 +6,7 @@ type BookPickerProps = {
   onQueryChange: (query: string) => void;
   books: Book[];
   isSearching: boolean;
+  hasError: boolean;
   isSaving: boolean;
   onPick: (book: Book) => void;
 };
@@ -15,6 +16,7 @@ export function BookPicker({
   onQueryChange,
   books,
   isSearching,
+  hasError,
   isSaving,
   onPick,
 }: BookPickerProps) {
@@ -30,7 +32,11 @@ export function BookPicker({
         autoFocus
         onChange={(event) => onQueryChange(event.target.value)}
       />
-      {books.length === 0 && !isSearching ? (
+      {hasError ? (
+        <p className="book-picker-empty" role="alert">
+          {t("components.bookPicker.loadError")}
+        </p>
+      ) : books.length === 0 && !isSearching ? (
         <p className="book-picker-empty">{t("components.bookPicker.empty")}</p>
       ) : (
         <ul className="book-picker-list">

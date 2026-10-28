@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BookList,
   BookPicker,
@@ -14,10 +14,25 @@ function Books() {
   const { t } = useTranslation();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const { data: favorites = [] } = useFavorites();
-  const { data: books = [], isFetching } = useCatalogSearch(query);
-  const { addFavorite, isAddingFavorite, hasAddFavoriteError } =
-    useAddFavorite();
+  const { data: favorites = [], isError: hasFavoritesError } = useFavorites();
+  const {
+    data: books = [],
+    isFetching,
+    isError: hasSearchError,
+  } = useCatalogSearch(query);
+  const {
+    addFavorite,
+    isAddingFavorite,
+    hasAddFavoriteError,
+    isRateLimited,
+    resetAddFavorite,
+  } = useAddFavorite();
+
+  useEffect(() => {
+    if (isFormOpen) {
+      resetAddFavorite();
+    }
+  }, [isFormOpen, resetAddFavorite]);
 
   function pickBook(book: Book) {
     addFavorite(book.id, {
@@ -43,12 +58,15 @@ function Books() {
             onQueryChange={setQuery}
             books={books}
             isSearching={isFetching}
+            hasError={hasSearchError}
             isSaving={isAddingFavorite}
             onPick={pickBook}
           />
           {hasAddFavoriteError && (
             <p className="book-picker-empty" role="alert">
-              {t("components.bookPicker.error")}
+              {isRateLimited
+                ? t("components.bookPicker.rateLimited")
+                : t("components.bookPicker.error")}
             </p>
           )}
         </BookDialog>
@@ -64,7 +82,13 @@ function Books() {
             {t("pages.books.library.count", { count: favorites.length })}
           </span>
         </div>
-        <BookList favorites={favorites} />
+        {hasFavoritesError ? (
+          <p className="book-picker-empty" role="alert">
+            {t("pages.books.library.error")}
+          </p>
+        ) : (
+          <BookList favorites={favorites} />
+        )}
       </section>
     </main>
   );

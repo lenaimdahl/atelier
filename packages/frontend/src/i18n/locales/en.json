@@ -8,7 +8,9 @@
     "bookPicker": {
       "search": "Title or author",
       "empty": "No match in my library.",
-      "error": "That did not work. Please try again."
+      "error": "That did not work. Please try again.",
+      "loadError": "The library is not reachable right now. Please try again later.",
+      "rateLimited": "Too many picks. Please wait a moment and try again."
     }
   },
   "pages": {
@@ -42,7 +44,8 @@
         "eyebrow": "SHARED SHELF",
         "title": "Favorite books",
         "count": "{{count}} books",
-        "picked": "picked {{count}}x"
+        "picked": "picked {{count}}x",
+        "error": "The shelf cannot be loaded right now. Please try again later."
       },
       "empty": {
         "title": "No book here yet.",

@@ -12,7 +12,9 @@ type Book struct {
 	// Author of the book.
 	Author string `json:"author"`
 
-	// URL of a cover image from Open Library. Optional.
+	// Path of the cover image, relative to the API base URL, e.g.
+	// "/covers/OL675783W". The backend serves the covers it imported from Open
+	// Library, so browsers never contact Open Library.
 	CoverUrl *string `json:"coverUrl,omitempty,omitzero"`
 
 	// Open Library work ID of the book, e.g. "OL675783W".
@@ -90,8 +92,7 @@ type FavoriteBook struct {
 	// Number of visitors who picked this book as a favorite.
 	Count int `json:"count"`
 
-	// RFC 3339 timestamp in UTC of the latest pick. The frontend converts this to
-	// UTC+1 for display, per AGENTS.md section 13.
+	// RFC 3339 timestamp in UTC of the latest pick.
 	LastAddedAt time.Time `json:"lastAddedAt"`
 }
 

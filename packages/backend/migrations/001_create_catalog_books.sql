@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS catalog_books (
     title TEXT NOT NULL,
     author TEXT NOT NULL,
     language TEXT NOT NULL CHECK (language IN ('en', 'de')),
-    cover_url TEXT,
+    cover_image BYTEA,
     favorite_count INTEGER NOT NULL DEFAULT 0,
     last_favorited_at TIMESTAMPTZ,
     imported_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
