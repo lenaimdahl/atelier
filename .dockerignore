@@ -7,3 +7,6 @@
 .env.*
 !.env.example
 *.log
+.vscode
+.idea
+.DS_Store
