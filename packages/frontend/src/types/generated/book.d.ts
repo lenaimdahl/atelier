@@ -6,16 +6,11 @@
  */
 
 /**
- * Reading status of a book. Allowed values: will-read, reading, read.
- */
-export type Status = "will-read" | "reading" | "finished" | "quit";
-
-/**
- * A book tracked in Atelier.
+ * A book from the Atelier library, imported from the Open Library API.
  */
 export interface Book {
   /**
-   * Unique identifier of the book.
+   * Open Library work ID of the book, e.g. "OL675783W".
    */
   id: string;
   /**
@@ -26,34 +21,12 @@ export interface Book {
    * Author of the book.
    */
   author: string;
-  status: Status;
   /**
-   * Labels attached to the book. Optional, defaults to an empty list.
+   * Language of the book.
    */
-  labels?: Label[];
+  language: "en" | "de";
   /**
-   * Free-form notes about the book. Optional.
+   * URL of a cover image from Open Library. Optional.
    */
-  notes?: string;
-  /**
-   * RFC 3339 timestamp in UTC of when the book was added. The frontend converts this to UTC+1 for display, per AGENTS.md section 13.
-   */
-  dateAdded: string;
-}
-/**
- * A tag that can be attached to a book.
- */
-export interface Label {
-  /**
-   * Unique identifier of the label.
-   */
-  id: string;
-  /**
-   * Display name of the label.
-   */
-  name: string;
-  /**
-   * Hex color code used to render the label, e.g. "#FF5733".
-   */
-  color: string;
+  coverUrl?: string;
 }

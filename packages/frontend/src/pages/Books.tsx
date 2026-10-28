@@ -1,26 +1,31 @@
 import { useState } from "react";
 import {
   BookList,
-  CreateBook,
-  CreateBookDialog,
-  type CreateBookInput,
+  BookPicker,
+  BookDialog,
+  type Book,
 } from "@atelier/bookshelf";
-import type { Book } from "../types/generated/book";
-import { useCreateBook } from "../hooks/useCreateBook";
 import { useTranslation } from "react-i18next";
 import Banner from "../components/Banner";
+import { useCatalogSearch } from "../hooks/useCatalogSearch";
+import { useAddFavorite, useFavorites } from "../hooks/useFavorites";
 
 function Books() {
   const { t } = useTranslation();
-  const [books, setBooks] = useState<Book[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const { createBook } = useCreateBook();
+  const [query, setQuery] = useState("");
+  const { data: favorites = [] } = useFavorites();
+  const { data: books = [], isFetching } = useCatalogSearch(query);
+  const { addFavorite, isAddingFavorite, hasAddFavoriteError } =
+    useAddFavorite();
 
-  async function saveBook(book: CreateBookInput) {
-    const savedBook = await createBook(book);
-
-    setBooks((currentBooks) => [...currentBooks, savedBook]);
-    setIsFormOpen(false);
+  function pickBook(book: Book) {
+    addFavorite(book.id, {
+      onSuccess: () => {
+        setIsFormOpen(false);
+        setQuery("");
+      },
+    });
   }
 
   return (
@@ -28,13 +33,25 @@ function Books() {
       <Banner isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} />
 
       {isFormOpen && (
-        <CreateBookDialog
+        <BookDialog
           eyebrow={t("pages.books.dialog.eyebrow")}
           title={t("pages.books.dialog.title")}
           onClose={() => setIsFormOpen(false)}
         >
-          <CreateBook onSave={saveBook} />
-        </CreateBookDialog>
+          <BookPicker
+            query={query}
+            onQueryChange={setQuery}
+            books={books}
+            isSearching={isFetching}
+            isSaving={isAddingFavorite}
+            onPick={pickBook}
+          />
+          {hasAddFavoriteError && (
+            <p className="book-picker-empty" role="alert">
+              {t("components.bookPicker.error")}
+            </p>
+          )}
+        </BookDialog>
       )}
 
       <section className="library-section">
@@ -44,10 +61,10 @@ function Books() {
             <h2>{t("pages.books.library.title")}</h2>
           </div>
           <span className="book-count">
-            {t("pages.books.library.count", { count: books.length })}
+            {t("pages.books.library.count", { count: favorites.length })}
           </span>
         </div>
-        <BookList books={books} />
+        <BookList favorites={favorites} />
       </section>
     </main>
   );

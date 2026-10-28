@@ -14,6 +14,8 @@
   background: rgba(0, 51, 254, 0.72);
 }
 .dialog-panel {
+  position: relative;
+  color: #0033fe;
   width: min(680px, 100%);
   max-height: calc(100svh - 40px);
   margin: 0;
@@ -34,14 +36,7 @@
   background: #0033fe;
   color: #fff;
 }
-.book-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-.book-form input,
-.book-form select,
-.book-form textarea {
+.book-picker input {
   width: 100%;
   border: 2px solid #d7dce8;
   border-radius: 0;
@@ -50,19 +45,53 @@
   background: #f8f9fc;
   outline: 0;
 }
-.book-form input:focus,
-.book-form select:focus,
-.book-form textarea:focus {
+.book-picker input:focus {
   border-color: #0033fe;
 }
-.book-form textarea {
-  grid-column: 1 / -1;
-  min-height: 100px;
-  resize: vertical;
+.book-picker-empty {
+  margin: 18px 0 0;
+  color: #58647c;
 }
-.book-form .submit-button {
-  grid-column: 1 / -1;
-  justify-self: start;
+.book-picker-list {
+  display: grid;
+  gap: 8px;
+  max-height: min(420px, 50svh);
+  margin: 14px 0 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+.book-picker-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 8px;
+  border: 2px solid transparent;
+  background: #f8f9fc;
+  color: #0033fe;
+  text-align: left;
+}
+.book-picker-item:hover,
+.book-picker-item:focus-visible {
+  border-color: #0033fe;
+  outline: 0;
+}
+.book-picker-item:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.book-picker-item .book-cover {
+  width: 40px;
+}
+.book-picker-item strong,
+.book-picker-item small {
+  display: block;
+}
+.book-picker-item small {
+  margin-top: 3px;
+  color: #58647c;
 }
 .empty-state {
   display: flex;
@@ -103,7 +132,13 @@
   background: #fff;
   border-left: 6px solid #0033fe;
 }
-.book-number {
+.book-cover {
+  width: 54px;
+  aspect-ratio: 2 / 3;
+  display: grid;
+  place-items: center;
+  object-fit: cover;
+  background: #e8ebf3;
   color: #fa3b30;
   font:
     700 0.85rem Arial,
@@ -132,27 +167,17 @@
     sans-serif;
   text-transform: uppercase;
 }
-.status-badge[data-status="finished"] {
-  background: #23845a;
-}
-.status-badge[data-status="quit"] {
-  background: #fa3b30;
-}
 
 @media (max-width: 720px) {
   .form-panel {
     padding: 24px 18px;
   }
-  .book-form {
-    grid-template-columns: 1fr;
-  }
-  .book-form textarea,
-  .book-form .submit-button {
-    grid-column: auto;
-  }
   .book-card {
-    grid-template-columns: 34px 1fr;
+    grid-template-columns: 44px 1fr;
     padding: 18px;
+  }
+  .book-card .book-cover {
+    width: 44px;
   }
   .status-badge {
     grid-column: 2;

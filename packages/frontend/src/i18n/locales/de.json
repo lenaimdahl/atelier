@@ -1,26 +1,15 @@
 {
   "common": {
-    "add": "Hinzufügen",
-    "edit": "Bearbeiten",
-    "delete": "Löschen",
     "close": "Schließen",
-    "notes": "Notizen",
-    "addBook": "Buch hinzufügen",
+    "addBook": "Lieblingsbuch teilen",
     "switchLanguage": "Sprache wechseln"
   },
   "components": {
-    "createBook": {
-      "title": "Buchtitel",
-      "author": "Autor",
-      "status": "Lesestatus",
-      "submit": "Buch speichern"
+    "bookPicker": {
+      "search": "Titel oder Autorin",
+      "empty": "Kein Treffer in meiner Bibliothek.",
+      "error": "Das hat nicht geklappt. Bitte versuch es noch einmal."
     }
-  },
-  "status": {
-    "will-read": "Möchte ich lesen",
-    "reading": "Lese ich gerade",
-    "finished": "Gelesen",
-    "quit": "Abgebrochen"
   },
   "pages": {
     "home": {
@@ -33,7 +22,7 @@
         "title": "Aus der Werkstatt",
         "books": {
           "title": "Bücherregal",
-          "description": "Bücher erfassen und den Lesestatus verfolgen. React-Frontend mit Go-API und PostgreSQL."
+          "description": "Ein gemeinsames Regal mit Lieblingsbüchern aus meiner Bibliothek von 100 feministischen Büchern. Daten von der Open Library API, Go-Backend, PostgreSQL."
         }
       },
       "stack": {
@@ -42,21 +31,22 @@
       }
     },
     "books": {
-      "title": "Hi, hier ist deine Buchseite",
-      "subTitle": "Finde neue Bücher oder schaue dich um.",
-      "eyebrow": "ATELIER / DEINE BIBLIOTHEK",
+      "title": "Bücher, die wir lieben",
+      "subTitle": "Such dir ein Buch aus meiner Bibliothek mit 100 feministischen Büchern aus und stell es ins gemeinsame Regal.",
+      "eyebrow": "ATELIER / FEMINISTISCHE BIBLIOTHEK",
       "dialog": {
-        "eyebrow": "NEUER EINTRAG",
-        "title": "Welches Buch zieht bei dir ein?"
+        "eyebrow": "100 FEMINISTISCHE BÜCHER",
+        "title": "Such ein Buch aus meiner Bibliothek"
       },
       "library": {
-        "eyebrow": "DEINE SAMMLUNG",
-        "title": "Lesestoff",
-        "count": "{{count}} Bücher"
+        "eyebrow": "GEMEINSAMES REGAL",
+        "title": "Lieblingsbücher",
+        "count": "{{count}} Bücher",
+        "picked": "{{count}}x gewählt"
       },
       "empty": {
-        "title": "Noch ist das Regal leer.",
-        "description": "Füge dein erstes Buch hinzu und halte fest, was dich gerade beschäftigt."
+        "title": "Noch steht hier kein Buch.",
+        "description": "Mach den Anfang und such dir ein Buch aus meiner Bibliothek aus."
       }
     }
   },

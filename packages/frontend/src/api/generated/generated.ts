@@ -10,6 +10,60 @@
  * ---------------------------------------------------------------
  */
 
+export interface Error {
+  error: string;
+}
+
+/**
+ * Book
+ * A book from the Atelier library, imported from the Open Library API.
+ */
+export interface Book {
+  /** Open Library work ID of the book, e.g. "OL675783W". */
+  id: string;
+  /** Title of the book. */
+  title: string;
+  /** Author of the book. */
+  author: string;
+  /** Language of the book. */
+  language: "en" | "de";
+  /** URL of a cover image from Open Library. Optional. */
+  coverUrl?: string;
+}
+
+/**
+ * FavoriteBook
+ * A book on the shared shelf, with how often visitors picked it.
+ */
+export interface FavoriteBook {
+  /** A book from the Atelier library, imported from the Open Library API. */
+  book: Bookbook;
+  /** Number of visitors who picked this book as a favorite. */
+  count: number;
+  /**
+   * RFC 3339 timestamp in UTC of the latest pick. The frontend converts this to UTC+1 for display, per AGENTS.md section 13.
+   * @format date-time
+   */
+  lastAddedAt: string;
+}
+
+/**
+ * Book
+ * A book from the Atelier library, imported from the Open Library API.
+ */
+export interface Bookbook {
+  /** Open Library work ID of the book, e.g. "OL675783W". */
+  id: string;
+  /** Title of the book. */
+  title: string;
+  /** Author of the book. */
+  author: string;
+  /** Language of the book. */
+  language: "en" | "de";
+  /** URL of a cover image from Open Library. Optional. */
+  coverUrl?: string;
+}
+
 import type {
   AxiosInstance,
   AxiosRequestConfig,
@@ -190,7 +244,7 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version 0.1.0
  * @baseUrl http://localhost:8080
  *
- * HTTP API for the Atelier reading tracker.
+ * HTTP API for the Atelier shelf of favorite feminist books.
  */
 export class Api<
   SecurityDataType extends unknown,
@@ -212,6 +266,68 @@ export class Api<
       >({
         path: `/health`,
         method: "GET",
+        format: "json",
+        ...params,
+      }),
+  };
+  catalog = {
+    /**
+     * @description The library holds 50 English and 50 German books imported from the Open Library API. Matches title and author. Without a query, the first 20 books ordered by title are returned.
+     *
+     * @name SearchCatalog
+     * @summary Search the library of 100 feminist books
+     * @request GET:/catalog
+     */
+    searchCatalog: (
+      query?: {
+        q?: string;
+        language?: "en" | "de";
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Book[], any>({
+        path: `/catalog`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+  };
+  favorites = {
+    /**
+     * No description
+     *
+     * @name ListFavorites
+     * @summary List the shared shelf, most recently picked first
+     * @request GET:/favorites
+     */
+    listFavorites: (params: RequestParams = {}) =>
+      this.request<FavoriteBook[], any>({
+        path: `/favorites`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name AddFavorite
+     * @summary Pick a book from the library as a favorite
+     * @request POST:/favorites
+     */
+    addFavorite: (
+      data: {
+        /** Open Library work ID of a book from the library. */
+        bookId: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<FavoriteBook, Error>({
+        path: `/favorites`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

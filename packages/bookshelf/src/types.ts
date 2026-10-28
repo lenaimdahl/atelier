@@ -1,9 +1,13 @@
-export type BookStatus = "will-read" | "reading" | "finished" | "quit";
-
 export interface Book {
-  id?: string;
+  id: string;
   title: string;
   author: string;
-  status: BookStatus;
-  notes?: string;
+  language: "en" | "de";
+  coverUrl?: string;
+}
+
+export interface FavoriteBook {
+  book: Book;
+  count: number;
+  lastAddedAt: string;
 }

@@ -1,14 +1,14 @@
 import { useTranslation } from "react-i18next";
-import type { Book } from "./types";
+import type { FavoriteBook } from "./types";
 
 type BookListProps = {
-  books: Book[];
+  favorites: FavoriteBook[];
 };
 
-export function BookList({ books }: BookListProps) {
+export function BookList({ favorites }: BookListProps) {
   const { t } = useTranslation();
 
-  return books.length === 0 ? (
+  return favorites.length === 0 ? (
     <div className="empty-state">
       <span className="empty-mark" aria-hidden="true">
         01
@@ -20,18 +20,21 @@ export function BookList({ books }: BookListProps) {
     </div>
   ) : (
     <ul className="book-list">
-      {books.map((book, index) => (
-        <li className="book-card" key={book.id || index}>
-          <span className="book-number">
-            {String(index + 1).padStart(2, "0")}
-          </span>
+      {favorites.map(({ book, count }, index) => (
+        <li className="book-card" key={book.id}>
+          {book.coverUrl ? (
+            <img className="book-cover" src={book.coverUrl} alt="" />
+          ) : (
+            <span className="book-cover" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+          )}
           <div className="book-details">
             <h3>{book.title}</h3>
             <p>{book.author}</p>
-            {book.notes && <small>{book.notes}</small>}
           </div>
-          <span className="status-badge" data-status={book.status}>
-            {t(`status.${book.status}`)}
+          <span className="status-badge">
+            {t("pages.books.library.picked", { count })}
           </span>
         </li>
       ))}

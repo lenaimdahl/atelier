@@ -1,19 +1,19 @@
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
-interface CreateBookDialogProps {
+interface BookDialogProps {
   eyebrow: string;
   title: string;
   children: ReactNode;
   onClose: () => void;
 }
 
-export function CreateBookDialog({
+export function BookDialog({
   eyebrow,
   title,
   children,
   onClose,
-}: CreateBookDialogProps) {
+}: BookDialogProps) {
   const { t } = useTranslation();
 
   return (

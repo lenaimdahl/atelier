@@ -1,26 +1,15 @@
 {
   "common": {
-    "add": "Add",
-    "edit": "Edit",
-    "delete": "Delete",
     "close": "Close",
-    "notes": "Notes",
-    "addBook": "Add book",
+    "addBook": "Share a favorite",
     "switchLanguage": "Switch language"
   },
   "components": {
-    "createBook": {
-      "title": "Book title",
-      "author": "Author",
-      "status": "Reading status",
-      "submit": "Save book"
+    "bookPicker": {
+      "search": "Title or author",
+      "empty": "No match in my library.",
+      "error": "That did not work. Please try again."
     }
-  },
-  "status": {
-    "will-read": "Want to read",
-    "reading": "Reading",
-    "finished": "Finished",
-    "quit": "Abandoned"
   },
   "pages": {
     "home": {
@@ -33,7 +22,7 @@
         "title": "From the workshop",
         "books": {
           "title": "Bookshelf",
-          "description": "Track books and their reading status. React frontend with a Go API and PostgreSQL."
+          "description": "A shared shelf of favorites from my library of 100 feminist books. Data from the Open Library API, Go backend, PostgreSQL."
         }
       },
       "stack": {
@@ -42,21 +31,22 @@
       }
     },
     "books": {
-      "title": "Welcome to your Book Page",
-      "subTitle": "Find new books or have a look",
-      "eyebrow": "ATELIER / YOUR LIBRARY",
+      "title": "Books we love",
+      "subTitle": "Pick a book from my library of 100 feminist books and put it on the shared shelf.",
+      "eyebrow": "ATELIER / FEMINIST LIBRARY",
       "dialog": {
-        "eyebrow": "NEW ENTRY",
-        "title": "Which book is moving in?"
+        "eyebrow": "100 FEMINIST BOOKS",
+        "title": "Pick a book from my library"
       },
       "library": {
-        "eyebrow": "YOUR COLLECTION",
-        "title": "Reading matter",
-        "count": "{{count}} books"
+        "eyebrow": "SHARED SHELF",
+        "title": "Favorite books",
+        "count": "{{count}} books",
+        "picked": "picked {{count}}x"
       },
       "empty": {
-        "title": "The shelf is still empty.",
-        "description": "Add your first book and keep track of what is on your mind."
+        "title": "No book here yet.",
+        "description": "Be the first and pick a book from my library."
       }
     }
   },
