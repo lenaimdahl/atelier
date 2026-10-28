@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { api } from "../api/client";
+import { api } from "src/api/client";
 
 const SEARCH_DELAY_MS = 250;
 

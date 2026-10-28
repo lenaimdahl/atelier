@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "../api/client";
+import { api } from "src/api/client";
 
 export function useFavorites() {
   return useQuery({

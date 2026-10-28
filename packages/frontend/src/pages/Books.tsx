@@ -6,9 +6,9 @@ import {
   type Book,
 } from "@atelier/bookshelf";
 import { useTranslation } from "react-i18next";
-import Banner from "../components/Banner";
-import { useCatalogSearch } from "../hooks/useCatalogSearch";
-import { useAddFavorite, useFavorites } from "../hooks/useFavorites";
+import Banner from "src/components/Banner";
+import { useCatalogSearch } from "src/hooks/useCatalogSearch";
+import { useAddFavorite, useFavorites } from "src/hooks/useFavorites";
 
 function Books() {
   const { t } = useTranslation();
