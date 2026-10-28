@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "./Button";
+import { Button } from "src/components/Button";
 
 interface BannerProps {
   isFormOpen: boolean;

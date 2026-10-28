@@ -8,6 +8,7 @@ const STACK = [
   "pnpm workspaces",
   "Go",
   "PostgreSQL",
+  "Open Library API",
   "Docker",
 ];
 

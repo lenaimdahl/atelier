@@ -1,8 +1,8 @@
 import * as i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import enTranslations from "./locales/en.json";
-import deTranslations from "./locales/de.json";
+import enTranslations from "src/i18n/locales/en.json";
+import deTranslations from "src/i18n/locales/de.json";
 
 const resources = {
   de: {

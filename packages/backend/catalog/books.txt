@@ -1,0 +1,106 @@
+# The library visitors pick their favorites from: 50 English and 50 German feminist books.
+# Format: <Open Library work ID> <language> <title> | <author>
+# The title is curated here because Open Library sometimes lists the original or a
+# publisher's title. Author and cover are imported from the Open Library API.
+
+OL20052801W en Living a Feminist Life | Sara Ahmed
+OL17607742W en The Power | Naomi Alderman
+OL80021W en I Know Why the Caged Bird Sings | Maya Angelou
+OL675783W en The Handmaid's Tale | Margaret Atwood
+OL20129837W en The Testaments | Margaret Atwood
+OL20844336W en Women and Power | Mary Beard
+OL767941W en The Second Sex | Simone de Beauvoir
+OL1835957W en Fun Home | Alison Bechdel
+OL2119951W en Gender Outlaw | Kate Bornstein
+OL29528W en Rubyfruit Jungle | Rita Mae Brown
+OL893584W en Gender Trouble | Judith Butler
+OL35616W en Kindred | Octavia E. Butler
+OL65430W en The Awakening | Kate Chopin
+OL1870600W en Black Feminist Thought | Patricia Hill Collins
+OL19729677W en Why I'm No Longer Talking to White People About Race | Reni Eddo-Lodge
+OL20470196W en Girl, Woman, Other | Bernardine Evaristo
+OL4294959W en Backlash | Susan Faludi
+OL5450225W en Caliban and the Witch | Silvia Federici
+OL1868110W en Stone Butch Blues | Leslie Feinberg
+OL6320689W en The Dialectic of Sex | Shulamith Firestone
+OL17573878W en Bad Feminist | Roxane Gay
+OL17765850W en Hunger: A Memoir of (My) Body | Roxane Gay
+OL59800W en The Left Hand of Darkness | Ursula K. Le Guin
+OL277280W en Feminism Is for Everybody | bell hooks
+OL31123W en Ain't I a Woman? | bell hooks
+OL27778127W en Their Eyes Were Watching God | Zora Neale Hurston
+OL1901507W en Fear of Flying | Erica Jong
+OL20652336W en Hood Feminism | Mikki Kendall
+OL31259W en The Golden Notebook | Doris Lessing
+OL2191789W en Sister Outsider | Audre Lorde
+OL2191787W en Zami: A New Spelling of My Name | Audre Lorde
+OL20470143W en In the Dream House | Carmen Maria Machado
+OL19728222W en Down Girl | Kate Manne
+OL18012166W en Circe | Madeline Miller
+OL16814401W en Redefining Realness | Janet Mock
+OL50548W en Beloved | Toni Morrison
+OL50565W en The Bluest Eye | Toni Morrison
+OL20157508W en Invisible Women | Caroline Criado Perez
+OL20878208W en Detransition, Baby | Torrey Peters
+OL1865528W en The Bell Jar | Sylvia Plath
+OL1858668W en Wide Sargasso Sea | Jean Rhys
+OL25723665W en Of Woman Born | Adrienne Rich
+OL3332541W en The Female Man | Joanna Russ
+OL8930045W en Whipping Girl | Julia Serano
+OL17359118W en Men Explain Things to Me | Rebecca Solnit
+OL1918804W en Oranges Are Not the Only Fruit | Jeanette Winterson
+OL39379W en A Room of One's Own | Virginia Woolf
+OL39564W en Three Guineas | Virginia Woolf
+OL39360W en Orlando | Virginia Woolf
+OL21156488W en Red Clocks | Leni Zumas
+
+OL20198000W de Ellbogen | Fatma Aydemir
+OL472971W de Malina | Ingeborg Bachmann
+OL24492571W de Drei Kameradinnen | Shida Bazyar
+OL6196255W de Die imaginierte Weiblichkeit | Silvia Bovenschen
+OL5280274W de Memoiren einer Sozialistin | Lily Braun
+OL35998067W de Alle_Zeit | Teresa Bücker
+OL43947874W de AktenEinsicht | Christina Clemm
+OL4734489W de Der Frauen Natur und Recht | Hedwig Dohm
+OL4734478W de Die Antifeministen | Hedwig Dohm
+OL20829264W de Ja heißt ja und ... | Carolin Emcke
+OL19624831W de Wie wir begehren | Carolin Emcke
+OL35048051W de Das Patriarchat der Dinge | Rebekka Endler
+OL31892017W de Die Wut, die bleibt | Mareike Fallwickl
+OL45482663W de Und alle so still | Mareike Fallwickl
+OL18451123W de Die Mittagsfrau | Julia Franck
+OL38207036W de Ich bin Linus | Linus Giese
+OL20773806W de Was weiße Menschen nicht über Rassismus hören wollen | Alice Hasters
+OL2756289W de Die Wand | Marlen Haushofer
+OL72165W de Die Liebhaberinnen | Elfriede Jelinek
+OL72168W de Die Klavierspielerin | Elfriede Jelinek
+OL7751074W de Der heilige Skarabäus | Else Jerusalem
+OL3827332W de Das kunstseidene Mädchen | Irmgard Keun
+OL3827333W de Gilgi, eine von uns | Irmgard Keun
+OL2442353W de weiter leben | Ruth Klüger
+OL23421455W de Stand Up: Feminismus für Anfänger*innen | Julia Korbik
+OL971539W de Selbsterfahrung und Fremdbestimmung | Ursula Krechel
+OL29182033W de Blutbuch | Kim de l'Horizon
+OL33319599W de Die Zukunft der Außenpolitik ist feministisch | Kristina Lunz
+OL108781W de Leben und Abenteuer der Trobadora Beatriz | Irmtraud Morgner
+OL2054930W de Die Geschichte der Frauenbewegung in Deutschland | Rosemarie Nave-Herz
+OL27739418W de Die Sommer | Ronya Othmann
+OL26124984W de Adas Raum | Sharon Dodua Otoo
+OL20818452W de Alte weiße Männer | Sophie Passmann
+OL4575703W de Das Deutsche als Männersprache | Luise F. Pusch
+OL583938W de Franziska Linkerhand | Brigitte Reimann
+OL2010570W de Aus guter Familie | Gabriele Reuter
+OL21334789W de Vergewaltigung | Mithu Sanyal
+OL24321078W de Identitti | Mithu Sanyal
+OL3494194W de Häutungen | Verena Stefan
+OL20787950W de Untenrum frei | Margarete Stokowski
+OL20787963W de Die letzten Tage des Patriarchats | Margarete Stokowski
+OL26426282W de Blaue Frau | Antje Rávik Strubel
+OL20697084W de Die deutsche Mutter | Barbara Vinken
+OL3793530W de Guten Morgen, du Schöne | Maxie Wander
+OL20838810W de 1000 Serpentinen Angst | Olivia Wenzel
+OL34964313W de Nichts, was uns passiert | Bettina Wilpert
+OL20095280W de Weil ein #Aufschrei nicht reicht | Anne Wizorek
+OL751417W de Kassandra | Christa Wolf
+OL751404W de Nachdenken über Christa T. | Christa Wolf
+OL24589224W de Ministerium der Träume | Hengameh Yaghoobifarah

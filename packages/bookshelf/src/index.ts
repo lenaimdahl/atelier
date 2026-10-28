@@ -1,7 +1,6 @@
 import "./styles.css";
 
 export { BookList } from "./BookList";
-export { CreateBook } from "./CreateBook";
-export type { CreateBookInput } from "./CreateBook";
-export { CreateBookDialog } from "./CreateBookDialog";
-export type { Book, BookStatus } from "./types";
+export { BookPicker } from "./BookPicker";
+export { BookDialog } from "./BookDialog";
+export type { Book, FavoriteBook } from "./types";

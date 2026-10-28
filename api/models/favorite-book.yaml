@@ -1,0 +1,20 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "favorite-book.yaml"
+title: FavoriteBook
+description: A book on the shared shelf, with how often visitors picked it.
+type: object
+properties:
+  book:
+    $ref: "book.yaml"
+  count:
+    type: integer
+    description: Number of visitors who picked this book as a favorite.
+  lastAddedAt:
+    type: string
+    format: date-time
+    description: RFC 3339 timestamp in UTC of the latest pick.
+required:
+  - book
+  - count
+  - lastAddedAt
+additionalProperties: false

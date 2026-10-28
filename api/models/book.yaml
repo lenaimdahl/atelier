@@ -1,38 +1,33 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "book.yaml"
 title: Book
-description: A book tracked in Atelier.
+description: A book from the Atelier library, imported from the Open Library API.
 type: object
 properties:
   id:
     type: string
-    description: Unique identifier of the book.
+    description: Open Library work ID of the book, e.g. "OL675783W".
   title:
     type: string
     description: Title of the book.
   author:
     type: string
     description: Author of the book.
-  status:
-    $ref: "status.yaml"
-  labels:
-    type: array
-    description: Labels attached to the book. Optional, defaults to an empty list.
-    items:
-      $ref: "label.yaml"
-  notes:
+  language:
     type: string
-    description: Free-form notes about the book. Optional.
-  dateAdded:
+    enum:
+      - en
+      - de
+    description: Language of the book.
+  coverUrl:
     type: string
-    format: date-time
     description: >-
-      RFC 3339 timestamp in UTC of when the book was added. The frontend
-      converts this to UTC+1 for display, per AGENTS.md section 13.
+      Path of the cover image, relative to the API base URL, e.g.
+      "/covers/OL675783W". The backend serves the covers it imported from Open
+      Library, so browsers never contact Open Library.
 required:
   - id
   - title
   - author
-  - status
-  - dateAdded
+  - language
 additionalProperties: false

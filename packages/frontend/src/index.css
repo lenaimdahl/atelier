@@ -99,7 +99,7 @@ button {
 .landing-hero {
   min-height: 470px;
   display: grid;
-  grid-template-columns: 1fr 0.9fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
   overflow: hidden;
   background: #1d1d1b;
   color: #f5f0e8;
@@ -232,7 +232,7 @@ button {
 .hero-banner {
   min-height: 470px;
   display: grid;
-  grid-template-columns: 1fr 0.9fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
   overflow: hidden;
   background: #0033fe;
   color: #fff;
@@ -297,8 +297,7 @@ h1 {
   border: 2px solid #0033fe;
   transform: rotate(12deg);
 }
-.primary-button,
-.submit-button {
+.primary-button {
   border: 0;
   background: #fa3b30;
   color: #fff;
@@ -310,8 +309,7 @@ h1 {
     transform 160ms ease,
     background 160ms ease;
 }
-.primary-button:hover,
-.submit-button:hover {
+.primary-button:hover {
   background: #fa3b30;
   transform: translate(-3px, -3px);
 }
