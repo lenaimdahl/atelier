@@ -50,37 +50,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
-          cache-dependency-path: packages/frontend/package-lock.json
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        working-directory: packages/frontend
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Verify generated model types are up to date
-        working-directory: packages/frontend
         run: |
-          npm run generate:types
-          git add -A -- src/types/generated
-          git diff --cached --exit-code -- src/types/generated
+          pnpm --filter atelier generate:types
+          git add -A -- packages/frontend/src/types/generated
+          git diff --cached --exit-code -- packages/frontend/src/types/generated
 
       - name: Verify generated API client is up to date
-        working-directory: packages/frontend
         run: |
-          npm run generate:api-client
-          git add -A -- src/api/generated
-          git diff --cached --exit-code -- src/api/generated
+          pnpm --filter atelier generate:api-client
+          git add -A -- packages/frontend/src/api/generated
+          git diff --cached --exit-code -- packages/frontend/src/api/generated
 
       - name: Lint
-        working-directory: packages/frontend
-        run: npm run lint
+        run: pnpm lint
 
       - name: Build
-        working-directory: packages/frontend
-        run: npm run build
+        run: pnpm build
 
   dependency-review:
     name: Dependency review
@@ -152,7 +149,7 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a
         with:
-          context: packages/frontend
+          context: .
           file: packages/frontend/Dockerfile
           push: false
 

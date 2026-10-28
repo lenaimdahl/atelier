@@ -21,10 +21,8 @@ import axios from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface FullRequestParams extends Omit<
-  AxiosRequestConfig,
-  "data" | "params" | "url" | "responseType"
-> {
+export interface FullRequestParams
+  extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -44,10 +42,8 @@ export type RequestParams = Omit<
   "body" | "method" | "query" | "path"
 >;
 
-export interface ApiConfig<SecurityDataType = unknown> extends Omit<
-  AxiosRequestConfig,
-  "data" | "cancelToken"
-> {
+export interface ApiConfig<SecurityDataType = unknown>
+  extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
