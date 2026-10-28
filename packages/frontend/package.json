@@ -12,25 +12,25 @@
     "generate:api-client": "swagger-typescript-api generate --path ../../api/openapi.yaml --output src/api/generated --name generated.ts --axios"
   },
   "dependencies": {
-    "@tanstack/react-query": "5.102.5",
-    "axios": "1.19.0",
-    "i18next": "26.3.6",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "react-i18next": "17.0.11",
-    "react-router-dom": "7.18.2"
+    "@atelier/bookshelf": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "axios": "catalog:",
+    "i18next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-i18next": "catalog:",
+    "react-router-dom": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "24.13.3",
-    "@types/react": "19.2.17",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.4",
-    "json-schema-to-typescript": "15.0.4",
-    "oxlint": "1.75.0",
-    "prettier": "3.9.6",
-    "swagger-typescript-api": "13.12.6",
-    "prettier": "3.9.6",
-    "typescript": "6.0.2",
-    "vite": "8.2.0"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "json-schema-to-typescript": "catalog:",
+    "oxlint": "catalog:",
+    "prettier": "catalog:",
+    "swagger-typescript-api": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
   }
 }

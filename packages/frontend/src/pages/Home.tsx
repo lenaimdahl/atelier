@@ -1,12 +1,12 @@
 import { useState } from "react";
+import {
+  BookList,
+  CreateBook,
+  CreateBookDialog,
+  type CreateBookInput,
+} from "@atelier/bookshelf";
 import type { Book } from "../types/generated/book";
 import { useCreateBook } from "../hooks/useCreateBook";
-import {
-  CreateBook,
-  type CreateBookInput,
-} from "../Features/createBooks/CreateBook";
-import { BookList } from "../Features/bookList/BookList";
-import { CreateBookDialog } from "../Features/createBooks/CreateBookDialog";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import Banner from "../components/Banner";

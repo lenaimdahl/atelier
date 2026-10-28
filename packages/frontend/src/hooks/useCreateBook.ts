@@ -1,5 +1,5 @@
 import type { Book } from "../types/generated/book";
-import type { CreateBookInput } from "../Features/createBooks/CreateBook";
+import type { CreateBookInput } from "@atelier/bookshelf";
 import { useMutation } from "@tanstack/react-query";
 
 export function useCreateBook() {

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { Book, Status } from "../../types/generated/book";
-import { Button } from "../../components/Button";
+import type { BookStatus } from "./types";
 
-export type CreateBookInput = Pick<
-  Book,
-  "title" | "author" | "status" | "notes"
->;
+export type CreateBookInput = {
+  title: string;
+  author: string;
+  status: BookStatus;
+  notes?: string;
+};
 
 type EditableBookField = keyof CreateBookInput;
 
@@ -67,7 +68,7 @@ export function CreateBook({ onSave }: CreateBookProps) {
         aria-label={t("components.createBook.status")}
         value={book.status}
         onChange={(event) =>
-          handleChangeBook("status", event.target.value as Status)
+          handleChangeBook("status", event.target.value as BookStatus)
         }
       >
         <option value="will-read">{t("status.will-read")}</option>
@@ -81,9 +82,9 @@ export function CreateBook({ onSave }: CreateBookProps) {
         value={book.notes}
         onChange={(event) => handleChangeBook("notes", event.target.value)}
       />
-      <Button variant="submit" type="submit">
+      <button className="submit-button" type="submit">
         {t("components.createBook.submit")}
-      </Button>
+      </button>
     </form>
   );
 }
