@@ -51,11 +51,52 @@
         "title": "Noch steht hier kein Buch.",
         "description": "Mach den Anfang und such dir ein Buch aus meiner Bibliothek aus."
       }
+    },
+    "citizenMaker": {
+      "eyebrow": "ATELIER / 40C3 BÜRGERLABOR",
+      "titleFirstLine": "BAUE EINEN",
+      "titleSecondLine": "CITIZEN_",
+      "description": "Irgendwo zwischen model citizen und reiyendem Ausreißer. Gesicht konfigurieren, Signal wählen und ab ins All.",
+      "newCitizen": "NEUER CITIZEN: 01",
+      "classification": "KLASSIFIZIERUNG: OFFEN",
+      "rocketLabel": "KEINE FESTE UMLAUFBAHN",
+      "workbench": "CITIZEN_KONSTRUKTOR",
+      "localSession": "SITZUNG 040 / NUR LOKAL",
+      "previewLabel": "LIVE-VORSCHAU / CITIZEN_01",
+      "mood": "STIMMUNG: NEUGIERIG",
+      "signal": "SIGNAL: INSTABIL",
+      "chooseFigure": "FIGUR AUSWÄHLEN",
+      "parameters": "01 / PARAMETER WÄHLEN",
+      "controlsTitle": "Mach es zu deinem",
+      "figureType": "FIGURENTYP",
+      "colorLabel": "CITIZEN-FARBE",
+      "paletteNote": "PALETTE / KEY 0 + A + B",
+      "colorOption": "Farbe {{color}} auswählen",
+      "hardToClassify": "ICH BIN SCHWER EINZUORDNEN",
+      "randomize": "ZUFALLSFIGUR",
+      "footerTitle": "CITIZEN-LOG / 01",
+      "privacyNote": "Keine Profildaten verlassen dieses Gerät.",
+      "figureTypes": {
+        "unicorn": "Einhorn",
+        "shapeShifter": "Formwandler",
+        "minimalist": "Minimalist"
+      },
+      "featureLabels": {
+        "head": "KOPF",
+        "eyes": "AUGEN",
+        "nose": "NASE",
+        "hair": "HAARE",
+        "mouth": "MUND"
+      },
+      "previousOption": "Vorherige {{option}}-Option",
+      "nextOption": "Nächste {{option}}-Option",
+      "optionNumber": "VARIANTE {{number}}"
     }
   },
   "nav": {
     "label": "Hauptmenü",
     "home": "Start",
-    "books": "Bücher"
+    "books": "Bücher",
+    "citizenMaker": "Citizen Lab"
   }
 }

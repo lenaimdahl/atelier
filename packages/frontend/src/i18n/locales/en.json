@@ -51,11 +51,52 @@
         "title": "No book here yet.",
         "description": "Be the first and pick a book from my library."
       }
+    },
+    "citizenMaker": {
+      "eyebrow": "ATELIER / 40C3 CITIZEN LAB",
+      "titleFirstLine": "BUILD A",
+      "titleSecondLine": "CITIZEN_",
+      "description": "Somewhere between model citizen and delightful outlier. Configure a face, pick a signal, and head for orbit.",
+      "newCitizen": "NEW CITIZEN: 01",
+      "classification": "CLASSIFICATION: PENDING",
+      "rocketLabel": "NO FIXED ORBIT",
+      "workbench": "CITIZEN_CONSTRUCTOR",
+      "localSession": "SESSION 040 / LOCAL ONLY",
+      "previewLabel": "LIVE PREVIEW / CITIZEN_01",
+      "mood": "MOOD: CURIOUS",
+      "signal": "SIGNAL: UNSTABLE",
+      "chooseFigure": "CHOOSE A FIGURE",
+      "parameters": "01 / SELECT PARAMETERS",
+      "controlsTitle": "Make it yours",
+      "figureType": "FIGURE TYPE",
+      "colorLabel": "CITIZEN COLOR",
+      "paletteNote": "PALETTE / KEY 0 + A + B",
+      "colorOption": "Choose color {{color}}",
+      "hardToClassify": "I AM HARD TO CLASSIFY",
+      "randomize": "RANDOMIZE",
+      "footerTitle": "CITIZEN LOG / 01",
+      "privacyNote": "No profile data leaves this device.",
+      "figureTypes": {
+        "unicorn": "unicorn",
+        "shapeShifter": "shape-shifter",
+        "minimalist": "minimalist"
+      },
+      "featureLabels": {
+        "head": "HEAD",
+        "eyes": "EYES",
+        "nose": "NOSE",
+        "hair": "HAIR",
+        "mouth": "MOUTH"
+      },
+      "previousOption": "Previous {{option}} option",
+      "nextOption": "Next {{option}} option",
+      "optionNumber": "OPTION {{number}}"
     }
   },
   "nav": {
     "label": "Main menu",
     "home": "Home",
-    "books": "Books"
+    "books": "Books",
+    "citizenMaker": "Citizen Lab"
   }
 }
