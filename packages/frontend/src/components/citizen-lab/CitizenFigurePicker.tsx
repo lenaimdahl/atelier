@@ -28,12 +28,12 @@ export function CitizenFigurePicker({
 }: CitizenFigurePickerProps) {
   const { t } = useTranslation();
   const palettes: { part: ColorPart; options: readonly string[] }[] = [
-    { part: "body", options: COLORS },
+    { part: "hair", options: COLORS },
     { part: "head", options: COLORS },
     ...(["eyes", "nose", "mouth"] as const)
       .filter((part) => recolorableParts[part])
       .map((part) => ({ part, options: COLORS })),
-    { part: "hair", options: COLORS },
+    { part: "body", options: COLORS },
     ...(decoOriginalColor ? [{ part: "deco" as const, options: [DECO_DEFAULT_COLOR, ...COLORS] }] : []),
   ];
 
