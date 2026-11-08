@@ -1,21 +1,39 @@
 import { describe, expect, test } from "vitest";
 import {
   DEFAULT_DESIGN,
-  designFromSearchParams,
-  designToSearchParams,
-  hairPositionFor,
+  decodeDesign,
+  encodeDesign,
+  FIELD_SIZES,
   TAG_MAX_LENGTH,
   type CitizenDesign,
 } from "src/components/citizen-lab/citizenShareState";
-import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, FEATURES, LOGO_COLORS, TAG_FONTS } from "src/pages/citizenLabOptions";
+import {
+  CITIZENS,
+  COLORS,
+  DECO_DEFAULT_COLOR,
+  FEATURES,
+  LOGO_COLORS,
+  LOGO_STYLES,
+  TAG_COLORS,
+  TAG_FONTS,
+} from "src/pages/citizenLabOptions";
 
-const roundTrip = (design: CitizenDesign) =>
-  designFromSearchParams(new URLSearchParams(designToSearchParams(design).toString()));
+const roundTrip = (design: CitizenDesign) => decodeDesign(encodeDesign(design));
 
-describe("citizen share links", () => {
-  test("the default design produces a clean URL", () => {
-    expect(designToSearchParams(DEFAULT_DESIGN).toString()).toBe("");
-    expect(designFromSearchParams(new URLSearchParams())).toEqual(DEFAULT_DESIGN);
+const FULL_DESIGN: CitizenDesign = {
+  citizenId: "adam",
+  features: { head: 3, eyes: 5, nose: 1, hair: 2, mouth: 7, deco: 4 },
+  colors: { body: COLORS[4], head: COLORS[1], hair: COLORS[7], deco: COLORS[2], eyes: COLORS[5], nose: COLORS[6], mouth: COLORS[3] },
+  tag: { text: "#chaos & co?", fontFamily: TAG_FONTS[1].value, color: TAG_COLORS[8] },
+  logo: { style: "text", color: LOGO_COLORS[9] },
+  hardToClassify: true,
+};
+
+describe("citizen share codes", () => {
+  test("the code is short and URL-safe", () => {
+    const withoutTag = encodeDesign({ ...FULL_DESIGN, tag: { ...FULL_DESIGN.tag, text: "" } });
+    expect(withoutTag).toMatch(/^1[0-9A-Za-z]{1,9}$/);
+    expect(encodeDesign({ ...FULL_DESIGN, tag: { ...FULL_DESIGN.tag, text: "#chaos" } })).toBe(`${withoutTag}.I2NoYW9z`);
   });
 
   test("every feature option survives a round trip", () => {
@@ -27,45 +45,17 @@ describe("citizen share links", () => {
     }
   });
 
-  test("citizens, colors, tag and toggle survive a round trip", () => {
+  test("citizens, colors, tag, logo and toggle survive a round trip", () => {
     for (const citizen of CITIZENS) {
-      const design: CitizenDesign = {
-        citizenId: citizen.id,
-        features: { head: 3, eyes: 5, nose: 1, hair: 2, mouth: 7, deco: 4 },
-        colors: { body: COLORS[4], head: COLORS[1], hair: COLORS[7], deco: COLORS[2], eyes: COLORS[5], nose: COLORS[6], mouth: COLORS[3] },
-        tag: { text: "#chaos & co?", fontFamily: TAG_FONTS[1].value, color: COLORS[3] },
-        logo: { style: "text", color: LOGO_COLORS[9] },
-        hardToClassify: true,
-      };
+      const design = { ...FULL_DESIGN, citizenId: citizen.id };
       expect(roundTrip(design), citizen.id).toEqual(design);
     }
-    const whiteDeco = { ...DEFAULT_DESIGN, features: { ...DEFAULT_DESIGN.features, deco: 4 }, colors: { ...DEFAULT_DESIGN.colors, deco: DECO_DEFAULT_COLOR } };
-    expect(roundTrip(whiteDeco)).toEqual(whiteDeco);
-  });
-
-  test("a citizen's own hair counts as default and is omitted", () => {
-    for (const citizen of CITIZENS) {
-      const design = { ...DEFAULT_DESIGN, citizenId: citizen.id, features: { ...DEFAULT_DESIGN.features, hair: hairPositionFor(citizen) } };
-      expect(designToSearchParams(design).has("hair"), citizen.id).toBe(false);
-      expect(roundTrip(design), citizen.id).toEqual(design);
-    }
-  });
-
-  test("invalid or tampered values fall back to defaults", () => {
-    const design = designFromSearchParams(
-      new URLSearchParams("citizen=nobody&head=99&eyes=3&deco=abc&bodyColor=123456&decoColor=zzz&font=7&tagColor=fffbff&odd=yes&tag=" + "x".repeat(TAG_MAX_LENGTH + 20)),
-    );
-    expect(design.citizenId).toBe(DEFAULT_DESIGN.citizenId);
-    expect(design.features).toEqual(DEFAULT_DESIGN.features);
-    expect(design.colors).toEqual(DEFAULT_DESIGN.colors);
-    expect(design.tag.fontFamily).toBe(TAG_FONTS[0].value);
-    expect(design.tag.color).toBe(DEFAULT_DESIGN.tag.color);
-    expect(design.tag.text).toHaveLength(TAG_MAX_LENGTH);
-    expect(design.hardToClassify).toBe(false);
+    const originalDeco = { ...DEFAULT_DESIGN, colors: { ...DEFAULT_DESIGN.colors, deco: DECO_DEFAULT_COLOR } };
+    expect(roundTrip(originalDeco)).toEqual(originalDeco);
   });
 
   test("every logo style and color survives a round trip", () => {
-    for (const style of ["none", "icon", "text"] as const) {
+    for (const style of LOGO_STYLES) {
       for (const color of LOGO_COLORS) {
         const design = { ...DEFAULT_DESIGN, logo: { style, color } };
         expect(roundTrip(design), `${style} ${color}`).toEqual(design);
@@ -73,19 +63,31 @@ describe("citizen share links", () => {
     }
   });
 
-  test("invalid logo values fall back to no logo", () => {
-    const design = designFromSearchParams(new URLSearchParams("logo=huge&logoColor=ff0000"));
-    expect(design.logo).toEqual(DEFAULT_DESIGN.logo);
+  test("tags with any characters survive a round trip", () => {
+    for (const text of ["#chaos & co?", "Grüße aus Hamburg", "🐝 hack the planet", "a.b/c?d#e"]) {
+      const design = { ...DEFAULT_DESIGN, tag: { ...DEFAULT_DESIGN.tag, text } };
+      expect(roundTrip(design), text).toEqual(design);
+    }
   });
 
-  test("colors are case-insensitive and stored without #", () => {
-    const params = designToSearchParams({ ...DEFAULT_DESIGN, colors: { ...DEFAULT_DESIGN.colors, body: "#ee5da2" } });
-    expect(params.get("bodyColor")).toBe("ee5da2");
-    expect(designFromSearchParams(new URLSearchParams("bodyColor=EE5DA2")).colors.body).toBe("#ee5da2");
+  test("invalid codes are rejected", () => {
+    for (const code of ["", "1", "2abc", "1ab!c", "1zzzzzzzzzzzz"]) {
+      expect(decodeDesign(code), code).toBeNull();
+    }
   });
 
-  test("white is a valid tag color", () => {
-    const design = { ...DEFAULT_DESIGN, tag: { ...DEFAULT_DESIGN.tag, text: "#white", color: "#ebedf0" } };
-    expect(roundTrip(design)).toEqual(design);
+  test("an overlong or broken tag is cut or dropped", () => {
+    const code = encodeDesign(DEFAULT_DESIGN);
+    const longTag = btoa("x".repeat(TAG_MAX_LENGTH + 20)).replace(/=+$/, "");
+    expect(decodeDesign(`${code}.${longTag}`)?.tag.text).toHaveLength(TAG_MAX_LENGTH);
+    expect(decodeDesign(`${code}.!!!`)?.tag.text).toBe("");
+  });
+
+  test("every option fits its field, so new parts need a new code version", () => {
+    const [, hair, head, eyes, nose, mouth, deco] = FIELD_SIZES;
+    const sizes = { hair, head, eyes, nose, mouth, deco };
+    for (const { key, options } of FEATURES) {
+      expect(Math.max(...options.map(({ id }) => id)), key).toBeLessThan(sizes[key]);
+    }
   });
 });

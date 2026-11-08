@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CitizenFigurePicker } from "src/components/citizen-lab/CitizenFigurePicker";
 import { CitizenPortrait, type CitizenColors, type CitizenLogo, type CitizenTag } from "src/components/citizen-lab/CitizenPortrait";
 import { OptionCycler } from "src/components/citizen-lab/OptionCycler";
@@ -9,8 +9,8 @@ import { decodeAsset, hasPartGreen, portraitUrls, predecodeAssets } from "src/co
 import { decoTint, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
 import {
   DEFAULT_DESIGN,
-  designFromSearchParams,
-  designToSearchParams,
+  decodeDesign,
+  encodeDesign,
   hairPositionFor,
   type CitizenDesign,
 } from "src/components/citizen-lab/citizenShareState";
@@ -75,10 +75,11 @@ function randomParts(currentCitizenId?: CitizenId): Pick<CitizenDesign, "citizen
 export function CitizenLabWorkbench() {
   const { t } = useTranslation();
   const portraitRef = useRef<SVGSVGElement>(null);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { code } = useParams();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery(MOBILE_QUERY);
-  const [design, setDesign] = useState<CitizenDesign>(() =>
-    searchParams.toString() === "" ? { ...DEFAULT_DESIGN, ...randomParts() } : designFromSearchParams(searchParams),
+  const [design, setDesign] = useState<CitizenDesign>(
+    () => (code ? decodeDesign(code) : null) ?? { ...DEFAULT_DESIGN, ...randomParts() },
   );
   const { features, colors, tag, logo } = design;
   const selectedCitizen = citizenOf(design);
@@ -88,11 +89,11 @@ export function CitizenLabWorkbench() {
   }, []);
 
   useEffect(() => {
-    const nextParams = designToSearchParams(design);
-    if (nextParams.toString() !== searchParams.toString()) {
-      setSearchParams(nextParams, { replace: true });
+    const nextCode = encodeDesign(design);
+    if (nextCode !== code) {
+      void navigate(`/citizen-lab/${nextCode}`, { replace: true });
     }
-  }, [design, searchParams, setSearchParams]);
+  }, [design, code, navigate]);
 
   const selection = selectionOf(design);
 

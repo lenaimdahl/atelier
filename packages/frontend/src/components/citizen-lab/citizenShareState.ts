@@ -47,78 +47,119 @@ export const DEFAULT_DESIGN: CitizenDesign = {
   hardToClassify: false,
 };
 
-const COLOR_PARAMS = {
-  body: "bodyColor",
-  head: "headColor",
-  hair: "hairColor",
-  deco: "decoColor",
-  eyes: "eyeColor",
-  nose: "noseColor",
-  mouth: "mouthColor",
-} as const;
 const DECO_COLORS: readonly string[] = [DECO_DEFAULT_COLOR, ...COLORS];
 
-// "#" would start the URL fragment, so colors are stored without it.
-const toParamColor = (color: string) => color.replace(/^#/, "");
-const fromParamColor = (value: string | null, allowed: readonly string[]) => {
-  const color = value ? `#${value.toLowerCase()}` : null;
-  return color && allowed.includes(color) ? color : null;
+// Every shared link depends on this order and these sizes. Never change them, add a new version instead.
+const CODE_VERSION = "1";
+const BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+type Field = {
+  size: number;
+  read: (design: CitizenDesign) => number;
+  write: (design: CitizenDesign, value: number) => void;
 };
 
-export function designToSearchParams(design: CitizenDesign): URLSearchParams {
-  const params = new URLSearchParams();
-  const setIfChanged = (key: string, value: string, defaultValue: string) => {
-    if (value !== defaultValue) params.set(key, value);
+function featureField(key: Feature, size: number): Field {
+  const options = FEATURES.find((feature) => feature.key === key)?.options ?? [];
+  return {
+    size,
+    read: (design) => options[design.features[key]].id,
+    write: (design, value) => {
+      const position = options.findIndex(({ id }) => id === value);
+      if (position >= 0) {
+        design.features[key] = position;
+      }
+    },
   };
-
-  const citizen = CITIZENS.find(({ id }) => id === design.citizenId) ?? CITIZENS[0];
-  setIfChanged("citizen", design.citizenId, DEFAULT_DESIGN.citizenId);
-  for (const { key, options } of FEATURES) {
-    const defaultPosition = key === "hair" ? hairPositionFor(citizen) : DEFAULT_DESIGN.features[key];
-    // Asset ids, not positions, so links survive reordering of the option lists.
-    setIfChanged(key, String(options[design.features[key]].id), String(options[defaultPosition].id));
-  }
-  for (const part of Object.keys(COLOR_PARAMS) as (keyof CitizenColors)[]) {
-    setIfChanged(COLOR_PARAMS[part], toParamColor(design.colors[part]), toParamColor(DEFAULT_DESIGN.colors[part]));
-  }
-  setIfChanged("tag", design.tag.text, DEFAULT_DESIGN.tag.text);
-  setIfChanged("font", String(TAG_FONTS.findIndex(({ value }) => value === design.tag.fontFamily)), "0");
-  setIfChanged("tagColor", toParamColor(design.tag.color), toParamColor(DEFAULT_DESIGN.tag.color));
-  setIfChanged("logo", design.logo.style, DEFAULT_DESIGN.logo.style);
-  setIfChanged("logoColor", toParamColor(design.logo.color), toParamColor(DEFAULT_DESIGN.logo.color));
-  if (design.hardToClassify) params.set("odd", "1");
-  return params;
 }
 
-export function designFromSearchParams(params: URLSearchParams): CitizenDesign {
-  const citizen = CITIZENS.find(({ id }) => id === params.get("citizen")) ?? CITIZENS[0];
-
-  const features = { ...DEFAULT_DESIGN.features, hair: hairPositionFor(citizen) };
-  for (const { key, options } of FEATURES) {
-    const value = params.get(key);
-    const position = value === null ? -1 : options.findIndex(({ id }) => String(id) === value);
-    if (position >= 0) features[key] = position;
-  }
-
-  const colors = { ...DEFAULT_DESIGN.colors };
-  for (const part of Object.keys(COLOR_PARAMS) as (keyof CitizenColors)[]) {
-    colors[part] = fromParamColor(params.get(COLOR_PARAMS[part]), part === "deco" ? DECO_COLORS : COLORS) ?? colors[part];
-  }
-
-  const font = TAG_FONTS[Number(params.get("font") ?? 0)] ?? TAG_FONTS[0];
+function listField<T>(list: readonly T[], read: (design: CitizenDesign) => T, write: (design: CitizenDesign, item: T) => void): Field {
   return {
-    citizenId: citizen.id,
-    features,
-    colors,
-    tag: {
-      text: (params.get("tag") ?? "").slice(0, TAG_MAX_LENGTH),
-      fontFamily: font.value,
-      color: fromParamColor(params.get("tagColor"), TAG_COLORS) ?? DEFAULT_DESIGN.tag.color,
-    },
-    logo: {
-      style: LOGO_STYLES.find((style) => style === params.get("logo")) ?? DEFAULT_DESIGN.logo.style,
-      color: fromParamColor(params.get("logoColor"), LOGO_COLORS) ?? DEFAULT_DESIGN.logo.color,
-    },
-    hardToClassify: params.get("odd") === "1",
+    size: list.length,
+    read: (design) => Math.max(0, list.indexOf(read(design))),
+    write: (design, value) => write(design, list[value]),
   };
+}
+
+function colorField(part: keyof CitizenColors, list: readonly string[]): Field {
+  return listField(list, (design) => design.colors[part], (design, color) => (design.colors[part] = color));
+}
+
+const FIELDS: Field[] = [
+  listField(CITIZENS.map(({ id }) => id), (design) => design.citizenId, (design, id) => (design.citizenId = id)),
+  featureField("hair", 3),
+  featureField("head", 8),
+  featureField("eyes", 12),
+  featureField("nose", 5),
+  featureField("mouth", 11),
+  featureField("deco", 11),
+  colorField("body", COLORS),
+  colorField("head", COLORS),
+  colorField("hair", COLORS),
+  colorField("eyes", COLORS),
+  colorField("nose", COLORS),
+  colorField("mouth", COLORS),
+  colorField("deco", DECO_COLORS),
+  listField(TAG_FONTS.map(({ value }) => value), (design) => design.tag.fontFamily, (design, font) => (design.tag.fontFamily = font)),
+  listField(TAG_COLORS, (design) => design.tag.color, (design, color) => (design.tag.color = color)),
+  listField(LOGO_STYLES, (design) => design.logo.style, (design, style) => (design.logo.style = style)),
+  listField(LOGO_COLORS, (design) => design.logo.color, (design, color) => (design.logo.color = color)),
+  listField([false, true], (design) => design.hardToClassify, (design, odd) => (design.hardToClassify = odd)),
+];
+
+export const FIELD_SIZES = FIELDS.map(({ size }) => size);
+const CODE_LIMIT = FIELDS.reduce((limit, { size }) => limit * BigInt(size), 1n);
+
+function toBase64Url(text: string) {
+  const binary = String.fromCharCode(...new TextEncoder().encode(text));
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function fromBase64Url(value: string) {
+  const binary = atob(value.replace(/-/g, "+").replace(/_/g, "/"));
+  return new TextDecoder().decode(Uint8Array.from(binary, (char) => char.charCodeAt(0)));
+}
+
+export function encodeDesign(design: CitizenDesign): string {
+  let number = 0n;
+  for (const field of FIELDS) {
+    number = number * BigInt(field.size) + BigInt(field.read(design));
+  }
+  let digits = "";
+  do {
+    digits = BASE62[Number(number % 62n)] + digits;
+    number /= 62n;
+  } while (number > 0n);
+  const tag = design.tag.text.trim();
+  return CODE_VERSION + digits + (tag ? `.${toBase64Url(tag)}` : "");
+}
+
+export function decodeDesign(code: string): CitizenDesign | null {
+  const [digits = "", tag = ""] = code.split(".");
+  if (!digits.startsWith(CODE_VERSION) || digits.length === CODE_VERSION.length) {
+    return null;
+  }
+  let number = 0n;
+  for (const char of digits.slice(CODE_VERSION.length)) {
+    const digit = BASE62.indexOf(char);
+    if (digit < 0) {
+      return null;
+    }
+    number = number * 62n + BigInt(digit);
+  }
+  if (number >= CODE_LIMIT) {
+    return null;
+  }
+
+  const design = structuredClone(DEFAULT_DESIGN);
+  for (const field of [...FIELDS].reverse()) {
+    field.write(design, Number(number % BigInt(field.size)));
+    number /= BigInt(field.size);
+  }
+  try {
+    design.tag.text = tag ? fromBase64Url(tag).slice(0, TAG_MAX_LENGTH) : "";
+  } catch {
+    design.tag.text = "";
+  }
+  return design;
 }
