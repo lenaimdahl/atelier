@@ -24,35 +24,15 @@ export const COLORS = [
   "#ffbc40",
 ];
 
-export const HEADS = Array.from({ length: 8 }, (_, assetIndex) => ({
-  id: assetIndex,
-  number: assetIndex + 1,
-}));
+const firstIds = (count: number) => Array.from({ length: count }, (_, id) => id);
+const toOptions = (ids: readonly number[]) => ids.map((id) => ({ id, number: id + 1 }));
 
-export const EYES = [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11].map((assetIndex) => ({
-  id: assetIndex,
-  number: assetIndex + 1,
-}));
-
-export const NOSES = Array.from({ length: 5 }, (_, assetIndex) => ({
-  id: assetIndex,
-  number: assetIndex + 1,
-}));
-
-export const HAIR = Array.from({ length: 3 }, (_, assetIndex) => ({
-  id: assetIndex,
-  number: assetIndex + 1,
-}));
-
-export const MOUTHS = Array.from({ length: 11 }, (_, assetIndex) => ({
-  id: assetIndex,
-  number: assetIndex + 1,
-}));
-
-export const DECO = Array.from({ length: 11 }, (_, assetIndex) => ({
-  id: assetIndex,
-  number: assetIndex + 1,
-}));
+export const HEADS = toOptions(firstIds(8));
+export const EYES = toOptions([0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11]);
+export const NOSES = toOptions(firstIds(5));
+export const HAIR = toOptions(firstIds(3));
+export const MOUTHS = toOptions(firstIds(11));
+export const DECO = toOptions(firstIds(11));
 
 export const FEATURES = [
   { key: "hair", options: HAIR },
