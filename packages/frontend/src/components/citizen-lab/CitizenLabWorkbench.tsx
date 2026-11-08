@@ -6,8 +6,9 @@ import { CitizenPortrait } from "src/components/citizen-lab/CitizenPortrait";
 import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/citizenTypes";
 import { OptionCycler } from "src/components/citizen-lab/OptionCycler";
 import { TagControls } from "src/components/citizen-lab/TagControls";
+import { citizenOf, cycleOption, randomParts, selectionOf } from "src/components/citizen-lab/citizenDesign";
 import { decodeAsset, hasPartGreen, portraitUrls, predecodeAssets } from "src/components/citizen-lab/citizenAssets";
-import { decoTint, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
+import { decoTint } from "src/components/citizen-lab/citizenLayout";
 import {
   DEFAULT_DESIGN,
   decodeDesign,
@@ -17,61 +18,11 @@ import {
 } from "src/components/citizen-lab/citizenShareState";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
 import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/downloadCitizen";
-import { CITIZENS, COLORS, FEATURES, featureOptionId, type CitizenId, type Feature } from "src/components/citizen-lab/citizenLabOptions";
+import { CITIZENS, FEATURES, type Feature } from "src/components/citizen-lab/citizenLabOptions";
 
 type Citizen = (typeof CITIZENS)[number];
 
-function cycleOption(index: number, length: number, direction: -1 | 1) {
-  return (index + direction + length) % length;
-}
-
-function randomIndex(length: number) {
-  return Math.floor(Math.random() * length);
-}
-
-function randomColor() {
-  return COLORS[randomIndex(COLORS.length)];
-}
-
 const MOBILE_QUERY = "(max-width: 720px)";
-
-function citizenOf(design: CitizenDesign) {
-  return CITIZENS.find((citizen) => citizen.id === design.citizenId) ?? CITIZENS[0];
-}
-
-function selectionOf(design: CitizenDesign): CitizenSelection {
-  return {
-    bodyId: citizenOf(design).bodyId,
-    headId: featureOptionId("head", design.features.head),
-    eyeId: featureOptionId("eyes", design.features.eyes),
-    noseId: featureOptionId("nose", design.features.nose),
-    hairId: featureOptionId("hair", design.features.hair),
-    mouthId: featureOptionId("mouth", design.features.mouth),
-    decoId: featureOptionId("deco", design.features.deco),
-  };
-}
-
-function randomParts(currentCitizenId?: CitizenId): Pick<CitizenDesign, "citizenId" | "colors" | "features"> {
-  const otherCitizens = CITIZENS.filter((citizen) => citizen.id !== currentCitizenId);
-  const head = randomColor();
-  const contrastColors = COLORS.filter((color) => color !== head);
-  const contrastColor = () => contrastColors[randomIndex(contrastColors.length)];
-  return {
-    citizenId: otherCitizens[randomIndex(otherCitizens.length)].id,
-    colors: {
-      body: randomColor(),
-      head,
-      hair: randomColor(),
-      deco: randomColor(),
-      eyes: contrastColor(),
-      nose: contrastColor(),
-      mouth: contrastColor(),
-    },
-    features: Object.fromEntries(
-      FEATURES.map(({ key, options }) => [key, randomIndex(options.length)]),
-    ) as CitizenDesign["features"],
-  };
-}
 
 export function CitizenLabWorkbench() {
   const { t } = useTranslation();
