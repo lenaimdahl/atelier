@@ -8,13 +8,15 @@ import { TagControls } from "src/components/citizen-lab/TagControls";
 import { hasPartGreen, predecodeAssets } from "src/components/citizen-lab/citizenAssets";
 import { decoTint, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
 import {
+  DEFAULT_DESIGN,
   designFromSearchParams,
   designToSearchParams,
   hairPositionFor,
   type CitizenDesign,
 } from "src/components/citizen-lab/citizenShareState";
+import { useMediaQuery } from "src/hooks/useMediaQuery";
 import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/downloadCitizen";
-import { CITIZENS, COLORS, FEATURES, featureOptionId, type Feature } from "src/pages/citizenLabOptions";
+import { CITIZENS, COLORS, FEATURES, featureOptionId, type CitizenId, type Feature } from "src/pages/citizenLabOptions";
 
 type Citizen = (typeof CITIZENS)[number];
 
@@ -30,11 +32,38 @@ function randomColor() {
   return COLORS[randomIndex(COLORS.length)];
 }
 
+const MOBILE_QUERY = "(max-width: 720px)";
+
+function randomParts(currentCitizenId?: CitizenId): Pick<CitizenDesign, "citizenId" | "colors" | "features"> {
+  const otherCitizens = CITIZENS.filter((citizen) => citizen.id !== currentCitizenId);
+  const head = randomColor();
+  const contrastColors = COLORS.filter((color) => color !== head);
+  const contrastColor = () => contrastColors[randomIndex(contrastColors.length)];
+  return {
+    citizenId: otherCitizens[randomIndex(otherCitizens.length)].id,
+    colors: {
+      body: randomColor(),
+      head,
+      hair: randomColor(),
+      deco: randomColor(),
+      eyes: contrastColor(),
+      nose: contrastColor(),
+      mouth: contrastColor(),
+    },
+    features: Object.fromEntries(
+      FEATURES.map(({ key, options }) => [key, randomIndex(options.length)]),
+    ) as CitizenDesign["features"],
+  };
+}
+
 export function CitizenLabWorkbench() {
   const { t } = useTranslation();
   const portraitRef = useRef<SVGSVGElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [design, setDesign] = useState<CitizenDesign>(() => designFromSearchParams(searchParams));
+  const isMobile = useMediaQuery(MOBILE_QUERY);
+  const [design, setDesign] = useState<CitizenDesign>(() =>
+    searchParams.toString() === "" ? { ...DEFAULT_DESIGN, ...randomParts() } : designFromSearchParams(searchParams),
+  );
   const { features, colors, tag, logo } = design;
   const selectedCitizen = CITIZENS.find((citizen) => citizen.id === design.citizenId) ?? CITIZENS[0];
 
@@ -81,27 +110,28 @@ export function CitizenLabWorkbench() {
   }
 
   function randomizeCitizen() {
-    const otherCitizens = CITIZENS.filter((citizen) => citizen.id !== design.citizenId);
-    const nextCitizen = otherCitizens[randomIndex(otherCitizens.length)] ?? selectedCitizen;
-    const head = randomColor();
-    const contrastColors = COLORS.filter((color) => color !== head);
-    const contrastColor = () => contrastColors[randomIndex(contrastColors.length)];
-    updateDesign(() => ({
-      citizenId: nextCitizen.id,
-      colors: {
-        body: randomColor(),
-        head,
-        hair: randomColor(),
-        deco: randomColor(),
-        eyes: contrastColor(),
-        nose: contrastColor(),
-        mouth: contrastColor(),
-      },
-      features: Object.fromEntries(
-        FEATURES.map(({ key, options }) => [key, randomIndex(options.length)]),
-      ) as CitizenDesign["features"],
-    }));
+    updateDesign(() => randomParts(design.citizenId));
   }
+
+  const quickActions = (
+    <>
+      <label className="classification-toggle">
+        <input
+          type="checkbox"
+          checked={design.hardToClassify}
+          onChange={(event) => {
+            const hardToClassify = event.currentTarget.checked;
+            updateDesign(() => ({ hardToClassify }));
+          }}
+        />
+        <span>{t("pages.citizenLab.hardToClassify")}</span>
+      </label>
+      <button className="randomize-button" type="button" onClick={randomizeCitizen}>
+        <span aria-hidden="true">*</span>
+        {t("pages.citizenLab.randomize")}
+      </button>
+    </>
+  );
 
   return (
     <section className="citizen-workbench" aria-labelledby="citizen-workbench-title">
@@ -141,6 +171,7 @@ export function CitizenLabWorkbench() {
               </button>
             </div>
           </div>
+          {isMobile && <div className="quick-actions">{quickActions}</div>}
           <div className={`citizen-stage${design.hardToClassify ? " hard-to-classify" : ""}`}>
             <div className="stage-orbit orbit-one" />
             <div className="stage-orbit orbit-two" />
@@ -201,21 +232,7 @@ export function CitizenLabWorkbench() {
               );
             })}
           </div>
-          <label className="classification-toggle">
-            <input
-              type="checkbox"
-              checked={design.hardToClassify}
-              onChange={(event) => {
-                const hardToClassify = event.currentTarget.checked;
-                updateDesign(() => ({ hardToClassify }));
-              }}
-            />
-            <span>{t("pages.citizenLab.hardToClassify")}</span>
-          </label>
-          <button className="randomize-button" type="button" onClick={randomizeCitizen}>
-            <span aria-hidden="true">*</span>
-            {t("pages.citizenLab.randomize")}
-          </button>
+          {!isMobile && quickActions}
           <TagControls
             tag={tag}
             onTagChange={(change: Partial<CitizenTag>) => updateDesign((current) => ({ tag: { ...current.tag, ...change } }))}

@@ -636,6 +636,14 @@
     padding: 26px 16px 36px;
   }
 
+  .quick-actions {
+    margin-bottom: 14px;
+  }
+
+  .quick-actions .classification-toggle {
+    margin: 0 0 8px;
+  }
+
   .citizen-intro {
     min-height: 0;
     grid-template-columns: 1fr;
