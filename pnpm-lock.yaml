@@ -40,8 +40,8 @@ catalogs:
       specifier: 1.75.0
       version: 1.75.0
     prettier:
-      specifier: 3.9.6
-      version: 3.9.6
+      specifier: 3.9.10
+      version: 3.9.10
     react:
       specifier: 19.3.1
       version: 19.3.1
@@ -145,7 +145,7 @@ importers:
         version: 1.75.0
       prettier:
         specifier: 'catalog:'
-        version: 3.9.6
+        version: 3.9.10
       swagger-typescript-api:
         specifier: 'catalog:'
         version: 13.12.6(react@19.3.1)
@@ -980,8 +980,8 @@ packages:
     resolution: {integrity: sha512-LJlKCCAUFKOuZxipUdYw1NzIITEsPcgyOG9LkvRJvuKj/bRzbuRY0ARXvL0pWGpsZvn8jku+LMep2eU0seHp8g==}
     engines: {node: ^10 || ^12 || >=14}
 
-  prettier@3.9.6:
-    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
+  prettier@3.9.10:
+    resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -1749,7 +1749,7 @@ snapshots:
       js-yaml: 5.5.0
       lodash: 4.18.1
       minimist: 1.2.8
-      prettier: 3.9.6
+      prettier: 3.9.10
       tinyglobby: 0.2.17
 
   json-schema-traverse@1.0.0: {}
@@ -1916,7 +1916,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.2
 
-  prettier@3.9.6: {}
+  prettier@3.9.10: {}
 
   proxy-from-env@2.1.0: {}
 
