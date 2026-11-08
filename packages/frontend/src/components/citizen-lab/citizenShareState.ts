@@ -12,7 +12,7 @@ import {
   TAG_FONTS,
   type CitizenId,
   type Feature,
-} from "src/pages/citizenLabOptions";
+} from "src/components/citizen-lab/citizenLabOptions";
 
 export const TAG_MAX_LENGTH = 30;
 

@@ -16,7 +16,7 @@ import {
 } from "src/components/citizen-lab/citizenShareState";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
 import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/downloadCitizen";
-import { CITIZENS, COLORS, FEATURES, featureOptionId, type CitizenId, type Feature } from "src/pages/citizenLabOptions";
+import { CITIZENS, COLORS, FEATURES, featureOptionId, type CitizenId, type Feature } from "src/components/citizen-lab/citizenLabOptions";
 
 type Citizen = (typeof CITIZENS)[number];
 

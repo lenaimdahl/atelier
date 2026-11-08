@@ -1,5 +1,5 @@
 import { CANVAS } from "src/components/citizen-lab/citizenLayout";
-import { TAG_FONTS } from "src/pages/citizenLabOptions";
+import { TAG_FONTS } from "src/components/citizen-lab/citizenLabOptions";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const PNG_SCALE = 4;

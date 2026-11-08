@@ -1,6 +1,6 @@
 import { useId, type Ref } from "react";
 import { portraitUrls } from "src/components/citizen-lab/citizenAssets";
-import { DECO_DEFAULT_COLOR, type LogoStyle } from "src/pages/citizenLabOptions";
+import { DECO_DEFAULT_COLOR, type LogoStyle } from "src/components/citizen-lab/citizenLabOptions";
 import {
   CANVAS,
   computePortraitLayout,

@@ -16,7 +16,7 @@ import {
   LOGO_STYLES,
   TAG_COLORS,
   TAG_FONTS,
-} from "src/pages/citizenLabOptions";
+} from "src/components/citizen-lab/citizenLabOptions";
 
 const roundTrip = (design: CitizenDesign) => decodeDesign(encodeDesign(design));
 
