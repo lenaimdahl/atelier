@@ -1,10 +1,15 @@
+import { useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "src/components/LanguageSwitcher";
 
 export function Layout() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.resolvedLanguage ?? "en";
+  }, [i18n.resolvedLanguage]);
   const shellClass = pathname === "/books" ? "" : pathname === "/" ? " terminal-shell home-shell" : " terminal-shell";
 
   return (

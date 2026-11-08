@@ -24,6 +24,18 @@ paths:
                   status:
                     type: string
                     const: ok
+        "503":
+          description: The database cannot be reached
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                properties:
+                  status:
+                    type: string
+                    const: unavailable
   /catalog:
     get:
       operationId: searchCatalog

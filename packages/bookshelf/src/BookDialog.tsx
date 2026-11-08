@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 interface BookDialogProps {
@@ -15,30 +15,40 @@ export function BookDialog({
   onClose,
 }: BookDialogProps) {
   const { t } = useTranslation();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    dialog?.showModal();
+    return () => dialog?.close();
+  }, []);
 
   return (
-    <div className="dialog-backdrop">
-      <dialog
-        className="form-panel dialog-panel"
-        open
-        aria-labelledby="dialog-title"
-      >
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">{eyebrow}</p>
-            <h2 id="dialog-title">{title}</h2>
-          </div>
-          <button
-            className="icon-button"
-            type="button"
-            aria-label={t("common.close")}
-            onClick={onClose}
-          >
-            x
-          </button>
+    <dialog
+      ref={dialogRef}
+      className="form-panel dialog-panel"
+      aria-labelledby={titleId}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+    >
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">{eyebrow}</p>
+          <h2 id={titleId}>{title}</h2>
         </div>
-        {children}
-      </dialog>
-    </div>
+        <button
+          className="icon-button"
+          type="button"
+          aria-label={t("common.close")}
+          onClick={onClose}
+        >
+          x
+        </button>
+      </div>
+      {children}
+    </dialog>
   );
 }

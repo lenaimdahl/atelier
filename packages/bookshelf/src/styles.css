@@ -4,21 +4,14 @@
   background: #fff;
   border-top: 6px solid #fa3b30;
 }
-.dialog-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: grid;
-  place-items: center;
-  padding: 20px;
+.dialog-panel::backdrop {
   background: rgba(0, 51, 254, 0.72);
 }
 .dialog-panel {
-  position: relative;
   color: #0033fe;
-  width: min(680px, 100%);
+  width: min(680px, calc(100% - 40px));
   max-height: calc(100svh - 40px);
-  margin: 0;
+  margin: auto;
   overflow: auto;
   box-shadow: 12px 12px 0 #fa3b30;
 }
