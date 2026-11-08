@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CitizenFigurePicker, FIST_DEFAULT_COLOR } from "src/components/citizen-maker/CitizenFigurePicker";
+import { CitizenFigurePicker, DECO_DEFAULT_COLOR } from "src/components/citizen-maker/CitizenFigurePicker";
 import { CitizenPortrait } from "src/components/citizen-maker/CitizenPortrait";
 import { OptionCycler } from "src/components/citizen-maker/OptionCycler";
 import { downloadCitizenSvg } from "src/components/citizen-maker/downloadCitizenSvg";
@@ -16,7 +16,8 @@ import {
   type CitizenId,
 } from "src/pages/citizenMakerOptions";
 
-const FIST_DECO_ID = 4;
+// Decos whose white parts can be tinted: chest badge and raised fist.
+const COLORABLE_DECO_IDS = [2, 4];
 
 function cycleOption(index: number, length: number, direction: -1 | 1) {
   return (index + direction + length) % length;
@@ -33,7 +34,7 @@ export function CitizenMakerWorkbench() {
   const [bodyColor, setBodyColor] = useState(COLORS[0]);
   const [headColor, setHeadColor] = useState(COLORS[0]);
   const [hairColor, setHairColor] = useState(COLORS[0]);
-  const [fistColor, setFistColor] = useState(FIST_DEFAULT_COLOR);
+  const [decoColor, setDecoColor] = useState(DECO_DEFAULT_COLOR);
   const [tagText, setTagText] = useState("");
   const [tagFontFamily, setTagFontFamily] = useState("Hack, monospace");
   const [tagColor, setTagColor] = useState("#ffbc40");
@@ -55,7 +56,7 @@ export function CitizenMakerWorkbench() {
     setBodyColor(COLORS[randomIndex(COLORS.length)]);
     setHeadColor(COLORS[randomIndex(COLORS.length)]);
     setHairColor(COLORS[randomIndex(COLORS.length)]);
-    setFistColor(COLORS[randomIndex(COLORS.length)]);
+    setDecoColor(COLORS[randomIndex(COLORS.length)]);
     setHeadIndex(randomIndex(HEADS.length));
     setEyeIndex(randomIndex(EYES.length));
     setNoseIndex(randomIndex(NOSES.length));
@@ -96,7 +97,7 @@ export function CitizenMakerWorkbench() {
               bodyColor={bodyColor}
               headColor={headColor}
               hairColor={hairColor}
-              fistColor={fistColor}
+              decoColor={decoColor}
               tagText={tagText}
               tagFontFamily={tagFontFamily}
               tagColor={tagColor}
@@ -112,8 +113,8 @@ export function CitizenMakerWorkbench() {
           </div>
           <CitizenFigurePicker
             selectedId={selectedId}
-            colors={{ body: bodyColor, head: headColor, hair: hairColor, fist: fistColor }}
-            showFistColor={DECO[decoIndex].id === FIST_DECO_ID}
+            colors={{ body: bodyColor, head: headColor, hair: hairColor, deco: decoColor }}
+            showDecoColor={COLORABLE_DECO_IDS.includes(DECO[decoIndex].id)}
             tagText={tagText}
             tagFontFamily={tagFontFamily}
             tagColor={tagColor}
@@ -126,8 +127,8 @@ export function CitizenMakerWorkbench() {
                 setBodyColor(color);
               } else if (part === "head") {
                 setHeadColor(color);
-              } else if (part === "fist") {
-                setFistColor(color);
+              } else if (part === "deco") {
+                setDecoColor(color);
               } else {
                 setHairColor(color);
               }

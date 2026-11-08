@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { CITIZENS, COLORS, type CitizenId } from "src/pages/citizenMakerOptions";
 
-type ColorPart = "body" | "head" | "hair" | "fist";
-// The fist deco is white by default, so its palette also offers white to switch back.
-export const FIST_DEFAULT_COLOR = "#fffbff";
+type ColorPart = "body" | "head" | "hair" | "deco";
+// Colorable decos are white by default, so their palette also offers white to switch back.
+export const DECO_DEFAULT_COLOR = "#fffbff";
 const TAG_FONTS = [
   { value: "Hack, monospace", label: "Hack" },
   { value: "\"Jersey 10\", monospace", label: "Jersey 10" },
@@ -13,7 +13,7 @@ const TAG_FONTS = [
 type CitizenFigurePickerProps = {
   selectedId: CitizenId;
   colors: Record<ColorPart, string>;
-  showFistColor: boolean;
+  showDecoColor: boolean;
   tagText: string;
   tagFontFamily: string;
   tagColor: string;
@@ -27,7 +27,7 @@ type CitizenFigurePickerProps = {
 export function CitizenFigurePicker({
   selectedId,
   colors,
-  showFistColor,
+  showDecoColor,
   tagText,
   tagFontFamily,
   tagColor,
@@ -42,7 +42,7 @@ export function CitizenFigurePicker({
     { part: "body", color: colors.body, options: COLORS },
     { part: "head", color: colors.head, options: COLORS },
     { part: "hair", color: colors.hair, options: COLORS },
-    ...(showFistColor ? [{ part: "fist" as const, color: colors.fist, options: [FIST_DEFAULT_COLOR, ...COLORS] }] : []),
+    ...(showDecoColor ? [{ part: "deco" as const, color: colors.deco, options: [DECO_DEFAULT_COLOR, ...COLORS] }] : []),
   ];
 
   return (

@@ -75,7 +75,7 @@
         "body": "BODY COLOR",
         "head": "HEAD COLOR",
         "hair": "HAIR COLOR",
-        "fist": "FIST COLOR"
+        "deco": "DECO COLOR"
       },
       "paletteNote": "PALETTE / KEY 0 + A + B",
       "colorOption": "Choose color {{color}}",

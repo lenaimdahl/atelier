@@ -151,6 +151,14 @@ function hairBoxFor(hairIndex: number, headIndex: number, headWidth: number, fac
   return { x: 160 - width / 2, y: bottom - height, width, height };
 }
 
+// Chest spot for the round badge deco (Deco2) on each body, in portrait coordinates.
+const BADGE_POSITIONS = [
+  { x: 108, y: 292 },
+  { x: 122, y: 300 },
+  { x: 118, y: 306 },
+  { x: 150, y: 296 },
+];
+
 function centeredBox(centerX: number, centerY: number, width: number, height: number) {
   return {
     x: centerX - width / 2,
@@ -171,7 +179,7 @@ type CitizenPortraitProps = {
   bodyColor: string;
   headColor: string;
   hairColor: string;
-  fistColor: string;
+  decoColor: string;
   tagText: string;
   tagFontFamily: string;
   tagColor: string;
@@ -190,7 +198,7 @@ export function CitizenPortrait({
   bodyColor,
   headColor,
   hairColor,
-  fistColor,
+  decoColor,
   tagText,
   tagFontFamily,
   tagColor,
@@ -221,8 +229,8 @@ export function CitizenPortrait({
   const decoLayouts = [
     fitBox(160, faceHeight * 0.82, headWidth * 1.25, faceHeight * 0.62, DECO_ASPECT_RATIOS[0]),
     fitBox(160, -headHeight * 0.12, headWidth * 0.88, headHeight * 0.5, DECO_ASPECT_RATIOS[1]),
-    // Bubblegum bubble blown in front of the mouth.
-    fitBox(160, faceHeight * 0.9, headWidth * 0.42, faceHeight * 0.42, DECO_ASPECT_RATIOS[2]),
+    // Round badge pinned on the chest; the spot depends on the body shape.
+    centeredBox(BADGE_POSITIONS[bodyIndex]?.x ?? 108, BADGE_POSITIONS[bodyIndex]?.y ?? 292, 30, 30),
     fitBox(160, faceHeight * 0.8, headWidth * 0.42, faceHeight * 0.14, DECO_ASPECT_RATIOS[3]),
     // Raised fist: rises from the right shoulder next to the head, sleeve tucked into the body.
     { x: 316 - 76, y: 292 - 76 / DECO_ASPECT_RATIOS[4], width: 76, height: 76 / DECO_ASPECT_RATIOS[4] },
@@ -244,8 +252,12 @@ export function CitizenPortrait({
   const studDeco = decoIndex === 10;
   const studBoxes = studDeco ? studDecoBoxes(headIndex, headWidth, faceHeight) : null;
   const fistDeco = decoIndex === 4;
-  // Mustache and bubble sit over the mouth but under the nose.
-  const mouthLayerDeco = decoIndex === 2 || decoIndex === 3;
+  const badgeDeco = decoIndex === 2;
+  // The mustache sits over the mouth but under the nose.
+  const mouthLayerDeco = decoIndex === 3;
+  // Body-level decos are drawn over the body and head, below the face.
+  const bodyLayerDeco = tieDeco || fistDeco || badgeDeco;
+  const tintedDeco = fistDeco || badgeDeco;
   const eyeLayerDeco = decoIndex === 6 || decoIndex === 9;
 
   return (
@@ -256,9 +268,9 @@ export function CitizenPortrait({
           <feFlood floodColor={headColor} result="tint" />
           <feComposite in="tint" in2="SourceAlpha" operator="in" />
         </filter>
-        {/* Multiply keeps the black outline and finger lines while tinting the white fist. */}
-        <filter id="fist-color" colorInterpolationFilters="sRGB">
-          <feFlood floodColor={fistColor} result="tint" />
+        {/* Multiply tints the white parts while keeping outlines and shading lines. */}
+        <filter id="deco-color" colorInterpolationFilters="sRGB">
+          <feFlood floodColor={decoColor} result="tint" />
           <feBlend in="SourceGraphic" in2="tint" mode="multiply" result="tinted" />
           <feComposite in="tinted" in2="SourceAlpha" operator="in" />
         </filter>
@@ -269,14 +281,14 @@ export function CitizenPortrait({
       </defs>
       <image href={`/40c3-creator/Bodies/Body${bodyIndex}.svg`} x="20" y="238" width="280" height="100" preserveAspectRatio="xMidYMid meet" style={{ filter: `hue-rotate(${COLOR_HUES[bodyColor]}deg)` }} />
       <image href={`/40c3-creator/Heads/Head${headIndex}.svg`} x={headX} y="0" width={headWidth} height={headHeight} preserveAspectRatio="none" style={{ filter: "url(#head-color)" }} />
-      {(tieDeco || fistDeco) && <image href={`/40c3-creator/Deco/Deco${decoIndex}.svg`} {...decoBox} preserveAspectRatio="xMidYMid meet" style={fistDeco ? { filter: "url(#fist-color)" } : undefined} />}
+      {bodyLayerDeco && <image href={`/40c3-creator/Deco/Deco${decoIndex}.svg`} {...decoBox} preserveAspectRatio="xMidYMid meet" style={tintedDeco ? { filter: "url(#deco-color)" } : undefined} />}
       <image href={`/40c3-creator/Hair/Hair${hairIndex}.svg`} {...hairBox} preserveAspectRatio="none" style={{ filter: "url(#hair-color)" }} />
       {earBoxes && [earBoxes.left, earBoxes.right].map(({ viewBox, ...box }) => (
         <svg key={viewBox} {...box} viewBox={viewBox} preserveAspectRatio="xMinYMin meet">
           <image href={`/40c3-creator/Deco/Deco${decoIndex}.svg`} x="0" y="0" width={EAR_DECO_VIEWBOX.width} height={EAR_DECO_VIEWBOX.height} />
         </svg>
       ))}
-      {!earDeco && !studDeco && !eyeLayerDeco && !tieDeco && !fistDeco && !mouthLayerDeco && <image href={`/40c3-creator/Deco/Deco${decoIndex}.svg`} {...decoBox} preserveAspectRatio="xMidYMid meet" />}
+      {!earDeco && !studDeco && !eyeLayerDeco && !bodyLayerDeco && !mouthLayerDeco && <image href={`/40c3-creator/Deco/Deco${decoIndex}.svg`} {...decoBox} preserveAspectRatio="xMidYMid meet" />}
       <image href={`/40c3-creator/Eyes/Eyes${eyeIndex}.svg`} {...eyeBox} preserveAspectRatio="xMidYMid meet" />
       {eyeLayerDeco && <image href={`/40c3-creator/Deco/Deco${decoIndex}.svg`} {...decoBox} preserveAspectRatio="xMidYMid meet" />}
       {studBoxes?.map(({ viewBox, ...box }) => (
