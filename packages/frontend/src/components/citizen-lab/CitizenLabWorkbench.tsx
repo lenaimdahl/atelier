@@ -13,7 +13,7 @@ import {
   hairPositionFor,
   type CitizenDesign,
 } from "src/components/citizen-lab/citizenShareState";
-import { downloadCitizenSvg } from "src/components/citizen-lab/downloadCitizenSvg";
+import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/downloadCitizen";
 import { CITIZENS, COLORS, FEATURES, featureOptionId, type Feature } from "src/pages/citizenLabOptions";
 
 type Citizen = (typeof CITIZENS)[number];
@@ -118,6 +118,15 @@ export function CitizenLabWorkbench() {
                 onClick={() => downloadCitizenSvg(portraitRef.current, `${selectedCitizen.id}-citizen.svg`)}
               >
                 {t("pages.citizenLab.downloadSvg")}
+              </button>
+              <button
+                className="download-svg-button"
+                type="button"
+                onClick={() =>
+                  void downloadCitizenPng(portraitRef.current, `${selectedCitizen.id}-citizen.png`, tag.fontFamily)
+                }
+              >
+                {t("pages.citizenLab.downloadPng")}
               </button>
             </div>
           </div>

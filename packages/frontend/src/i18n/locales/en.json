@@ -75,6 +75,7 @@
       "localSession": "SESSION 042 / LOCAL ONLY",
       "previewLabel": "LIVE PREVIEW / CITIZEN_01",
       "downloadSvg": "DOWNLOAD SVG",
+      "downloadPng": "DOWNLOAD PNG",
       "addLogo": "ADD LOGO",
       "removeLogo": "REMOVE LOGO",
       "logoLabel": "40C3 LOGO",

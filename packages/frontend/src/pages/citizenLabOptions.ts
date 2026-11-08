@@ -8,8 +8,8 @@ export const CITIZENS = [
 export type CitizenId = (typeof CITIZENS)[number]["id"];
 
 export const TAG_FONTS = [
-  { value: "Hack, monospace", label: "Hack" },
-  { value: "\"Jersey 10\", monospace", label: "Jersey 10" },
+  { value: "Hack, monospace", label: "Hack", file: "/fonts/Hack-Bold.ttf", weight: 700 },
+  { value: "\"Jersey 10\", monospace", label: "Jersey 10", file: "/fonts/jersey-10-latin-400-normal.woff2", weight: 400 },
   { value: "Georgia, serif", label: "Georgia" },
 ] as const;
 
