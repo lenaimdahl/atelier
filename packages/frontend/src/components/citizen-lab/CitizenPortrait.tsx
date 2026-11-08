@@ -30,7 +30,10 @@ type CitizenPortraitProps = {
   colors: CitizenColors;
   tag: CitizenTag;
   logo: CitizenLogo;
+  tilted: boolean;
 };
+
+const TILT = `translate(${CANVAS.centerX} ${CANVAS.height / 2}) rotate(-4) scale(1.05) translate(${-CANVAS.centerX} ${-CANVAS.height / 2})`;
 
 function TintFilter({ id, color, mode }: { id: string; color: string; mode: "fill" | "multiply" }) {
   if (mode === "fill") {
@@ -84,7 +87,7 @@ function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[
   );
 }
 
-export function CitizenPortrait({ portraitRef, citizenName, selection, colors, tag, logo }: CitizenPortraitProps) {
+export function CitizenPortrait({ portraitRef, citizenName, selection, colors, tag, logo, tilted }: CitizenPortraitProps) {
   const layout = computePortraitLayout(selection);
   const filterPrefix = useId();
   const filterIds = {
@@ -135,57 +138,59 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
           <HueRotateFilter id={filterIds.body} degrees={COLOR_HUES[colors.body] ?? 0} />
         )}
       </defs>
-      <image
-        href={assetUrl(`Bodies/Body${selection.bodyId}.svg`)}
-        x={layout.body.x}
-        y={layout.body.y}
-        width={layout.body.width}
-        height={layout.body.height}
-        preserveAspectRatio="xMidYMid meet"
-        style={{ filter: `url(#${filterIds.body})` }}
-      />
-      <image
-        href={assetUrl(`Heads/Head${selection.headId}.svg`)}
-        {...layout.head}
-        preserveAspectRatio="none"
-        style={{ filter: `url(#${filterIds.head})` }}
-      />
-      {decoInLayer("body")}
-      <image
-        href={assetUrl(`Hair/Hair${selection.hairId}.svg`)}
-        {...layout.hair}
-        preserveAspectRatio="none"
-        style={{ filter: `url(#${filterIds.hair})` }}
-      />
-      {decoInLayer("head")}
-      <image href={assetUrl(`Eyes/Eyes${selection.eyeId}.svg`, colors.eyes)} {...layout.eyes} preserveAspectRatio="xMidYMid meet" />
-      {decoInLayer("eyes")}
-      <image href={assetUrl(`Mouths/Mouth${selection.mouthId}.svg`, colors.mouth)} {...layout.mouth} preserveAspectRatio="xMidYMid meet" />
-      {decoInLayer("mouth")}
-      <image href={assetUrl(`Noses/Nose${selection.noseId}.svg`, colors.nose)} {...layout.nose} preserveAspectRatio="xMidYMid meet" />
-      {tagText && (
-        <text
-          x={layout.tag.x}
-          y={layout.tag.y}
-          textAnchor="end"
-          fill={tag.color}
-          fontFamily={tag.fontFamily}
-          fontSize="11"
-          textLength={tagTextWidth}
-          lengthAdjust="spacingAndGlyphs"
-          fontWeight="bold"
-        >
-          {tagText}
-        </text>
-      )}
-      {logo.style !== "none" && (
+      <g transform={tilted ? TILT : undefined}>
         <image
-          href={assetUrl(`Logos/${logo.style === "text" ? "LogoText" : "Logo"}.svg`)}
-          {...logoBox(logo.style)}
+          href={assetUrl(`Bodies/Body${selection.bodyId}.svg`)}
+          x={layout.body.x}
+          y={layout.body.y}
+          width={layout.body.width}
+          height={layout.body.height}
           preserveAspectRatio="xMidYMid meet"
-          style={{ filter: `url(#${filterIds.logo})` }}
+          style={{ filter: `url(#${filterIds.body})` }}
         />
-      )}
+        <image
+          href={assetUrl(`Heads/Head${selection.headId}.svg`)}
+          {...layout.head}
+          preserveAspectRatio="none"
+          style={{ filter: `url(#${filterIds.head})` }}
+        />
+        {decoInLayer("body")}
+        <image
+          href={assetUrl(`Hair/Hair${selection.hairId}.svg`)}
+          {...layout.hair}
+          preserveAspectRatio="none"
+          style={{ filter: `url(#${filterIds.hair})` }}
+        />
+        {decoInLayer("head")}
+        <image href={assetUrl(`Eyes/Eyes${selection.eyeId}.svg`, colors.eyes)} {...layout.eyes} preserveAspectRatio="xMidYMid meet" />
+        {decoInLayer("eyes")}
+        <image href={assetUrl(`Mouths/Mouth${selection.mouthId}.svg`, colors.mouth)} {...layout.mouth} preserveAspectRatio="xMidYMid meet" />
+        {decoInLayer("mouth")}
+        <image href={assetUrl(`Noses/Nose${selection.noseId}.svg`, colors.nose)} {...layout.nose} preserveAspectRatio="xMidYMid meet" />
+        {tagText && (
+          <text
+            x={layout.tag.x}
+            y={layout.tag.y}
+            textAnchor="end"
+            fill={tag.color}
+            fontFamily={tag.fontFamily}
+            fontSize="11"
+            textLength={tagTextWidth}
+            lengthAdjust="spacingAndGlyphs"
+            fontWeight="bold"
+          >
+            {tagText}
+          </text>
+        )}
+        {logo.style !== "none" && (
+          <image
+            href={assetUrl(`Logos/${logo.style === "text" ? "LogoText" : "Logo"}.svg`)}
+            {...logoBox(logo.style)}
+            preserveAspectRatio="xMidYMid meet"
+            style={{ filter: `url(#${filterIds.logo})` }}
+          />
+        )}
+      </g>
     </svg>
   );
 }

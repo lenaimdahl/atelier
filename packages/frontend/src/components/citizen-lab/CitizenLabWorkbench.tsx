@@ -153,6 +153,7 @@ export function CitizenLabWorkbench() {
               colors={colors}
               tag={tag}
               logo={logo}
+              tilted={design.hardToClassify}
             />
             <span className="stage-signal">{t("pages.citizenLab.signal")}</span>
           </div>

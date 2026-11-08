@@ -264,10 +264,6 @@
   filter: drop-shadow(0 10px 0 rgba(0, 19, 0, 0.4));
 }
 
-.hard-to-classify .citizen-portrait {
-  transform: rotate(-4deg) scale(1.05);
-}
-
 .hard-to-classify .orbit-one {
   border-style: dotted;
 }

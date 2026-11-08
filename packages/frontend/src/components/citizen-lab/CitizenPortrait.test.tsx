@@ -29,6 +29,7 @@ function decoFilters(decoId: number, decoColor: string) {
       colors={{ ...BASE_COLORS, deco: decoColor }}
       tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
       logo={NO_LOGO}
+      tilted={false}
     />,
   );
   const decoImages = imagesOf(markup, `Deco/Deco${decoId}.svg`);
@@ -74,6 +75,7 @@ describe("deco recoloring", () => {
         colors={BASE_COLORS}
         tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
         logo={NO_LOGO}
+        tilted={false}
       />,
     );
     const filterId = imagesOf(markup, "Deco/Deco6.svg")[0]?.match(/filter:url\(#([^)]+)\)/)?.[1];
@@ -92,6 +94,7 @@ describe("40C3 logo", () => {
         colors={BASE_COLORS}
         tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
         logo={logo}
+        tilted={false}
       />,
     );
   }
@@ -122,6 +125,7 @@ describe("part green", () => {
         colors={{ ...BASE_COLORS, deco }}
         tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
         logo={NO_LOGO}
+        tilted={false}
       />,
     );
     return (markup.match(/<image [^>]*>/g) ?? []).map((image) => image.match(/href="([^"]*)"/)?.[1] ?? "");
@@ -144,5 +148,26 @@ describe("part green", () => {
 
   test("parts without green keep their url", () => {
     expect(assetUrl("Mouths/Mouth6.svg", BASE_COLORS.mouth)).toBe(assetUrl("Mouths/Mouth6.svg"));
+  });
+});
+
+describe("hard to classify", () => {
+  function portraitMarkup(tilted: boolean) {
+    return renderToStaticMarkup(
+      <CitizenPortrait
+        portraitRef={null}
+        citizenName="Test"
+        selection={{ bodyId: 0, headId: 2, hairId: 0, eyeId: 0, noseId: 0, mouthId: 0, decoId: 0 }}
+        colors={BASE_COLORS}
+        tag={{ text: "#chaos", fontFamily: "Hack, monospace", color: "#ffbc40" }}
+        logo={{ style: "icon", color: "#75b44b" }}
+        tilted={tilted}
+      />,
+    );
+  }
+
+  test("the tilt is part of the SVG, so downloads keep it", () => {
+    expect(portraitMarkup(true)).toMatch(/<g transform="[^"]*rotate\(-4\)[^"]*">/);
+    expect(portraitMarkup(false)).toContain("<g>");
   });
 });
