@@ -12,8 +12,8 @@ FROM alpine:3.22
 
 RUN adduser -D -H -u 10001 appuser
 COPY --from=build /atelier-backend /atelier-backend
-USER appuser
+USER 10001
 ENV TRUST_PROXY=true
 EXPOSE 8080
-HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=3 CMD wget -q -O /dev/null http://localhost:8080/health || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=3 CMD ["wget", "-q", "-O", "/dev/null", "http://localhost:8080/health"]
 ENTRYPOINT ["/atelier-backend"]
