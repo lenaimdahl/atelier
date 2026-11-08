@@ -55,10 +55,10 @@ export const DECO = Array.from({ length: 11 }, (_, assetIndex) => ({
 }));
 
 export const FEATURES = [
+  { key: "hair", options: HAIR },
   { key: "head", options: HEADS },
   { key: "eyes", options: EYES },
   { key: "nose", options: NOSES },
-  { key: "hair", options: HAIR },
   { key: "mouth", options: MOUTHS },
   { key: "deco", options: DECO },
 ] as const;
