@@ -80,7 +80,7 @@ export function CitizenFigurePicker({
               {(["icon", "text"] as const).map((style) => (
                 <button
                   key={style}
-                  className={`logo-style-option${logo.style === style ? " selected" : ""}`}
+                  className="lab-button"
                   type="button"
                   aria-pressed={logo.style === style}
                   onClick={() => onLogoChange({ style })}

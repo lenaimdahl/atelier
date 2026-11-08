@@ -169,7 +169,7 @@ export function CitizenLabWorkbench() {
             <div className="preview-actions">
               <span>{t("pages.citizenLab.mood")}</span>
               <button
-                className="download-svg-button"
+                className="lab-button"
                 type="button"
                 aria-pressed={logo.style !== "none"}
                 onClick={() => updateLogo({ style: logo.style === "none" ? "icon" : "none" })}
@@ -177,14 +177,14 @@ export function CitizenLabWorkbench() {
                 {logo.style === "none" ? t("pages.citizenLab.addLogo") : t("pages.citizenLab.removeLogo")}
               </button>
               <button
-                className="download-svg-button"
+                className="lab-button"
                 type="button"
                 onClick={() => downloadCitizenSvg(portraitRef.current, `${selectedCitizen.id}-citizen.svg`)}
               >
                 {t("pages.citizenLab.downloadSvg")}
               </button>
               <button
-                className="download-svg-button"
+                className="lab-button"
                 type="button"
                 onClick={() =>
                   void downloadCitizenPng(portraitRef.current, `${selectedCitizen.id}-citizen.png`, shownDesign.tag.fontFamily)
