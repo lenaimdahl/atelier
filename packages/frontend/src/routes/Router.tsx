@@ -1,10 +1,16 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Layout } from "src/components/Layout";
 import Books from "src/pages/Books";
 import Home from "src/pages/Home";
 
-const CitizenMaker = lazy(() => import("src/pages/CitizenMaker"));
+const CitizenLab = lazy(() => import("src/pages/CitizenLab"));
+
+// Keeps citizen links shared before the rename working.
+function CitizenMakerRedirect() {
+  const { search } = useLocation();
+  return <Navigate to={{ pathname: "/citizen-lab", search }} replace />;
+}
 
 export default function Router() {
   return (
@@ -14,13 +20,14 @@ export default function Router() {
           <Route path="/" element={<Home />} />
           <Route path="/books" element={<Books />} />
           <Route
-            path="/citizen-maker"
+            path="/citizen-lab"
             element={
               <Suspense fallback={null}>
-                <CitizenMaker />
+                <CitizenLab />
               </Suspense>
             }
           />
+          <Route path="/citizen-maker" element={<CitizenMakerRedirect />} />
         </Route>
       </Routes>
     </BrowserRouter>

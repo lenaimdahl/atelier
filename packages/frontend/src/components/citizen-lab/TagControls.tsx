@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import type { CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
-import { SwatchRow } from "src/components/citizen-maker/SwatchRow";
-import { TAG_MAX_LENGTH } from "src/components/citizen-maker/citizenShareState";
-import { COLORS, TAG_FONTS } from "src/pages/citizenMakerOptions";
+import type { CitizenTag } from "src/components/citizen-lab/CitizenPortrait";
+import { SwatchRow } from "src/components/citizen-lab/SwatchRow";
+import { TAG_MAX_LENGTH } from "src/components/citizen-lab/citizenShareState";
+import { COLORS, TAG_FONTS } from "src/pages/citizenLabOptions";
 
 type TagControlsProps = {
   tag: CitizenTag;
@@ -14,17 +14,17 @@ export function TagControls({ tag, onTagChange }: TagControlsProps) {
   return (
     <div className="tag-controls">
       <label className="tag-field">
-        <span className="control-label">{t("pages.citizenMaker.tagTextLabel")}</span>
+        <span className="control-label">{t("pages.citizenLab.tagTextLabel")}</span>
         <input
           type="text"
           maxLength={TAG_MAX_LENGTH}
-          placeholder={t("pages.citizenMaker.tagTextPlaceholder")}
+          placeholder={t("pages.citizenLab.tagTextPlaceholder")}
           value={tag.text}
           onChange={(event) => onTagChange({ text: event.currentTarget.value })}
         />
       </label>
       <label className="tag-field">
-        <span className="control-label">{t("pages.citizenMaker.tagFontLabel")}</span>
+        <span className="control-label">{t("pages.citizenLab.tagFontLabel")}</span>
         <select value={tag.fontFamily} onChange={(event) => onTagChange({ fontFamily: event.currentTarget.value })}>
           {TAG_FONTS.map((font) => (
             <option key={font.value} value={font.value}>{font.label}</option>
@@ -33,7 +33,7 @@ export function TagControls({ tag, onTagChange }: TagControlsProps) {
       </label>
       <SwatchRow
         className="color-swatches tag-color-swatches"
-        label={t("pages.citizenMaker.tagColorLabel")}
+        label={t("pages.citizenLab.tagColorLabel")}
         options={COLORS}
         selected={tag.color}
         onSelect={(color) => onTagChange({ color })}

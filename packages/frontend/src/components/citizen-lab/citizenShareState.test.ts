@@ -5,8 +5,8 @@ import {
   designToSearchParams,
   hairPositionFor,
   type CitizenDesign,
-} from "src/components/citizen-maker/citizenShareState";
-import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, FEATURES, LOGO_COLORS, TAG_FONTS } from "src/pages/citizenMakerOptions";
+} from "src/components/citizen-lab/citizenShareState";
+import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, FEATURES, LOGO_COLORS, TAG_FONTS } from "src/pages/citizenLabOptions";
 
 const roundTrip = (design: CitizenDesign) =>
   designFromSearchParams(new URLSearchParams(designToSearchParams(design).toString()));

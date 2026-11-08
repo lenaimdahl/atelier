@@ -30,7 +30,7 @@ export function SwatchRow({
           key={color}
           type="button"
           style={{ "--swatch-color": displayColor(color) } as CSSProperties}
-          aria-label={t("pages.citizenMaker.colorPartOption", { part: label, color: swatchLabel?.(color) ?? color })}
+          aria-label={t("pages.citizenLab.colorPartOption", { part: label, color: swatchLabel?.(color) ?? color })}
           aria-pressed={selected === color}
           onClick={() => onSelect(color)}
         />

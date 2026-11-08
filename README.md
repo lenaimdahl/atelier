@@ -147,10 +147,10 @@ Generated and local-only stuff like `node_modules/` and `dist/` never gets commi
 
 ## Citizen Lab
 
-At `/citizen-maker` you build a citizen from bodies, heads, hair, eyes, noses, mouths and decorations, pick the colors, add a hashtag and, if you like, the 40C3 logo. Then download it as SVG.
+At `/citizen-lab` you build a citizen from bodies, heads, hair, eyes, noses, mouths and decorations, pick the colors, add a hashtag and, if you like, the 40C3 logo. Then download it as SVG.
 
 - **Share links**: the whole citizen lives in the URL (`?citizen=adam&head=2&...`), so whatever is in the address bar is your share link. Only values that differ from the defaults end up in it, and anything invalid quietly falls back to the default. Nothing goes to the backend.
-- **Layout**: all positions are calculated in `packages/frontend/src/components/citizen-maker/citizenLayout.ts`. The geometry of each head, body and eye set and one definition per decoration (layer, recoloring, layout) live there; the portrait component only draws.
+- **Layout**: all positions are calculated in `packages/frontend/src/components/citizen-lab/citizenLayout.ts`. The geometry of each head, body and eye set and one definition per decoration (layer, recoloring, layout) live there; the portrait component only draws.
 - **Assets**: the SVG parts are in `packages/frontend/src/assets/40c3-creator/`. To add a head, eyes or a decoration, drop in the file and add one entry in `citizenLayout.ts`. The tests complain if an option has no layout data.
 
 ## Credits

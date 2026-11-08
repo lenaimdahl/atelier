@@ -9,9 +9,9 @@ import {
   decoTint,
   logoBox,
   type CitizenSelection,
-} from "src/components/citizen-maker/citizenLayout";
-import { assetUrl } from "src/components/citizen-maker/citizenAssets";
-import { CITIZENS, DECO, EYES, HAIR, HEADS, MOUTHS, NOSES } from "src/pages/citizenMakerOptions";
+} from "src/components/citizen-lab/citizenLayout";
+import { assetUrl } from "src/components/citizen-lab/citizenAssets";
+import { CITIZENS, DECO, EYES, HAIR, HEADS, MOUTHS, NOSES } from "src/pages/citizenLabOptions";
 
 function* allSelections(): Generator<CitizenSelection> {
   for (const bodyId of BODY_GEOMETRY.keys())

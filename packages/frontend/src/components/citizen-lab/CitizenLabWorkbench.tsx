@@ -1,20 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
-import { CitizenFigurePicker } from "src/components/citizen-maker/CitizenFigurePicker";
-import { CitizenPortrait, type CitizenColors, type CitizenLogo, type CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
-import { OptionCycler } from "src/components/citizen-maker/OptionCycler";
-import { TagControls } from "src/components/citizen-maker/TagControls";
-import { predecodeAssets } from "src/components/citizen-maker/citizenAssets";
-import { decoTint, type CitizenSelection } from "src/components/citizen-maker/citizenLayout";
+import { CitizenFigurePicker } from "src/components/citizen-lab/CitizenFigurePicker";
+import { CitizenPortrait, type CitizenColors, type CitizenLogo, type CitizenTag } from "src/components/citizen-lab/CitizenPortrait";
+import { OptionCycler } from "src/components/citizen-lab/OptionCycler";
+import { TagControls } from "src/components/citizen-lab/TagControls";
+import { predecodeAssets } from "src/components/citizen-lab/citizenAssets";
+import { decoTint, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
 import {
   designFromSearchParams,
   designToSearchParams,
   hairPositionFor,
   type CitizenDesign,
-} from "src/components/citizen-maker/citizenShareState";
-import { downloadCitizenSvg } from "src/components/citizen-maker/downloadCitizenSvg";
-import { CITIZENS, COLORS, FEATURES, featureOptionId, type Feature } from "src/pages/citizenMakerOptions";
+} from "src/components/citizen-lab/citizenShareState";
+import { downloadCitizenSvg } from "src/components/citizen-lab/downloadCitizenSvg";
+import { CITIZENS, COLORS, FEATURES, featureOptionId, type Feature } from "src/pages/citizenLabOptions";
 
 type Citizen = (typeof CITIZENS)[number];
 
@@ -30,7 +30,7 @@ function randomColor() {
   return COLORS[randomIndex(COLORS.length)];
 }
 
-export function CitizenMakerWorkbench() {
+export function CitizenLabWorkbench() {
   const { t } = useTranslation();
   const portraitRef = useRef<SVGSVGElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -95,29 +95,29 @@ export function CitizenMakerWorkbench() {
   return (
     <section className="citizen-workbench" aria-labelledby="citizen-workbench-title">
       <header className="workbench-bar">
-        <h2 id="citizen-workbench-title">{t("pages.citizenMaker.workbench")}</h2>
-        <span>{t("pages.citizenMaker.localSession")}</span>
+        <h2 id="citizen-workbench-title">{t("pages.citizenLab.workbench")}</h2>
+        <span>{t("pages.citizenLab.localSession")}</span>
       </header>
       <div className="workbench-grid">
-        <section className="preview-column" aria-label={t("pages.citizenMaker.previewLabel")}>
+        <section className="preview-column" aria-label={t("pages.citizenLab.previewLabel")}>
           <div className="preview-heading">
-            <span>{t("pages.citizenMaker.previewLabel")}</span>
+            <span>{t("pages.citizenLab.previewLabel")}</span>
             <div className="preview-actions">
-              <span>{t("pages.citizenMaker.mood")}</span>
+              <span>{t("pages.citizenLab.mood")}</span>
               <button
                 className="download-svg-button"
                 type="button"
                 aria-pressed={logo.style !== "none"}
                 onClick={() => updateLogo({ style: logo.style === "none" ? "icon" : "none" })}
               >
-                {logo.style === "none" ? t("pages.citizenMaker.addLogo") : t("pages.citizenMaker.removeLogo")}
+                {logo.style === "none" ? t("pages.citizenLab.addLogo") : t("pages.citizenLab.removeLogo")}
               </button>
               <button
                 className="download-svg-button"
                 type="button"
                 onClick={() => downloadCitizenSvg(portraitRef.current, `${selectedCitizen.id}-citizen.svg`)}
               >
-                {t("pages.citizenMaker.downloadSvg")}
+                {t("pages.citizenLab.downloadSvg")}
               </button>
             </div>
           </div>
@@ -134,7 +134,7 @@ export function CitizenMakerWorkbench() {
               tag={tag}
               logo={logo}
             />
-            <span className="stage-signal">{t("pages.citizenMaker.signal")}</span>
+            <span className="stage-signal">{t("pages.citizenLab.signal")}</span>
           </div>
           <CitizenFigurePicker
             selectedId={design.citizenId}
@@ -150,10 +150,10 @@ export function CitizenMakerWorkbench() {
         </section>
 
         <aside className="citizen-controls">
-          <p className="citizen-eyebrow">{t("pages.citizenMaker.parameters")}</p>
-          <h2>{t("pages.citizenMaker.controlsTitle")}</h2>
+          <p className="citizen-eyebrow">{t("pages.citizenLab.parameters")}</p>
+          <h2>{t("pages.citizenLab.controlsTitle")}</h2>
           <div className="control-group">
-            <span className="control-label">{t("pages.citizenMaker.figureType")}</span>
+            <span className="control-label">{t("pages.citizenLab.figureType")}</span>
             <div className="control-readout">
               <span>{selectedCitizen.name}</span>
               <span>{t(selectedCitizen.typeKey)}</span>
@@ -161,14 +161,14 @@ export function CitizenMakerWorkbench() {
           </div>
           <div className="feature-cyclers">
             {FEATURES.map(({ key, options }) => {
-              const label = t(`pages.citizenMaker.featureLabels.${key}`);
+              const label = t(`pages.citizenLab.featureLabels.${key}`);
               return (
                 <OptionCycler
                   key={key}
                   label={label}
-                  value={t("pages.citizenMaker.optionNumber", { number: options[features[key]].number })}
-                  previousLabel={t("pages.citizenMaker.previousOption", { option: label })}
-                  nextLabel={t("pages.citizenMaker.nextOption", { option: label })}
+                  value={t("pages.citizenLab.optionNumber", { number: options[features[key]].number })}
+                  previousLabel={t("pages.citizenLab.previousOption", { option: label })}
+                  nextLabel={t("pages.citizenLab.nextOption", { option: label })}
                   onPrevious={() => cycleFeature(key, options.length, -1)}
                   onNext={() => cycleFeature(key, options.length, 1)}
                 />
@@ -184,11 +184,11 @@ export function CitizenMakerWorkbench() {
                 updateDesign(() => ({ hardToClassify }));
               }}
             />
-            <span>{t("pages.citizenMaker.hardToClassify")}</span>
+            <span>{t("pages.citizenLab.hardToClassify")}</span>
           </label>
           <button className="randomize-button" type="button" onClick={randomizeCitizen}>
             <span aria-hidden="true">*</span>
-            {t("pages.citizenMaker.randomize")}
+            {t("pages.citizenLab.randomize")}
           </button>
           <TagControls
             tag={tag}

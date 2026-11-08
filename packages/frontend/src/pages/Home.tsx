@@ -19,7 +19,7 @@ const STACK = [
 
 const PROJECTS = [
   { id: "books", path: "/books", number: "0x01" },
-  { id: "citizenLab", path: "/citizen-maker", number: "0x02" },
+  { id: "citizenLab", path: "/citizen-lab", number: "0x02" },
 ] as const;
 
 function Prompt({ command }: { command: string }) {

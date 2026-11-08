@@ -1,8 +1,8 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vitest";
-import { assetUrl } from "src/components/citizen-maker/citizenAssets";
-import { CitizenPortrait, type CitizenColors, type CitizenLogo } from "src/components/citizen-maker/CitizenPortrait";
-import { DECO, DECO_DEFAULT_COLOR } from "src/pages/citizenMakerOptions";
+import { assetUrl } from "src/components/citizen-lab/citizenAssets";
+import { CitizenPortrait, type CitizenColors, type CitizenLogo } from "src/components/citizen-lab/CitizenPortrait";
+import { DECO, DECO_DEFAULT_COLOR } from "src/pages/citizenLabOptions";
 
 const NO_LOGO: CitizenLogo = { style: "none", color: "#75b44b" };
 function imagesOf(markup: string, assetPath: string) {

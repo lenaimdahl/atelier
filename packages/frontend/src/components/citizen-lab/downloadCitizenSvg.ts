@@ -1,4 +1,4 @@
-import { CANVAS } from "src/components/citizen-maker/citizenLayout";
+import { CANVAS } from "src/components/citizen-lab/citizenLayout";
 
 export function downloadCitizenSvg(portrait: SVGSVGElement | null, filename: string) {
   if (!portrait) {

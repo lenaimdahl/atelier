@@ -23,7 +23,7 @@ export function Layout() {
             {t("nav.home")}
           </NavLink>
           <NavLink to="/books">{t("nav.books")}</NavLink>
-          <NavLink to="/citizen-maker">{t("nav.citizenMaker")}</NavLink>
+          <NavLink to="/citizen-lab">{t("nav.citizenLab")}</NavLink>
         </nav>
         <LanguageSwitcher />
       </header>

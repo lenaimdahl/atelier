@@ -1,6 +1,6 @@
 import { useId, type Ref } from "react";
-import { assetUrl } from "src/components/citizen-maker/citizenAssets";
-import { COLOR_HUES, DECO_DEFAULT_COLOR, type LogoStyle } from "src/pages/citizenMakerOptions";
+import { assetUrl } from "src/components/citizen-lab/citizenAssets";
+import { COLOR_HUES, DECO_DEFAULT_COLOR, type LogoStyle } from "src/pages/citizenLabOptions";
 import {
   CANVAS,
   computePortraitLayout,
@@ -8,7 +8,7 @@ import {
   type DecoLayer,
   type DecoPiece,
   logoBox,
-} from "src/components/citizen-maker/citizenLayout";
+} from "src/components/citizen-lab/citizenLayout";
 
 
 export type CitizenColors = { body: string; head: string; hair: string; deco: string };

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import type { CitizenColors, CitizenLogo } from "src/components/citizen-maker/CitizenPortrait";
-import { SwatchRow } from "src/components/citizen-maker/SwatchRow";
-import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, LOGO_COLORS, type CitizenId } from "src/pages/citizenMakerOptions";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/CitizenPortrait";
+import { SwatchRow } from "src/components/citizen-lab/SwatchRow";
+import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, LOGO_COLORS, type CitizenId } from "src/pages/citizenLabOptions";
 
 type ColorPart = keyof CitizenColors;
 
@@ -35,7 +35,7 @@ export function CitizenFigurePicker({
   return (
     <div className="figure-picker">
       <fieldset className="figure-options">
-        <legend className="control-label">{t("pages.citizenMaker.chooseFigure")}</legend>
+        <legend className="control-label">{t("pages.citizenLab.chooseFigure")}</legend>
         {CITIZENS.map((citizen) => (
           <button
             className={`figure-option${citizen.id === selectedId ? " selected" : ""}`}
@@ -55,14 +55,14 @@ export function CitizenFigurePicker({
             <SwatchRow
               key={part}
               className="color-swatches"
-              label={t(`pages.citizenMaker.colorLabels.${part}`)}
+              label={t(`pages.citizenLab.colorLabels.${part}`)}
               options={options}
               selected={colors[part]}
               onSelect={(color) => onSelectColor(part, color)}
               {...(part === "deco" && decoOriginalColor
                 ? {
                     displayColor: (color: string) => (color === DECO_DEFAULT_COLOR ? decoOriginalColor : color),
-                    swatchLabel: (color: string) => (color === DECO_DEFAULT_COLOR ? t("pages.citizenMaker.originalColor") : color),
+                    swatchLabel: (color: string) => (color === DECO_DEFAULT_COLOR ? t("pages.citizenLab.originalColor") : color),
                   }
                 : {})}
             />
@@ -71,7 +71,7 @@ export function CitizenFigurePicker({
         {logo.style !== "none" && (
           <div className="logo-controls">
             <fieldset className="logo-styles">
-              <legend className="control-label">{t("pages.citizenMaker.logoLabel")}</legend>
+              <legend className="control-label">{t("pages.citizenLab.logoLabel")}</legend>
               {(["icon", "text"] as const).map((style) => (
                 <button
                   key={style}
@@ -80,20 +80,20 @@ export function CitizenFigurePicker({
                   aria-pressed={logo.style === style}
                   onClick={() => onLogoChange({ style })}
                 >
-                  {t(`pages.citizenMaker.logoStyles.${style}`)}
+                  {t(`pages.citizenLab.logoStyles.${style}`)}
                 </button>
               ))}
             </fieldset>
             <SwatchRow
               className="color-swatches"
-              label={t("pages.citizenMaker.logoColorLabel")}
+              label={t("pages.citizenLab.logoColorLabel")}
               options={LOGO_COLORS}
               selected={logo.color}
               onSelect={(color) => onLogoChange({ color })}
             />
           </div>
         )}
-        <span className="palette-note">{t("pages.citizenMaker.paletteNote")}</span>
+        <span className="palette-note">{t("pages.citizenLab.paletteNote")}</span>
       </div>
     </div>
   );

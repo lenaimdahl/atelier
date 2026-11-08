@@ -63,7 +63,7 @@
         "description": "Mach den Anfang und such dir ein Buch aus meiner Bibliothek aus."
       }
     },
-    "citizenMaker": {
+    "citizenLab": {
       "eyebrow": "ATELIER / 40C3 CITIZEN LAB",
       "titleFirstLine": "BAU EINEN",
       "titleSecondLine": "CITIZEN_",
@@ -128,6 +128,6 @@
     "label": "Hauptmenü",
     "home": "Start",
     "books": "Bücher",
-    "citizenMaker": "Citizen Lab"
+    "citizenLab": "Citizen Lab"
   }
 }
