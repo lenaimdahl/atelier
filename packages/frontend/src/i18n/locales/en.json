@@ -70,8 +70,14 @@
       "controlsTitle": "Make it yours",
       "figureType": "FIGURE TYPE",
       "colorLabel": "CITIZEN COLOR",
+      "colorLabels": {
+        "body": "BODY COLOR",
+        "head": "HEAD COLOR",
+        "hair": "HAIR COLOR"
+      },
       "paletteNote": "PALETTE / KEY 0 + A + B",
       "colorOption": "Choose color {{color}}",
+      "colorPartOption": "Set {{part}} to {{color}}",
       "hardToClassify": "I AM HARD TO CLASSIFY",
       "randomize": "RANDOMIZE",
       "footerTitle": "CITIZEN LOG / 01",
@@ -86,7 +92,8 @@
         "eyes": "EYES",
         "nose": "NOSE",
         "hair": "HAIR",
-        "mouth": "MOUTH"
+        "mouth": "MOUTH",
+        "deco": "DECO"
       },
       "previousOption": "Previous {{option}} option",
       "nextOption": "Next {{option}} option",
