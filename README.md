@@ -170,5 +170,5 @@ This program is free software: you can redistribute it and/or modify it under th
 
 Not covered by this license:
 
-- the 40C3 graphics and logos in `packages/frontend/src/assets/40c3-creator/` (40C3 design team / Chaos Computer Club, all rights stay with them)
+- the 40C3 graphics and logos in `packages/frontend/src/assets/40c3-creator/` ([mcgraw](https://mcgraw.club) / 40C3 design team / Chaos Computer Club, CC0 license)
 - the fonts in `packages/frontend/public/fonts/`, which come with their own license files
