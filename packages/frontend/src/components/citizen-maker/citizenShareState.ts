@@ -54,7 +54,6 @@ export function designToSearchParams(design: CitizenDesign): URLSearchParams {
     if (value !== defaultValue) params.set(key, value);
   };
 
-  // The default hair depends on the citizen.
   const citizen = CITIZENS.find(({ id }) => id === design.citizenId) ?? CITIZENS[0];
   setIfChanged("citizen", design.citizenId, DEFAULT_DESIGN.citizenId);
   for (const { key, options } of FEATURES) {

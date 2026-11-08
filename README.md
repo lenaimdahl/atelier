@@ -51,21 +51,29 @@ POST    /favorites
 OPTIONS /favorites
 ```
 
-`POST /favorites` only takes `application/json`, bodies up to 1 KB and at most 10 picks per minute per client. The client IP comes from the last `X-Forwarded-For` entry, so the backend has to run behind a reverse proxy that sets this header (Coolify does).
+`POST /favorites` only takes `application/json`, bodies up to 1 KB and at most 10 picks per minute per client. IPv6 clients are counted per /64.
 
-Run the backend locally without Docker:
+The rate limit is there to keep the shelf usable, not to make the counts tamper-proof. Someone with enough addresses can still push a book up. That's fine for a fun shelf, just don't read the numbers as a real vote.
 
-```bash
-cd packages/backend
-go run .
-```
+`GET /health` returns `503` when the database can't be reached.
 
-It listens on `http://localhost:8080`. Want another port?
+Run the backend locally without Docker (with the database from Docker Compose running):
 
 ```bash
 cd packages/backend
-PORT=8081 go run .
+DATABASE_URL=postgres://postgres:your-password@localhost:5432/atelier_db go run .
 ```
+
+Configuration:
+
+| Variable              | Default                 | Meaning                                                                                                                                      |
+| --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`        | none, required          | PostgreSQL connection string                                                                                                                 |
+| `PORT`                | `8080`                  | HTTP port                                                                                                                                    |
+| `CORS_ALLOWED_ORIGIN` | `http://localhost:5173` | Origin of the frontend                                                                                                                       |
+| `TRUST_PROXY`         | off                     | Set to `true` only behind a reverse proxy that appends the client IP to `X-Forwarded-For` (Coolify does). Otherwise anyone could fake their IP. |
+
+It listens on `http://localhost:8080`.
 
 Backend checks:
 
@@ -87,6 +95,8 @@ docker compose up --build
 ```
 
 You only need `--build` after changing Go code, the Dockerfile, `go.mod` or `go.sum`. Otherwise `docker compose up` is enough.
+
+All ports are bound to `127.0.0.1`, so nothing is reachable from the network you are on (handy at Congress).
 
 Where to find things:
 
@@ -162,7 +172,7 @@ pnpm --filter atelier generate:api-client
 
 You can pick from a fixed library of 50 English and 50 German feminist books, listed in `packages/backend/catalog/books.txt` by Open Library work ID.
 
-On startup the backend fetches author and cover for any missing books from the Open Library API in a single search request, downloads the covers and stores everything in PostgreSQL. Covers are served by the backend, so your browser never talks to Open Library. Titles and languages come from `books.txt` on every start, and if I remove a book from the file, it's deleted together with its picks. If Open Library is down, the import keeps retrying with longer and longer pauses.
+On startup the backend fetches author and cover for any missing books from the Open Library API in a single search request, downloads the covers and stores everything in PostgreSQL. Covers are served by the backend, so your browser never talks to Open Library. Titles and languages come from `books.txt` on every start, and if I remove a book from the file, it's deleted together with its picks. If Open Library is down, the import retries up to 5 times with longer and longer pauses.
 
 You can only pick books from this library, and picks are simply counted per book.
 
@@ -191,6 +201,14 @@ Terminal 2: pnpm dev
 ```
 
 The frontend runs at `http://localhost:5173`, the backend at `http://localhost:8080`.
+
+## Security
+
+Found a problem? See [SECURITY.md](SECURITY.md).
+
+## License
+
+See [LICENSE](LICENSE). The 40C3 graphics and logos are not covered by it, see Credits.
 
 ## Coming up
 

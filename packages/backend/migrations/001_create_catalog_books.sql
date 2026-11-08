@@ -1,5 +1,3 @@
--- Picks are counted per book instead of stored per visitor, so the table never
--- grows beyond the books in the library.
 CREATE TABLE IF NOT EXISTS catalog_books (
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,

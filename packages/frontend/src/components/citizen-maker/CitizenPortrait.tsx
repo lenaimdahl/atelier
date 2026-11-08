@@ -24,7 +24,6 @@ type CitizenPortraitProps = {
   logo: CitizenLogo;
 };
 
-// "fill" paints every visible pixel; "multiply" tints white parts and keeps black/green details.
 function TintFilter({ id, color, mode }: { id: string; color: string; mode: "fill" | "multiply" }) {
   if (mode === "fill") {
     return (

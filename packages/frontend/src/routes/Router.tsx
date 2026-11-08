@@ -4,7 +4,6 @@ import { Layout } from "src/components/Layout";
 import Books from "src/pages/Books";
 import Home from "src/pages/Home";
 
-// The Citizen Lab bundles all its parts, so it is only loaded when opened.
 const CitizenMaker = lazy(() => import("src/pages/CitizenMaker"));
 
 export default function Router() {

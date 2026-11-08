@@ -26,7 +26,6 @@ function decoFilters(decoId: number, decoColor: string) {
   const decoImages = imagesOf(markup, `Deco/Deco${decoId}.svg`);
   return decoImages.map((image) => {
     const filterId = image.match(/filter:url\(#([^)]+)\)/)?.[1];
-    // Filter ids carry a useId prefix; only the suffix identifies the filter type.
     return filterId?.replace(/^.*(deco-(?:fill|multiply))$/, "$1");
   });
 }

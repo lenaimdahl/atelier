@@ -18,7 +18,6 @@ export function fitBox(centerX: number, centerY: number, maxWidth: number, maxHe
 
 type HeadGeometry = {
   aspectRatio: number;
-  /** Head 7 has a long chin below the face. */
   faceHeightRatio: number;
   /** Silhouette width (fraction of headWidth) at 25% / 38% of the face height. */
   widthAt25: number;
@@ -81,7 +80,6 @@ const NOSE_SIZE: Record<number, { width: number; height: number }> = {
 };
 const DEFAULT_NOSE_SIZE = { width: 0.1, height: 0.2 };
 
-// Hair is stretched (preserveAspectRatio="none") so it follows each head's shape.
 function hairBox(hairId: number, head: HeadGeometry, headWidth: number, faceHeight: number): Box {
   const widthAt25 = Math.max(head.widthAt25, 0.4) * headWidth;
   const widthAt38 = Math.max(head.widthAt38, 0.5) * headWidth;
@@ -147,7 +145,6 @@ const DECO_ASPECT_RATIOS = [
   414.78 / 108.19,
 ];
 
-// Ears are drawn as two cropped halves so each attaches to its head side, whatever the head width.
 const EAR_ASSET = { width: 622.57, height: 313.32 };
 const EAR_CROP_WIDTH = 175;
 const EAR_INNER_EDGE = 166;
@@ -275,7 +272,6 @@ const LOGO_ASSETS = {
 };
 const LOGO_OFFSET = { left: 14, bottom: 16 };
 
-// Bottom-left is the one corner kept free of hats, hair and the tag.
 export function logoBox(style: "icon" | "text"): Box {
   const { aspectRatio, height } = LOGO_ASSETS[style];
   return { x: LOGO_OFFSET.left, y: CANVAS.height - height - LOGO_OFFSET.bottom, width: height * aspectRatio, height };

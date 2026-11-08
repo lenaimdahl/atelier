@@ -30,7 +30,6 @@ button {
   min-height: 100svh;
 }
 
-/* Site frame: one header layout for every page, only the colors change per area. */
 .app-shell {
   --frame-bg: #f5f0e8;
   --frame-text: #1d1d1b;
