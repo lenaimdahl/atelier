@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CitizenFigurePicker } from "src/components/citizen-maker/CitizenFigurePicker";
+import { CitizenFigurePicker, FIST_DEFAULT_COLOR } from "src/components/citizen-maker/CitizenFigurePicker";
 import { CitizenPortrait } from "src/components/citizen-maker/CitizenPortrait";
 import { OptionCycler } from "src/components/citizen-maker/OptionCycler";
+import { downloadCitizenSvg } from "src/components/citizen-maker/downloadCitizenSvg";
 import {
   CITIZENS,
   COLORS,
@@ -15,6 +16,8 @@ import {
   type CitizenId,
 } from "src/pages/citizenMakerOptions";
 
+const FIST_DECO_ID = 4;
+
 function cycleOption(index: number, length: number, direction: -1 | 1) {
   return (index + direction + length) % length;
 }
@@ -26,9 +29,14 @@ function randomIndex(length: number) {
 export function CitizenMakerWorkbench() {
   const { t } = useTranslation();
   const [selectedId, setSelectedId] = useState<CitizenId>(CITIZENS[0].id);
+  const portraitRef = useRef<SVGSVGElement>(null);
   const [bodyColor, setBodyColor] = useState(COLORS[0]);
   const [headColor, setHeadColor] = useState(COLORS[0]);
   const [hairColor, setHairColor] = useState(COLORS[0]);
+  const [fistColor, setFistColor] = useState(FIST_DEFAULT_COLOR);
+  const [tagText, setTagText] = useState("");
+  const [tagFontFamily, setTagFontFamily] = useState("Hack, monospace");
+  const [tagColor, setTagColor] = useState("#ffbc40");
   const [headIndex, setHeadIndex] = useState(0);
   const [eyeIndex, setEyeIndex] = useState(0);
   const [noseIndex, setNoseIndex] = useState(4);
@@ -47,6 +55,7 @@ export function CitizenMakerWorkbench() {
     setBodyColor(COLORS[randomIndex(COLORS.length)]);
     setHeadColor(COLORS[randomIndex(COLORS.length)]);
     setHairColor(COLORS[randomIndex(COLORS.length)]);
+    setFistColor(COLORS[randomIndex(COLORS.length)]);
     setHeadIndex(randomIndex(HEADS.length));
     setEyeIndex(randomIndex(EYES.length));
     setNoseIndex(randomIndex(NOSES.length));
@@ -65,7 +74,16 @@ export function CitizenMakerWorkbench() {
         <section className="preview-column" aria-label={t("pages.citizenMaker.previewLabel")}>
           <div className="preview-heading">
             <span>{t("pages.citizenMaker.previewLabel")}</span>
-            <span>{t("pages.citizenMaker.mood")}</span>
+            <div className="preview-actions">
+              <span>{t("pages.citizenMaker.mood")}</span>
+              <button
+                className="download-svg-button"
+                type="button"
+                onClick={() => downloadCitizenSvg(portraitRef.current, `${selectedCitizen.id}-citizen.svg`)}
+              >
+                {t("pages.citizenMaker.downloadSvg")}
+              </button>
+            </div>
           </div>
           <div className={`citizen-stage${isHardToClassify ? " hard-to-classify" : ""}`}>
             <div className="stage-orbit orbit-one" />
@@ -73,10 +91,15 @@ export function CitizenMakerWorkbench() {
             <span className="stage-cross cross-one" aria-hidden="true">+</span>
             <span className="stage-cross cross-two" aria-hidden="true">+</span>
             <CitizenPortrait
+              portraitRef={portraitRef}
               citizenName={selectedCitizen.name}
               bodyColor={bodyColor}
               headColor={headColor}
               hairColor={hairColor}
+              fistColor={fistColor}
+              tagText={tagText}
+              tagFontFamily={tagFontFamily}
+              tagColor={tagColor}
               bodyIndex={selectedCitizen.bodyIndex}
               hairIndex={hairIndex}
               headIndex={HEADS[headIndex].id}
@@ -89,7 +112,11 @@ export function CitizenMakerWorkbench() {
           </div>
           <CitizenFigurePicker
             selectedId={selectedId}
-            colors={{ body: bodyColor, head: headColor, hair: hairColor }}
+            colors={{ body: bodyColor, head: headColor, hair: hairColor, fist: fistColor }}
+            showFistColor={DECO[decoIndex].id === FIST_DECO_ID}
+            tagText={tagText}
+            tagFontFamily={tagFontFamily}
+            tagColor={tagColor}
             onSelectFigure={(citizen) => {
               setSelectedId(citizen.id);
               setHairIndex(citizen.hairIndex);
@@ -99,10 +126,15 @@ export function CitizenMakerWorkbench() {
                 setBodyColor(color);
               } else if (part === "head") {
                 setHeadColor(color);
+              } else if (part === "fist") {
+                setFistColor(color);
               } else {
                 setHairColor(color);
               }
             }}
+            onTagTextChange={setTagText}
+            onTagFontChange={setTagFontFamily}
+            onTagColorChange={setTagColor}
           />
         </section>
 

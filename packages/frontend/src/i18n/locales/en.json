@@ -63,6 +63,7 @@
       "workbench": "CITIZEN_CONSTRUCTOR",
       "localSession": "SESSION 040 / LOCAL ONLY",
       "previewLabel": "LIVE PREVIEW / CITIZEN_01",
+      "downloadSvg": "DOWNLOAD SVG",
       "mood": "MOOD: CURIOUS",
       "signal": "SIGNAL: UNSTABLE",
       "chooseFigure": "CHOOSE A FIGURE",
@@ -73,11 +74,16 @@
       "colorLabels": {
         "body": "BODY COLOR",
         "head": "HEAD COLOR",
-        "hair": "HAIR COLOR"
+        "hair": "HAIR COLOR",
+        "fist": "FIST COLOR"
       },
       "paletteNote": "PALETTE / KEY 0 + A + B",
       "colorOption": "Choose color {{color}}",
       "colorPartOption": "Set {{part}} to {{color}}",
+      "tagTextLabel": "BODY TAG",
+      "tagTextPlaceholder": "#YOURTAG",
+      "tagFontLabel": "FONT",
+      "tagColorLabel": "TAG COLOR",
       "hardToClassify": "I AM HARD TO CLASSIFY",
       "randomize": "RANDOMIZE",
       "footerTitle": "CITIZEN LOG / 01",
