@@ -36,6 +36,8 @@ type CitizenPortraitProps = {
 
 const TILT = `translate(${CANVAS.centerX} ${CANVAS.height / 2}) rotate(-4) scale(1.05) translate(${-CANVAS.centerX} ${-CANVAS.height / 2})`;
 
+const filterUrl = (id: string) => `url(#${id})`;
+
 function TintFilter({ id, color, mode }: { id: string; color: string; mode: "fill" | "multiply" }) {
   if (mode === "fill") {
     return (
@@ -116,7 +118,7 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
   const decoTint = layout.deco?.tint;
   const decoFilter =
     decoTint && decoTint.mode !== "replace" && colors.deco !== DECO_DEFAULT_COLOR
-      ? `url(#${decoTint.mode === "fill" ? filterIds.decoFill : filterIds.decoMultiply})`
+      ? filterUrl(decoTint.mode === "fill" ? filterIds.decoFill : filterIds.decoMultiply)
       : undefined;
   const decoInLayer = (layer: DecoLayer) =>
     layout.deco?.layer === layer ? (
@@ -147,11 +149,11 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
         <PortraitImage
           href={urls.body}
           box={layout.body}
-          filter={layout.body.white ? `url(#${filterIds.body})` : undefined}
+          filter={layout.body.white ? filterUrl(filterIds.body) : undefined}
         />
-        <PortraitImage href={urls.head} box={layout.head} fit="none" filter={`url(#${filterIds.head})`} />
+        <PortraitImage href={urls.head} box={layout.head} fit="none" filter={filterUrl(filterIds.head)} />
         {decoInLayer("body")}
-        <PortraitImage href={urls.hair} box={layout.hair} fit="none" filter={`url(#${filterIds.hair})`} />
+        <PortraitImage href={urls.hair} box={layout.hair} fit="none" filter={filterUrl(filterIds.hair)} />
         {decoInLayer("head")}
         <PortraitImage href={urls.eyes} box={layout.eyes} />
         {decoInLayer("eyes")}
@@ -174,7 +176,7 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
           </text>
         )}
         {logo.style !== "none" && urls.logo && (
-          <PortraitImage href={urls.logo} box={logoBox(logo.style)} filter={`url(#${filterIds.logo})`} />
+          <PortraitImage href={urls.logo} box={logoBox(logo.style)} filter={filterUrl(filterIds.logo)} />
         )}
       </g>
     </svg>
