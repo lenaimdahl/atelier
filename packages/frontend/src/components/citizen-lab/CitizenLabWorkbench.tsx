@@ -1,24 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { CitizenFigurePicker } from "src/components/citizen-lab/CitizenFigurePicker";
-import { CitizenPortrait } from "src/components/citizen-lab/CitizenPortrait";
-import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/citizenTypes";
-import { OptionCycler } from "src/components/citizen-lab/OptionCycler";
-import { TagControls } from "src/components/citizen-lab/TagControls";
-import { citizenOf, cycleOption, randomParts, selectionOf } from "src/components/citizen-lab/citizenDesign";
-import { decodeAsset, hasPartGreen, portraitUrls, predecodeAssets } from "src/components/citizen-lab/citizenAssets";
-import { decoTint } from "src/components/citizen-lab/citizenLayout";
+import { CitizenFigurePicker } from "src/components/citizen-lab/controls/CitizenFigurePicker";
+import { CitizenPortrait } from "src/components/citizen-lab/portrait/CitizenPortrait";
+import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
+import { OptionCycler } from "src/components/citizen-lab/controls/OptionCycler";
+import { TagControls } from "src/components/citizen-lab/controls/TagControls";
+import { citizenOf, cycleOption, randomParts, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
+import { decodeAsset, hasPartGreen, portraitUrls, predecodeAssets } from "src/components/citizen-lab/portrait/citizenAssets";
+import { decoTint } from "src/components/citizen-lab/portrait/citizenLayout";
 import {
   DEFAULT_DESIGN,
   decodeDesign,
   encodeDesign,
   hairPositionFor,
   type CitizenDesign,
-} from "src/components/citizen-lab/citizenShareState";
+} from "src/components/citizen-lab/design/citizenShareState";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
-import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/downloadCitizen";
-import { CITIZENS, FEATURES, type Feature } from "src/components/citizen-lab/citizenLabOptions";
+import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/export/downloadCitizen";
+import { CITIZENS, FEATURES, type Feature } from "src/components/citizen-lab/design/citizenLabOptions";
 
 type Citizen = (typeof CITIZENS)[number];
 

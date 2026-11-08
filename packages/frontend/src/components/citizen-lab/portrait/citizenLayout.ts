@@ -1,4 +1,4 @@
-import { ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/citizenLabOptions";
+import { ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
 
 export const CANVAS = { width: 320, height: 340, centerX: 160 } as const;
 

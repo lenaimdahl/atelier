@@ -1,4 +1,4 @@
-import type { LogoStyle } from "src/components/citizen-lab/citizenLabOptions";
+import type { LogoStyle } from "src/components/citizen-lab/design/citizenLabOptions";
 
 export type CitizenColors = {
   body: string;

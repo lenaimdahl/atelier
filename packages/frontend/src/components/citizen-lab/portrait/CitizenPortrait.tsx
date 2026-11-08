@@ -1,6 +1,6 @@
 import { useId, type Ref } from "react";
-import { portraitUrls } from "src/components/citizen-lab/citizenAssets";
-import { DECO_DEFAULT_COLOR } from "src/components/citizen-lab/citizenLabOptions";
+import { portraitUrls } from "src/components/citizen-lab/portrait/citizenAssets";
+import { DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
 import {
   CANVAS,
   computePortraitLayout,
@@ -9,8 +9,8 @@ import {
   type DecoLayer,
   type DecoPiece,
   logoBox,
-} from "src/components/citizen-lab/citizenLayout";
-import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/citizenTypes";
+} from "src/components/citizen-lab/portrait/citizenLayout";
+import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
 
 type CitizenPortraitProps = {
   portraitRef: Ref<SVGSVGElement>;

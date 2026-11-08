@@ -1,9 +1,9 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vitest";
-import { assetUrl } from "src/components/citizen-lab/citizenAssets";
-import { CitizenPortrait } from "src/components/citizen-lab/CitizenPortrait";
-import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/citizenTypes";
-import { DECO, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/citizenLabOptions";
+import { assetUrl } from "src/components/citizen-lab/portrait/citizenAssets";
+import { CitizenPortrait } from "src/components/citizen-lab/portrait/CitizenPortrait";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
+import { DECO, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
 
 const NO_LOGO: CitizenLogo = { style: "none", color: "#75b44b" };
 const BASE_COLORS: CitizenColors = {

@@ -1,4 +1,4 @@
-import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/citizenTypes";
+import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
 import {
   CITIZENS,
   COLORS,
@@ -12,7 +12,7 @@ import {
   TAG_FONTS,
   type CitizenId,
   type Feature,
-} from "src/components/citizen-lab/citizenLabOptions";
+} from "src/components/citizen-lab/design/citizenLabOptions";
 
 export const TAG_MAX_LENGTH = 30;
 

@@ -1,6 +1,6 @@
-import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/citizenTypes";
-import { computePortraitLayout, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
-import { ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/citizenLabOptions";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
+import { computePortraitLayout, type CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
+import { ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
 
 const RAW_ASSETS = import.meta.glob<string>("/src/assets/40c3-creator/**/*.svg", {
   query: "?raw",

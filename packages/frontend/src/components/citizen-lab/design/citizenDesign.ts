@@ -1,6 +1,6 @@
-import { CITIZENS, COLORS, FEATURES, featureOptionId, type CitizenId } from "src/components/citizen-lab/citizenLabOptions";
-import type { CitizenSelection } from "src/components/citizen-lab/citizenLayout";
-import type { CitizenDesign } from "src/components/citizen-lab/citizenShareState";
+import { CITIZENS, COLORS, FEATURES, featureOptionId, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
+import type { CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
+import type { CitizenDesign } from "src/components/citizen-lab/design/citizenShareState";
 
 export function cycleOption(index: number, length: number, direction: -1 | 1) {
   return (index + direction + length) % length;
