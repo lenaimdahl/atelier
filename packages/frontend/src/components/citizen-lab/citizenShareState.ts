@@ -42,7 +42,7 @@ export const DEFAULT_DESIGN: CitizenDesign = {
     nose: COLORS[0],
     mouth: COLORS[0],
   },
-  tag: { text: "", fontFamily: TAG_FONTS[0].value, color: "#ffbc40" },
+  tag: { text: "", fontFamily: TAG_FONTS[0].value, color: COLORS[7] },
   logo: { style: "none", color: LOGO_COLORS[0] },
   hardToClassify: false,
 };

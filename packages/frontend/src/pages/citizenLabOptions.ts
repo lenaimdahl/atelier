@@ -70,8 +70,9 @@ export function featureOptionId(feature: Feature, position: number): number {
   return (options[position] ?? options[0]).id;
 }
 
-// Deco color value meaning "keep the asset's original color".
 export const DECO_DEFAULT_COLOR = "#fffbff";
+
+export const ASSET_PART_GREEN = "#6ab143";
 
 export const LOGO_STYLES = ["none", "icon", "text"] as const;
 export type LogoStyle = (typeof LOGO_STYLES)[number];

@@ -1,3 +1,5 @@
+import { ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/pages/citizenLabOptions";
+
 export const CANVAS = { width: 320, height: 340, centerX: 160 } as const;
 
 export type Box = { x: number; y: number; width: number; height: number };
@@ -122,9 +124,9 @@ type DecoContext = {
 
 export type DecoTint = { mode: "multiply" | "fill" | "replace"; originalColor: string };
 
-const WHITE_TINT: DecoTint = { mode: "multiply", originalColor: "#fffbff" };
+const WHITE_TINT: DecoTint = { mode: "multiply", originalColor: DECO_DEFAULT_COLOR };
 const BLACK_TINT: DecoTint = { mode: "fill", originalColor: "#000000" };
-const GREEN_TINT: DecoTint = { mode: "replace", originalColor: "#6ab143" };
+const GREEN_TINT: DecoTint = { mode: "replace", originalColor: ASSET_PART_GREEN };
 
 type DecoDefinition = {
   layer: DecoLayer;

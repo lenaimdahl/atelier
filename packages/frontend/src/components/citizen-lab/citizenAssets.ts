@@ -1,6 +1,6 @@
 import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/CitizenPortrait";
 import { computePortraitLayout, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
-import { DECO_DEFAULT_COLOR } from "src/pages/citizenLabOptions";
+import { ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/pages/citizenLabOptions";
 
 const RAW_ASSETS = import.meta.glob<string>("/src/assets/40c3-creator/**/*.svg", {
   query: "?raw",
@@ -9,7 +9,7 @@ const RAW_ASSETS = import.meta.glob<string>("/src/assets/40c3-creator/**/*.svg",
 });
 
 const ASSET_PREFIX = "/src/assets/40c3-creator/";
-const PART_GREEN = /#6ab143/gi;
+const PART_GREEN = new RegExp(ASSET_PART_GREEN, "gi");
 
 const SVGS = new Map(Object.entries(RAW_ASSETS).map(([path, svg]) => [path.slice(ASSET_PREFIX.length), svg]));
 const URLS = new Map<string, string>();
