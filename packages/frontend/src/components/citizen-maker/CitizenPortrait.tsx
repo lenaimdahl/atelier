@@ -1,17 +1,19 @@
 import { useId, type Ref } from "react";
-import { COLOR_HUES, DECO_DEFAULT_COLOR } from "src/pages/citizenMakerOptions";
+import { COLOR_HUES, DECO_DEFAULT_COLOR, type LogoStyle } from "src/pages/citizenMakerOptions";
 import {
   CANVAS,
   computePortraitLayout,
   type CitizenSelection,
   type DecoLayer,
   type DecoPiece,
+  logoBox,
 } from "src/components/citizen-maker/citizenLayout";
 
 const ASSET_ROOT = "/40c3-creator";
 
 export type CitizenColors = { body: string; head: string; hair: string; deco: string };
 export type CitizenTag = { text: string; fontFamily: string; color: string };
+export type CitizenLogo = { style: LogoStyle; color: string };
 
 type CitizenPortraitProps = {
   portraitRef: Ref<SVGSVGElement>;
@@ -19,6 +21,7 @@ type CitizenPortraitProps = {
   selection: CitizenSelection;
   colors: CitizenColors;
   tag: CitizenTag;
+  logo: CitizenLogo;
 };
 
 // "fill" paints every visible pixel; "multiply" tints white parts and keeps black/green details.
@@ -74,7 +77,7 @@ function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[
   );
 }
 
-export function CitizenPortrait({ portraitRef, citizenName, selection, colors, tag }: CitizenPortraitProps) {
+export function CitizenPortrait({ portraitRef, citizenName, selection, colors, tag, logo }: CitizenPortraitProps) {
   const layout = computePortraitLayout(selection);
   const filterPrefix = useId();
   const filterIds = {
@@ -83,6 +86,7 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
     decoMultiply: `${filterPrefix}deco-multiply`,
     decoFill: `${filterPrefix}deco-fill`,
     body: `${filterPrefix}body-color`,
+    logo: `${filterPrefix}logo-color`,
   };
   const tagText = tag.text.trim();
   const tagTextWidth = Math.min(tagText.length * 6.5, layout.tag.maxWidth);
@@ -110,6 +114,7 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
         <TintFilter id={filterIds.hair} color={colors.hair} mode="fill" />
         <TintFilter id={filterIds.decoMultiply} color={colors.deco} mode="multiply" />
         <TintFilter id={filterIds.decoFill} color={colors.deco} mode="fill" />
+        <TintFilter id={filterIds.logo} color={logo.color} mode="fill" />
         {layout.body.white ? (
           <TintFilter id={filterIds.body} color={colors.body} mode="multiply" />
         ) : (
@@ -158,6 +163,14 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
         >
           {tagText}
         </text>
+      )}
+      {logo.style !== "none" && (
+        <image
+          href={`${ASSET_ROOT}/Logos/${logo.style === "text" ? "LogoText" : "Logo"}.svg`}
+          {...logoBox(logo.style)}
+          preserveAspectRatio="xMidYMid meet"
+          style={{ filter: `url(#${filterIds.logo})` }}
+        />
       )}
     </svg>
   );

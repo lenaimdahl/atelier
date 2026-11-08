@@ -50,7 +50,7 @@ type BodyGeometry = {
 const DEFAULT_TAG = { x: 292, y: 322, maxWidth: 116 };
 
 export const BODY_GEOMETRY: BodyGeometry[] = [
-  { badge: { x: 108, y: 292 }, tag: DEFAULT_TAG, white: false },
+  { badge: { x: 120, y: 292 }, tag: DEFAULT_TAG, white: false },
   { badge: { x: 122, y: 300 }, tag: DEFAULT_TAG, white: false },
   { badge: { x: 118, y: 306 }, tag: { x: 248, y: 320, maxWidth: 72 }, white: false },
   { badge: { x: 150, y: 296 }, tag: DEFAULT_TAG, white: true },
@@ -267,6 +267,18 @@ export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
 
 export function decoTint(decoId: number): DecoTint | undefined {
   return DECO_DEFINITIONS[decoId]?.tint;
+}
+
+const LOGO_ASSETS = {
+  icon: { aspectRatio: 67.65 / 88.42, height: 46 },
+  text: { aspectRatio: 138.02 / 71.06, height: 42 },
+};
+const LOGO_OFFSET = { left: 14, bottom: 16 };
+
+// Bottom-left is the one corner kept free of hats, hair and the tag.
+export function logoBox(style: "icon" | "text"): Box {
+  const { aspectRatio, height } = LOGO_ASSETS[style];
+  return { x: LOGO_OFFSET.left, y: CANVAS.height - height - LOGO_OFFSET.bottom, width: height * aspectRatio, height };
 }
 
 export type CitizenSelection = {

@@ -7,6 +7,7 @@ import {
   EYE_GEOMETRY,
   HEAD_GEOMETRY,
   decoTint,
+  logoBox,
   type CitizenSelection,
 } from "src/components/citizen-maker/citizenLayout";
 import { CITIZENS, DECO, EYES, HAIR, HEADS } from "src/pages/citizenMakerOptions";
@@ -39,6 +40,21 @@ describe("asset geometry", () => {
 });
 
 describe("portrait layout", () => {
+  test("the logo stays inside the canvas, clear of the tag", () => {
+    for (const style of ["icon", "text"] as const) {
+      const logo = logoBox(style);
+      expect(logo.x, style).toBeGreaterThanOrEqual(0);
+      expect(logo.y + logo.height, style).toBeLessThanOrEqual(CANVAS.height);
+      for (const body of BODY_GEOMETRY) {
+        expect(logo.x + logo.width, style).toBeLessThan(body.tag.x - body.tag.maxWidth);
+        // The badge deco sits on the chest above-right of the logo; they must not overlap.
+        const badgeLeft = body.badge.x - 15;
+        const badgeBottom = body.badge.y + 15;
+        expect(logo.x + logo.width <= badgeLeft || logo.y >= badgeBottom, `${style} vs badge`).toBe(true);
+      }
+    }
+  });
+
   test("ears and studs stay horizontally inside the canvas", () => {
     for (const selection of allSelections()) {
       if (selection.decoId !== 0 && selection.decoId !== 10) continue;

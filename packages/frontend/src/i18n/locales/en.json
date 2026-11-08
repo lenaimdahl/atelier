@@ -64,6 +64,14 @@
       "localSession": "SESSION 040 / LOCAL ONLY",
       "previewLabel": "LIVE PREVIEW / CITIZEN_01",
       "downloadSvg": "DOWNLOAD SVG",
+      "addLogo": "ADD LOGO",
+      "removeLogo": "REMOVE LOGO",
+      "logoLabel": "40C3 LOGO",
+      "logoColorLabel": "LOGO COLOR",
+      "logoStyles": {
+        "icon": "ICON",
+        "text": "WITH TEXT"
+      },
       "mood": "MOOD: CURIOUS",
       "signal": "SIGNAL: UNSTABLE",
       "chooseFigure": "CHOOSE A FIGURE",

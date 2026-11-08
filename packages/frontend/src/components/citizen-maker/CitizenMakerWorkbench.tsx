@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { CitizenFigurePicker } from "src/components/citizen-maker/CitizenFigurePicker";
-import { CitizenPortrait, type CitizenColors, type CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
+import { CitizenPortrait, type CitizenColors, type CitizenLogo, type CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
 import { OptionCycler } from "src/components/citizen-maker/OptionCycler";
 import { TagControls } from "src/components/citizen-maker/TagControls";
 import { decoTint, type CitizenSelection } from "src/components/citizen-maker/citizenLayout";
@@ -34,7 +34,7 @@ export function CitizenMakerWorkbench() {
   const portraitRef = useRef<SVGSVGElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [design, setDesign] = useState<CitizenDesign>(() => designFromSearchParams(searchParams));
-  const { features, colors, tag } = design;
+  const { features, colors, tag, logo } = design;
   const selectedCitizen = CITIZENS.find((citizen) => citizen.id === design.citizenId) ?? CITIZENS[0];
 
   useEffect(() => {
@@ -57,6 +57,10 @@ export function CitizenMakerWorkbench() {
 
   function updateDesign(change: (current: CitizenDesign) => Partial<CitizenDesign>) {
     setDesign((current) => ({ ...current, ...change(current) }));
+  }
+
+  function updateLogo(change: Partial<CitizenLogo>) {
+    updateDesign((current) => ({ logo: { ...current.logo, ...change } }));
   }
 
   function selectCitizen(citizen: Citizen) {
@@ -99,6 +103,14 @@ export function CitizenMakerWorkbench() {
               <button
                 className="download-svg-button"
                 type="button"
+                aria-pressed={logo.style !== "none"}
+                onClick={() => updateLogo({ style: logo.style === "none" ? "icon" : "none" })}
+              >
+                {logo.style === "none" ? t("pages.citizenMaker.addLogo") : t("pages.citizenMaker.removeLogo")}
+              </button>
+              <button
+                className="download-svg-button"
+                type="button"
                 onClick={() => downloadCitizenSvg(portraitRef.current, `${selectedCitizen.id}-citizen.svg`)}
               >
                 {t("pages.citizenMaker.downloadSvg")}
@@ -116,6 +128,7 @@ export function CitizenMakerWorkbench() {
               selection={selection}
               colors={colors}
               tag={tag}
+              logo={logo}
             />
             <span className="stage-signal">{t("pages.citizenMaker.signal")}</span>
           </div>
@@ -123,6 +136,8 @@ export function CitizenMakerWorkbench() {
             selectedId={design.citizenId}
             colors={colors}
             decoOriginalColor={decoTint(selection.decoId)?.originalColor}
+            logo={logo}
+            onLogoChange={updateLogo}
             onSelectFigure={selectCitizen}
             onSelectColor={(part: keyof CitizenColors, color) =>
               updateDesign((current) => ({ colors: { ...current.colors, [part]: color } }))

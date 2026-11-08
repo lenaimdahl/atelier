@@ -82,3 +82,8 @@ export function featureOptionId(feature: Feature, position: number): number {
 
 // Deco color value meaning "keep the asset's original color".
 export const DECO_DEFAULT_COLOR = "#fffbff";
+
+export const LOGO_STYLES = ["none", "icon", "text"] as const;
+export type LogoStyle = (typeof LOGO_STYLES)[number];
+// The official 40C3 logo colors: the palette plus light and dark.
+export const LOGO_COLORS = [...COLORS, "#ebedf0", "#001300"] as const;

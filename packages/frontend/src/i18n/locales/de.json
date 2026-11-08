@@ -64,6 +64,14 @@
       "localSession": "SITZUNG 040 / NUR LOKAL",
       "previewLabel": "LIVE-VORSCHAU / CITIZEN_01",
       "downloadSvg": "SVG HERUNTERLADEN",
+      "addLogo": "LOGO HINZUFÜGEN",
+      "removeLogo": "LOGO ENTFERNEN",
+      "logoLabel": "40C3-LOGO",
+      "logoColorLabel": "LOGOFARBE",
+      "logoStyles": {
+        "icon": "SIGNET",
+        "text": "MIT TEXT"
+      },
       "mood": "STIMMUNG: NEUGIERIG",
       "signal": "SIGNAL: INSTABIL",
       "chooseFigure": "FIGUR AUSWÄHLEN",

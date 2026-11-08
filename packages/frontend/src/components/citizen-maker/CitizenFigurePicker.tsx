@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import type { CitizenColors } from "src/components/citizen-maker/CitizenPortrait";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-maker/CitizenPortrait";
 import { SwatchRow } from "src/components/citizen-maker/SwatchRow";
-import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/pages/citizenMakerOptions";
+import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, LOGO_COLORS, type CitizenId } from "src/pages/citizenMakerOptions";
 
 type ColorPart = keyof CitizenColors;
 
@@ -9,16 +9,20 @@ type CitizenFigurePickerProps = {
   selectedId: CitizenId;
   colors: CitizenColors;
   decoOriginalColor: string | undefined;
+  logo: CitizenLogo;
   onSelectFigure: (citizen: (typeof CITIZENS)[number]) => void;
   onSelectColor: (part: ColorPart, color: string) => void;
+  onLogoChange: (change: Partial<CitizenLogo>) => void;
 };
 
 export function CitizenFigurePicker({
   selectedId,
   colors,
   decoOriginalColor,
+  logo,
   onSelectFigure,
   onSelectColor,
+  onLogoChange,
 }: CitizenFigurePickerProps) {
   const { t } = useTranslation();
   const palettes: { part: ColorPart; options: readonly string[] }[] = [
@@ -64,6 +68,31 @@ export function CitizenFigurePicker({
             />
           ))}
         </div>
+        {logo.style !== "none" && (
+          <div className="logo-controls">
+            <fieldset className="logo-styles">
+              <legend className="control-label">{t("pages.citizenMaker.logoLabel")}</legend>
+              {(["icon", "text"] as const).map((style) => (
+                <button
+                  key={style}
+                  className={`logo-style-option${logo.style === style ? " selected" : ""}`}
+                  type="button"
+                  aria-pressed={logo.style === style}
+                  onClick={() => onLogoChange({ style })}
+                >
+                  {t(`pages.citizenMaker.logoStyles.${style}`)}
+                </button>
+              ))}
+            </fieldset>
+            <SwatchRow
+              className="color-swatches"
+              label={t("pages.citizenMaker.logoColorLabel")}
+              options={LOGO_COLORS}
+              selected={logo.color}
+              onSelect={(color) => onLogoChange({ color })}
+            />
+          </div>
+        )}
         <span className="palette-note">{t("pages.citizenMaker.paletteNote")}</span>
       </div>
     </div>

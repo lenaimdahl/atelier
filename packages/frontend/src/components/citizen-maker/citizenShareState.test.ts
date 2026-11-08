@@ -6,7 +6,7 @@ import {
   hairPositionFor,
   type CitizenDesign,
 } from "src/components/citizen-maker/citizenShareState";
-import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, FEATURES, TAG_FONTS } from "src/pages/citizenMakerOptions";
+import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, FEATURES, LOGO_COLORS, TAG_FONTS } from "src/pages/citizenMakerOptions";
 
 const roundTrip = (design: CitizenDesign) =>
   designFromSearchParams(new URLSearchParams(designToSearchParams(design).toString()));
@@ -33,6 +33,7 @@ describe("citizen share links", () => {
         features: { head: 3, eyes: 5, nose: 1, hair: 2, mouth: 7, deco: 4 },
         colors: { body: COLORS[4], head: COLORS[1], hair: COLORS[7], deco: COLORS[2] },
         tag: { text: "#chaos & co?", fontFamily: TAG_FONTS[1].value, color: COLORS[3] },
+        logo: { style: "text", color: LOGO_COLORS[9] },
         hardToClassify: true,
       };
       expect(roundTrip(design), citizen.id).toEqual(design);
@@ -62,6 +63,20 @@ describe("citizen share links", () => {
     expect(design.tag.color).toBe(DEFAULT_DESIGN.tag.color);
     expect(design.tag.text).toHaveLength(20);
     expect(design.hardToClassify).toBe(false);
+  });
+
+  test("every logo style and color survives a round trip", () => {
+    for (const style of ["none", "icon", "text"] as const) {
+      for (const color of LOGO_COLORS) {
+        const design = { ...DEFAULT_DESIGN, logo: { style, color } };
+        expect(roundTrip(design), `${style} ${color}`).toEqual(design);
+      }
+    }
+  });
+
+  test("invalid logo values fall back to no logo", () => {
+    const design = designFromSearchParams(new URLSearchParams("logo=huge&logoColor=ff0000"));
+    expect(design.logo).toEqual(DEFAULT_DESIGN.logo);
   });
 
   test("colors are case-insensitive and stored without #", () => {

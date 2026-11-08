@@ -247,6 +247,49 @@
   outline-offset: 2px;
 }
 
+.download-svg-button[aria-pressed="true"] {
+  background: rgba(117, 180, 75, 0.18);
+}
+
+.logo-controls {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.logo-styles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.logo-styles legend {
+  margin-bottom: 6px;
+}
+
+.logo-style-option {
+  padding: 6px 10px;
+  border: 1px solid rgba(117, 180, 75, 0.55);
+  background: transparent;
+  color: #ebedf0;
+  font: 0.62rem Hack, monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.logo-style-option.selected {
+  border-color: #75b44b;
+  background: rgba(117, 180, 75, 0.18);
+}
+
+.logo-style-option:focus-visible {
+  outline: 2px solid #ffbc40;
+  outline-offset: 2px;
+}
+
 .citizen-stage {
   position: relative;
   min-height: 470px;

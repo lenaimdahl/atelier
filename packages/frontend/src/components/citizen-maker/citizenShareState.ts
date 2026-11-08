@@ -1,10 +1,12 @@
-import type { CitizenColors, CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
+import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
 import {
   CITIZENS,
   COLORS,
   DECO_DEFAULT_COLOR,
   FEATURES,
   HAIR,
+  LOGO_COLORS,
+  LOGO_STYLES,
   TAG_FONTS,
   type CitizenId,
   type Feature,
@@ -17,6 +19,7 @@ export type CitizenDesign = {
   features: Record<Feature, number>;
   colors: CitizenColors;
   tag: CitizenTag;
+  logo: CitizenLogo;
   hardToClassify: boolean;
 };
 
@@ -31,6 +34,7 @@ export const DEFAULT_DESIGN: CitizenDesign = {
   features: { head: 0, eyes: 0, nose: 4, hair: hairPositionFor(CITIZENS[0]), mouth: 1, deco: 0 },
   colors: { body: COLORS[0], head: COLORS[0], hair: COLORS[0], deco: DECO_DEFAULT_COLOR },
   tag: { text: "", fontFamily: TAG_FONTS[0].value, color: "#ffbc40" },
+  logo: { style: "none", color: LOGO_COLORS[0] },
   hardToClassify: false,
 };
 
@@ -64,6 +68,8 @@ export function designToSearchParams(design: CitizenDesign): URLSearchParams {
   setIfChanged("tag", design.tag.text, DEFAULT_DESIGN.tag.text);
   setIfChanged("font", String(TAG_FONTS.findIndex(({ value }) => value === design.tag.fontFamily)), "0");
   setIfChanged("tagColor", toParamColor(design.tag.color), toParamColor(DEFAULT_DESIGN.tag.color));
+  setIfChanged("logo", design.logo.style, DEFAULT_DESIGN.logo.style);
+  setIfChanged("logoColor", toParamColor(design.logo.color), toParamColor(DEFAULT_DESIGN.logo.color));
   if (design.hardToClassify) params.set("odd", "1");
   return params;
 }
@@ -92,6 +98,10 @@ export function designFromSearchParams(params: URLSearchParams): CitizenDesign {
       text: (params.get("tag") ?? "").slice(0, TAG_MAX_LENGTH),
       fontFamily: font.value,
       color: fromParamColor(params.get("tagColor"), COLORS) ?? DEFAULT_DESIGN.tag.color,
+    },
+    logo: {
+      style: LOGO_STYLES.find((style) => style === params.get("logo")) ?? DEFAULT_DESIGN.logo.style,
+      color: fromParamColor(params.get("logoColor"), LOGO_COLORS) ?? DEFAULT_DESIGN.logo.color,
     },
     hardToClassify: params.get("odd") === "1",
   };
