@@ -4,6 +4,7 @@ import { DECO_DEFAULT_COLOR, type LogoStyle } from "src/components/citizen-lab/c
 import {
   CANVAS,
   computePortraitLayout,
+  type Box,
   type CitizenSelection,
   type DecoLayer,
   type DecoPiece,
@@ -53,6 +54,30 @@ function TintFilter({ id, color, mode }: { id: string; color: string; mode: "fil
   );
 }
 
+function PortraitImage({
+  href,
+  box,
+  fit = "xMidYMid meet",
+  filter,
+}: {
+  href: string;
+  box: Box;
+  fit?: "none" | "xMidYMid meet";
+  filter?: string;
+}) {
+  return (
+    <image
+      href={href}
+      x={box.x}
+      y={box.y}
+      width={box.width}
+      height={box.height}
+      preserveAspectRatio={fit}
+      style={filter ? { filter } : undefined}
+    />
+  );
+}
+
 function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[]; filter: string | undefined }) {
   return pieces.map(({ crop, ...box }) =>
     crop ? (
@@ -67,13 +92,7 @@ function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[
         />
       </svg>
     ) : (
-      <image
-        key={`${box.x},${box.y}`}
-        href={href}
-        {...box}
-        preserveAspectRatio="xMidYMid meet"
-        style={filter ? { filter } : undefined}
-      />
+      <PortraitImage key={`${box.x},${box.y}`} href={href} box={box} filter={filter} />
     ),
   );
 }
@@ -125,34 +144,20 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
         {layout.body.white && <TintFilter id={filterIds.body} color={colors.body} mode="multiply" />}
       </defs>
       <g transform={tilted ? TILT : undefined}>
-        <image
+        <PortraitImage
           href={urls.body}
-          x={layout.body.x}
-          y={layout.body.y}
-          width={layout.body.width}
-          height={layout.body.height}
-          preserveAspectRatio="xMidYMid meet"
-          style={layout.body.white ? { filter: `url(#${filterIds.body})` } : undefined}
+          box={layout.body}
+          filter={layout.body.white ? `url(#${filterIds.body})` : undefined}
         />
-        <image
-          href={urls.head}
-          {...layout.head}
-          preserveAspectRatio="none"
-          style={{ filter: `url(#${filterIds.head})` }}
-        />
+        <PortraitImage href={urls.head} box={layout.head} fit="none" filter={`url(#${filterIds.head})`} />
         {decoInLayer("body")}
-        <image
-          href={urls.hair}
-          {...layout.hair}
-          preserveAspectRatio="none"
-          style={{ filter: `url(#${filterIds.hair})` }}
-        />
+        <PortraitImage href={urls.hair} box={layout.hair} fit="none" filter={`url(#${filterIds.hair})`} />
         {decoInLayer("head")}
-        <image href={urls.eyes} {...layout.eyes} preserveAspectRatio="xMidYMid meet" />
+        <PortraitImage href={urls.eyes} box={layout.eyes} />
         {decoInLayer("eyes")}
-        <image href={urls.mouth} {...layout.mouth} preserveAspectRatio="xMidYMid meet" />
+        <PortraitImage href={urls.mouth} box={layout.mouth} />
         {decoInLayer("mouth")}
-        <image href={urls.nose} {...layout.nose} preserveAspectRatio="xMidYMid meet" />
+        <PortraitImage href={urls.nose} box={layout.nose} />
         {tagText && (
           <text
             x={layout.tag.x}
@@ -169,12 +174,7 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
           </text>
         )}
         {logo.style !== "none" && urls.logo && (
-          <image
-            href={urls.logo}
-            {...logoBox(logo.style)}
-            preserveAspectRatio="xMidYMid meet"
-            style={{ filter: `url(#${filterIds.logo})` }}
-          />
+          <PortraitImage href={urls.logo} box={logoBox(logo.style)} filter={`url(#${filterIds.logo})`} />
         )}
       </g>
     </svg>
