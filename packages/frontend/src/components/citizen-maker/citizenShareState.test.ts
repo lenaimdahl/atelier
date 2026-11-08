@@ -55,11 +55,9 @@ describe("citizen share links", () => {
       new URLSearchParams("citizen=nobody&head=99&eyes=3&deco=abc&bodyColor=123456&decoColor=zzz&font=7&tagColor=fffbff&odd=yes&tag=" + "x".repeat(50)),
     );
     expect(design.citizenId).toBe(DEFAULT_DESIGN.citizenId);
-    // Eyes asset 3 does not exist, so it is rejected too.
     expect(design.features).toEqual(DEFAULT_DESIGN.features);
     expect(design.colors).toEqual(DEFAULT_DESIGN.colors);
     expect(design.tag.fontFamily).toBe(TAG_FONTS[0].value);
-    // White is only allowed for decos, not for the tag.
     expect(design.tag.color).toBe(DEFAULT_DESIGN.tag.color);
     expect(design.tag.text).toHaveLength(20);
     expect(design.hardToClassify).toBe(false);

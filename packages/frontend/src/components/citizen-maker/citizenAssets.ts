@@ -1,4 +1,3 @@
-// Parts are bundled as data URLs so switching a part never waits for the network.
 const RAW_ASSETS = import.meta.glob<string>("/src/assets/40c3-creator/**/*.svg", {
   query: "?raw",
   import: "default",
@@ -20,7 +19,6 @@ export function assetUrl(path: string): string {
 
 let decoded: Promise<unknown> | null = null;
 
-// Decoding every part once up front means a newly selected part is drawn in the same frame.
 export function predecodeAssets() {
   decoded ??= Promise.allSettled(
     [...ASSET_URLS.values()].map((url) => {

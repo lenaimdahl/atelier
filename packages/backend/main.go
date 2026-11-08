@@ -5,13 +5,14 @@ import (
 	"embed"
 	"encoding/json"
 	"errors"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 //go:embed migrations/*.sql
@@ -29,8 +30,10 @@ func main() {
 
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
-		databaseURL = "postgres://postgres:your-password@localhost:5432/atelier_db"
+		log.Fatal("DATABASE_URL is not set")
 	}
+
+	trustProxy := os.Getenv("TRUST_PROXY") == "true"
 
 	corsAllowedOrigin := os.Getenv("CORS_ALLOWED_ORIGIN")
 	if corsAllowedOrigin == "" {
@@ -57,12 +60,12 @@ func main() {
 		importCatalogWithRetry(ctx, database, &http.Client{Timeout: 30 * time.Second})
 	}()
 
-	http.HandleFunc("GET /health", healthHandler)
+	http.HandleFunc("GET /health", healthHandler(database))
 	http.HandleFunc("GET /catalog", searchCatalogHandler(database, corsAllowedOrigin))
 	http.HandleFunc("GET /covers/{id}", coverHandler(database))
 	http.HandleFunc("OPTIONS /favorites", optionsHandler(corsAllowedOrigin))
 	http.HandleFunc("GET /favorites", listFavoritesHandler(database, corsAllowedOrigin))
-	http.HandleFunc("POST /favorites", addFavoriteHandler(database, corsAllowedOrigin, newRateLimiter(10, time.Minute)))
+	http.HandleFunc("POST /favorites", addFavoriteHandler(database, corsAllowedOrigin, newRateLimiter(10, time.Minute), trustProxy))
 
 	server := &http.Server{
 		Addr:              ":" + port,
@@ -134,7 +137,15 @@ func writeJSONError(response http.ResponseWriter, status int, message string) {
 	writeJSON(response, status, errorResponse{Error: message})
 }
 
-func healthHandler(response http.ResponseWriter, _ *http.Request) {
-	response.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(response).Encode(map[string]string{"status": "ok"})
+func healthHandler(database *pgxpool.Pool) http.HandlerFunc {
+	return func(response http.ResponseWriter, request *http.Request) {
+		ctx, cancel := context.WithTimeout(request.Context(), 2*time.Second)
+		defer cancel()
+		if err := database.Ping(ctx); err != nil {
+			log.Printf("health check failed: %v", err)
+			writeJSON(response, http.StatusServiceUnavailable, map[string]string{"status": "unavailable"})
+			return
+		}
+		writeJSON(response, http.StatusOK, map[string]string{"status": "ok"})
+	}
 }

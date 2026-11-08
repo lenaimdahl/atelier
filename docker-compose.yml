@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: your-password
       POSTGRES_DB: atelier_db
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - atelier_pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -23,8 +23,9 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:your-password@postgres:5432/atelier_db
       CORS_ALLOWED_ORIGIN: http://localhost:5173
+      TRUST_PROXY: "false"
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -37,7 +38,7 @@ services:
         VITE_API_URL: http://localhost:8080
     container_name: atelier-frontend
     ports:
-      - "5173:8080"
+      - "127.0.0.1:5173:8080"
     depends_on:
       - backend
 

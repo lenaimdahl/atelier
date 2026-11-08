@@ -4,6 +4,7 @@ import (
 	"context"
 	_ "embed"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -21,7 +22,6 @@ import (
 //go:embed catalog/books.txt
 var catalogFile string
 
-// Open Library asks clients to identify themselves.
 const userAgent = "atelier-showcase/0.1 (https://github.com/lenaimdahl/atelier)"
 
 const openLibrarySearchURL = "https://openlibrary.org/search.json"
@@ -56,8 +56,6 @@ func parseCatalog(file string) ([]catalogEntry, error) {
 	return entries, nil
 }
 
-// importCatalogWithRetry keeps retrying when Open Library is unreachable, so the library
-// does not stay empty until the next restart.
 func importCatalogWithRetry(ctx context.Context, database *pgxpool.Pool, client *http.Client) {
 	delay := 10 * time.Second
 	for attempt := 1; ; attempt++ {
@@ -84,13 +82,15 @@ func importCatalog(ctx context.Context, database *pgxpool.Pool, client *http.Cli
 	if err != nil {
 		return err
 	}
+	if len(entries) == 0 {
+		return errors.New("catalog is empty, refusing to delete every book")
+	}
 
 	ids := make([]string, len(entries))
 	for i, entry := range entries {
 		ids[i] = entry.id
 	}
 
-	// Books removed from the list disappear from the library and the shelf.
 	removed, err := database.Exec(ctx, `DELETE FROM catalog_books WHERE id <> ALL($1)`, ids)
 	if err != nil {
 		return err
@@ -99,7 +99,6 @@ func importCatalog(ctx context.Context, database *pgxpool.Pool, client *http.Cli
 		log.Printf("removed %d books that are no longer in the catalog", removed.RowsAffected())
 	}
 
-	// Title and language are curated in books.txt, so corrections apply on every start.
 	for _, entry := range entries {
 		if _, err := database.Exec(ctx, `UPDATE catalog_books SET title = $2, language = $3 WHERE id = $1`, entry.id, entry.title, entry.language); err != nil {
 			return err
@@ -178,7 +177,6 @@ type openLibraryWork struct {
 	CoverID    int      `json:"cover_i"`
 }
 
-// fetchOpenLibraryWorks looks up all works with a single search request, keyed by work ID.
 func fetchOpenLibraryWorks(ctx context.Context, client *http.Client, ids []string) (map[string]openLibraryWork, error) {
 	query := url.Values{
 		"q":      {"key:(/works/" + strings.Join(ids, " OR /works/") + ")"},
@@ -203,7 +201,6 @@ func fetchCover(ctx context.Context, client *http.Client, coverID int) ([]byte, 
 	return cover, nil
 }
 
-// download rejects responses larger than maxBytes instead of reading them into memory.
 func download(ctx context.Context, client *http.Client, url string, maxBytes int64) ([]byte, error) {
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -298,8 +295,6 @@ func searchCatalogHandler(database *pgxpool.Pool, allowedOrigin string) http.Han
 	}
 }
 
-// coverPath is relative to the API base URL. Covers are served by the backend itself, so
-// visitors' browsers never contact Open Library.
 func coverPath(bookID string) *string {
 	path := "/covers/" + bookID
 	return &path
@@ -309,7 +304,7 @@ func coverHandler(database *pgxpool.Pool) http.HandlerFunc {
 	return func(response http.ResponseWriter, request *http.Request) {
 		var cover []byte
 		err := database.QueryRow(request.Context(), `SELECT cover_image FROM catalog_books WHERE id = $1 AND cover_image IS NOT NULL`, request.PathValue("id")).Scan(&cover)
-		if err == pgx.ErrNoRows {
+		if errors.Is(err, pgx.ErrNoRows) {
 			http.NotFound(response, request)
 			return
 		}

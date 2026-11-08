@@ -63,7 +63,6 @@ describe("portrait layout", () => {
       expect(logo.y + logo.height, style).toBeLessThanOrEqual(CANVAS.height);
       for (const body of BODY_GEOMETRY) {
         expect(logo.x + logo.width, style).toBeLessThan(body.tag.x - body.tag.maxWidth);
-        // The badge deco sits on the chest above-right of the logo; they must not overlap.
         const badgeLeft = body.badge.x - 15;
         const badgeBottom = body.badge.y + 15;
         expect(logo.x + logo.width <= badgeLeft || logo.y >= badgeBottom, `${style} vs badge`).toBe(true);

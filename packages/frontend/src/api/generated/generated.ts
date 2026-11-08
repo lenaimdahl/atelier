@@ -262,7 +262,9 @@ export class Api<
         {
           status: "ok";
         },
-        any
+        {
+          status: "unavailable";
+        }
       >({
         path: `/health`,
         method: "GET",

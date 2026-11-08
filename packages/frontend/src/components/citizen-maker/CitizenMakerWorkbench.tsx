@@ -45,7 +45,6 @@ export function CitizenMakerWorkbench() {
   useEffect(() => {
     const nextParams = designToSearchParams(design);
     if (nextParams.toString() !== searchParams.toString()) {
-      // Replace, not push, so editing doesn't flood the browser history.
       setSearchParams(nextParams, { replace: true });
     }
   }, [design, searchParams, setSearchParams]);

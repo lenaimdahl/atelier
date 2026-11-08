@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"log"
 	"mime"
 	"net"
@@ -22,7 +23,6 @@ type addFavoriteRequest struct {
 	BookID string `json:"bookId"`
 }
 
-// rateLimiter allows a fixed number of requests per client within a time window.
 type rateLimiter struct {
 	mu      sync.Mutex
 	limit   int
@@ -39,42 +39,64 @@ func newRateLimiter(limit int, window time.Duration) *rateLimiter {
 	return &rateLimiter{limit: limit, window: window, clients: map[string]*clientWindow{}}
 }
 
+const maxTrackedClients = 10000
+
 func (limiter *rateLimiter) allow(client string, now time.Time) bool {
 	limiter.mu.Lock()
 	defer limiter.mu.Unlock()
 
-	// Bounds memory: forget all clients once too many distinct ones were seen.
-	if len(limiter.clients) > 10000 {
-		limiter.clients = map[string]*clientWindow{}
-	}
-
 	window, ok := limiter.clients[client]
-	if !ok || now.Sub(window.start) >= limiter.window {
-		limiter.clients[client] = &clientWindow{start: now, count: 1}
+	if ok && now.Sub(window.start) < limiter.window {
+		if window.count >= limiter.limit {
+			return false
+		}
+		window.count++
 		return true
 	}
-	if window.count >= limiter.limit {
-		return false
+
+	if !ok && len(limiter.clients) >= maxTrackedClients {
+		for key, existing := range limiter.clients {
+			if now.Sub(existing.start) >= limiter.window {
+				delete(limiter.clients, key)
+			}
+		}
+		if len(limiter.clients) >= maxTrackedClients {
+			return false
+		}
 	}
-	window.count++
+
+	limiter.clients[client] = &clientWindow{start: now, count: 1}
 	return true
 }
 
-// clientIP uses the last X-Forwarded-For entry, which the reverse proxy in front of the
-// backend appends. Entries before it are set by the client and cannot be trusted.
-func clientIP(request *http.Request) string {
-	if forwarded := request.Header.Get("X-Forwarded-For"); forwarded != "" {
-		entries := strings.Split(forwarded, ",")
-		return strings.TrimSpace(entries[len(entries)-1])
+// X-Forwarded-For can be set by anyone, so only its last entry and only behind a trusted
+// proxy is used. IPv6 is grouped by /64 because one host usually controls a whole /64.
+func clientKey(request *http.Request, trustProxy bool) string {
+	address := ""
+	if trustProxy {
+		if forwarded := request.Header.Get("X-Forwarded-For"); forwarded != "" {
+			entries := strings.Split(forwarded, ",")
+			address = strings.TrimSpace(entries[len(entries)-1])
+		}
 	}
-	host, _, err := net.SplitHostPort(request.RemoteAddr)
-	if err != nil {
-		return request.RemoteAddr
+	if address == "" {
+		host, _, err := net.SplitHostPort(request.RemoteAddr)
+		if err != nil {
+			host = request.RemoteAddr
+		}
+		address = host
 	}
-	return host
+
+	ip := net.ParseIP(address)
+	if ip == nil {
+		return address
+	}
+	if ip.To4() != nil {
+		return ip.String()
+	}
+	return ip.Mask(net.CIDRMask(64, 128)).String() + "/64"
 }
 
-// queryFavorites returns the shelf, most recently picked first.
 func queryFavorites(ctx context.Context, database *pgxpool.Pool) ([]models.FavoriteBook, error) {
 	rows, err := database.Query(ctx, `
 		SELECT id, title, author, language, favorite_count, last_favorited_at
@@ -115,7 +137,7 @@ func listFavoritesHandler(database *pgxpool.Pool, allowedOrigin string) http.Han
 	}
 }
 
-func addFavoriteHandler(database *pgxpool.Pool, allowedOrigin string, limiter *rateLimiter) http.HandlerFunc {
+func addFavoriteHandler(database *pgxpool.Pool, allowedOrigin string, limiter *rateLimiter, trustProxy bool) http.HandlerFunc {
 	return func(response http.ResponseWriter, request *http.Request) {
 		setCORSHeaders(response, allowedOrigin)
 
@@ -127,7 +149,7 @@ func addFavoriteHandler(database *pgxpool.Pool, allowedOrigin string, limiter *r
 			return
 		}
 
-		if !limiter.allow(clientIP(request), time.Now()) {
+		if !limiter.allow(clientKey(request, trustProxy), time.Now()) {
 			writeJSONError(response, http.StatusTooManyRequests, "too many picks, please try again later")
 			return
 		}
@@ -147,7 +169,7 @@ func addFavoriteHandler(database *pgxpool.Pool, allowedOrigin string, limiter *r
 			WHERE id = $1
 			RETURNING id, title, author, language, favorite_count, last_favorited_at
 		`, input.BookID).Scan(&book.ID, &book.Title, &book.Author, &book.Language, &favorite.Count, &favorite.LastAddedAt)
-		if err == pgx.ErrNoRows {
+		if errors.Is(err, pgx.ErrNoRows) {
 			writeJSONError(response, http.StatusBadRequest, "book is not in the library")
 			return
 		}
