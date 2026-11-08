@@ -54,16 +54,6 @@ export const DECO = Array.from({ length: 11 }, (_, assetIndex) => ({
   number: assetIndex + 1,
 }));
 
-export const COLOR_HUES: Record<string, number> = {
-  "#75b44b": -4,
-  "#15ada3": 82,
-  "#9fa4e8": 143,
-  "#c892d6": -165,
-  "#ee5da2": -125,
-  "#ea6f82": -108,
-  "#f88a30": -72,
-  "#ffbc40": -59,
-};
 export const FEATURES = [
   { key: "head", options: HEADS },
   { key: "eyes", options: EYES },

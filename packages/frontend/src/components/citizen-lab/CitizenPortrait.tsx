@@ -1,6 +1,6 @@
 import { useId, type Ref } from "react";
 import { assetUrl } from "src/components/citizen-lab/citizenAssets";
-import { COLOR_HUES, DECO_DEFAULT_COLOR, type LogoStyle } from "src/pages/citizenLabOptions";
+import { DECO_DEFAULT_COLOR, type LogoStyle } from "src/pages/citizenLabOptions";
 import {
   CANVAS,
   computePortraitLayout,
@@ -49,15 +49,6 @@ function TintFilter({ id, color, mode }: { id: string; color: string; mode: "fil
       <feFlood floodColor={color} result="tint" />
       <feBlend in="SourceGraphic" in2="tint" mode="multiply" result="tinted" />
       <feComposite in="tinted" in2="SourceAlpha" operator="in" />
-    </filter>
-  );
-}
-
-// An SVG filter instead of CSS hue-rotate, so downloaded files keep the body color in every viewer.
-function HueRotateFilter({ id, degrees }: { id: string; degrees: number }) {
-  return (
-    <filter id={id} colorInterpolationFilters="sRGB">
-      <feColorMatrix type="hueRotate" values={String(degrees)} />
     </filter>
   );
 }
@@ -133,21 +124,17 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
         <TintFilter id={filterIds.decoMultiply} color={colors.deco} mode="multiply" />
         <TintFilter id={filterIds.decoFill} color={colors.deco} mode="fill" />
         <TintFilter id={filterIds.logo} color={logo.color} mode="fill" />
-        {layout.body.white ? (
-          <TintFilter id={filterIds.body} color={colors.body} mode="multiply" />
-        ) : (
-          <HueRotateFilter id={filterIds.body} degrees={COLOR_HUES[colors.body] ?? 0} />
-        )}
+        {layout.body.white && <TintFilter id={filterIds.body} color={colors.body} mode="multiply" />}
       </defs>
       <g transform={tilted ? TILT : undefined}>
         <image
-          href={assetUrl(`Bodies/Body${selection.bodyId}.svg`)}
+          href={assetUrl(`Bodies/Body${selection.bodyId}.svg`, layout.body.white ? undefined : colors.body)}
           x={layout.body.x}
           y={layout.body.y}
           width={layout.body.width}
           height={layout.body.height}
           preserveAspectRatio="xMidYMid meet"
-          style={{ filter: `url(#${filterIds.body})` }}
+          style={layout.body.white ? { filter: `url(#${filterIds.body})` } : undefined}
         />
         <image
           href={assetUrl(`Heads/Head${selection.headId}.svg`)}

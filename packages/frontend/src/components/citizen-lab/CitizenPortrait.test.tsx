@@ -171,3 +171,31 @@ describe("hard to classify", () => {
     expect(portraitMarkup(false)).toContain("<g>");
   });
 });
+
+describe("body color", () => {
+  function bodyImage(bodyId: number) {
+    const markup = renderToStaticMarkup(
+      <CitizenPortrait
+        portraitRef={null}
+        citizenName="Test"
+        selection={{ bodyId, headId: 2, hairId: 0, eyeId: 0, noseId: 0, mouthId: 0, decoId: 0 }}
+        colors={BASE_COLORS}
+        tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
+        logo={NO_LOGO}
+        tilted={false}
+      />,
+    );
+    return { markup, image: (markup.match(/<image [^>]*>/g) ?? [])[0] ?? "" };
+  }
+
+  test("green bodies get the exact color without a filter, so PNG exports match", () => {
+    const { markup, image } = bodyImage(0);
+    expect(image).toContain(`href="${assetUrl("Bodies/Body0.svg", BASE_COLORS.body)}"`);
+    expect(image).not.toContain("filter");
+    expect(markup).not.toContain("hueRotate");
+  });
+
+  test("the white body is still tinted", () => {
+    expect(bodyImage(3).image).toMatch(/filter:url\(#[^)]*body-color\)/);
+  });
+});

@@ -42,7 +42,7 @@ export const HEAD_GEOMETRY: HeadGeometry[] = [
 type BodyGeometry = {
   badge: { x: number; y: number };
   tag: { x: number; y: number; maxWidth: number };
-  /** White can't be hue-rotated, so white bodies are tinted instead. */
+  /** White bodies have no green to replace, so they are tinted instead. */
   white: boolean;
 };
 
