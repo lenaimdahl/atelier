@@ -4,6 +4,7 @@ import {
   designFromSearchParams,
   designToSearchParams,
   hairPositionFor,
+  TAG_MAX_LENGTH,
   type CitizenDesign,
 } from "src/components/citizen-lab/citizenShareState";
 import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, FEATURES, LOGO_COLORS, TAG_FONTS } from "src/pages/citizenLabOptions";
@@ -31,7 +32,7 @@ describe("citizen share links", () => {
       const design: CitizenDesign = {
         citizenId: citizen.id,
         features: { head: 3, eyes: 5, nose: 1, hair: 2, mouth: 7, deco: 4 },
-        colors: { body: COLORS[4], head: COLORS[1], hair: COLORS[7], deco: COLORS[2] },
+        colors: { body: COLORS[4], head: COLORS[1], hair: COLORS[7], deco: COLORS[2], eyes: COLORS[5], nose: COLORS[6], mouth: COLORS[3] },
         tag: { text: "#chaos & co?", fontFamily: TAG_FONTS[1].value, color: COLORS[3] },
         logo: { style: "text", color: LOGO_COLORS[9] },
         hardToClassify: true,
@@ -52,14 +53,14 @@ describe("citizen share links", () => {
 
   test("invalid or tampered values fall back to defaults", () => {
     const design = designFromSearchParams(
-      new URLSearchParams("citizen=nobody&head=99&eyes=3&deco=abc&bodyColor=123456&decoColor=zzz&font=7&tagColor=fffbff&odd=yes&tag=" + "x".repeat(50)),
+      new URLSearchParams("citizen=nobody&head=99&eyes=3&deco=abc&bodyColor=123456&decoColor=zzz&font=7&tagColor=fffbff&odd=yes&tag=" + "x".repeat(TAG_MAX_LENGTH + 20)),
     );
     expect(design.citizenId).toBe(DEFAULT_DESIGN.citizenId);
     expect(design.features).toEqual(DEFAULT_DESIGN.features);
     expect(design.colors).toEqual(DEFAULT_DESIGN.colors);
     expect(design.tag.fontFamily).toBe(TAG_FONTS[0].value);
     expect(design.tag.color).toBe(DEFAULT_DESIGN.tag.color);
-    expect(design.tag.text).toHaveLength(20);
+    expect(design.tag.text).toHaveLength(TAG_MAX_LENGTH);
     expect(design.hardToClassify).toBe(false);
   });
 

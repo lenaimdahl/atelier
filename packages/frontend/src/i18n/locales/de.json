@@ -94,7 +94,10 @@
         "body": "KÖRPERFARBE",
         "head": "KOPFFARBE",
         "hair": "HAARFARBE",
-        "deco": "DEKOFARBE"
+        "deco": "DEKOFARBE",
+        "eyes": "AUGENFARBE",
+        "nose": "NASENFARBE",
+        "mouth": "MUNDFARBE"
       },
       "paletteNote": "PALETTE / 0–7",
       "colorPartOption": "{{part}} auf {{color}} setzen",

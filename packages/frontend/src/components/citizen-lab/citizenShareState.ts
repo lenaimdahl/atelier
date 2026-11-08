@@ -12,7 +12,7 @@ import {
   type Feature,
 } from "src/pages/citizenLabOptions";
 
-export const TAG_MAX_LENGTH = 20;
+export const TAG_MAX_LENGTH = 30;
 
 export type CitizenDesign = {
   citizenId: CitizenId;
@@ -32,13 +32,29 @@ export function hairPositionFor(citizen: Citizen) {
 export const DEFAULT_DESIGN: CitizenDesign = {
   citizenId: CITIZENS[0].id,
   features: { head: 0, eyes: 0, nose: 4, hair: hairPositionFor(CITIZENS[0]), mouth: 1, deco: 0 },
-  colors: { body: COLORS[0], head: COLORS[0], hair: COLORS[0], deco: DECO_DEFAULT_COLOR },
+  colors: {
+    body: COLORS[0],
+    head: COLORS[0],
+    hair: COLORS[0],
+    deco: DECO_DEFAULT_COLOR,
+    eyes: COLORS[0],
+    nose: COLORS[0],
+    mouth: COLORS[0],
+  },
   tag: { text: "", fontFamily: TAG_FONTS[0].value, color: "#ffbc40" },
   logo: { style: "none", color: LOGO_COLORS[0] },
   hardToClassify: false,
 };
 
-const COLOR_PARAMS = { body: "bodyColor", head: "headColor", hair: "hairColor", deco: "decoColor" } as const;
+const COLOR_PARAMS = {
+  body: "bodyColor",
+  head: "headColor",
+  hair: "hairColor",
+  deco: "decoColor",
+  eyes: "eyeColor",
+  nose: "noseColor",
+  mouth: "mouthColor",
+} as const;
 const DECO_COLORS: readonly string[] = [DECO_DEFAULT_COLOR, ...COLORS];
 
 // "#" would start the URL fragment, so colors are stored without it.

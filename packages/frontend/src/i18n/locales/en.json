@@ -94,7 +94,10 @@
         "body": "BODY COLOR",
         "head": "HEAD COLOR",
         "hair": "HAIR COLOR",
-        "deco": "DECO COLOR"
+        "deco": "DECO COLOR",
+        "eyes": "EYE COLOR",
+        "nose": "NOSE COLOR",
+        "mouth": "MOUTH COLOR"
       },
       "paletteNote": "PALETTE / 0–7",
       "colorPartOption": "Set {{part}} to {{color}}",
