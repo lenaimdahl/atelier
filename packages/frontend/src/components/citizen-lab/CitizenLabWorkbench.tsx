@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CitizenFigurePicker } from "src/components/citizen-lab/controls/CitizenFigurePicker";
 import { CitizenPortrait } from "src/components/citizen-lab/portrait/CitizenPortrait";
 import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
+import { PreviewActions } from "src/components/citizen-lab/controls/PreviewActions";
 import { OptionCycler } from "src/components/citizen-lab/controls/OptionCycler";
 import { TagControls } from "src/components/citizen-lab/controls/TagControls";
 import { citizenOf, cycleOption, randomParts, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
@@ -119,33 +120,14 @@ export function CitizenLabWorkbench() {
         <section className="preview-column" aria-label={t("pages.citizenLab.previewLabel")}>
           <div className="preview-heading">
             <span>{t("pages.citizenLab.previewLabel")}</span>
-            <div className="preview-actions">
-              <span>{t("pages.citizenLab.mood")}</span>
-              <button
-                className="lab-button"
-                type="button"
-                aria-pressed={logo.style !== "none"}
-                onClick={() => updateLogo({ style: logo.style === "none" ? "icon" : "none" })}
-              >
-                {logo.style === "none" ? t("pages.citizenLab.addLogo") : t("pages.citizenLab.removeLogo")}
-              </button>
-              <button
-                className="lab-button"
-                type="button"
-                onClick={() => downloadCitizenSvg(portraitRef.current, `${selectedCitizen.id}-citizen.svg`)}
-              >
-                {t("pages.citizenLab.downloadSvg")}
-              </button>
-              <button
-                className="lab-button"
-                type="button"
-                onClick={() =>
-                  void downloadCitizenPng(portraitRef.current, `${selectedCitizen.id}-citizen.png`, shownDesign.tag.fontFamily)
-                }
-              >
-                {t("pages.citizenLab.downloadPng")}
-              </button>
-            </div>
+            <PreviewActions
+              logoStyle={logo.style}
+              onToggleLogo={() => updateLogo({ style: logo.style === "none" ? "icon" : "none" })}
+              onDownloadSvg={() => downloadCitizenSvg(portraitRef.current, `${selectedCitizen.id}-citizen.svg`)}
+              onDownloadPng={() =>
+                void downloadCitizenPng(portraitRef.current, `${selectedCitizen.id}-citizen.png`, shownDesign.tag.fontFamily)
+              }
+            />
           </div>
           {isMobile && <div className="quick-actions">{quickActions}</div>}
           <div className={`citizen-stage${design.hardToClassify ? " hard-to-classify" : ""}`}>
