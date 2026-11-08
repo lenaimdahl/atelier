@@ -12,7 +12,7 @@ import {
   type Feature,
 } from "src/pages/citizenLabOptions";
 
-export const TAG_MAX_LENGTH = 20;
+export const TAG_MAX_LENGTH = 30;
 
 export type CitizenDesign = {
   citizenId: CitizenId;

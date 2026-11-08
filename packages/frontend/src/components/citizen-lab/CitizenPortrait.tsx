@@ -99,7 +99,8 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
     logo: `${filterPrefix}logo-color`,
   };
   const tagText = tag.text.trim();
-  const tagTextWidth = Math.min(tagText.length * 6.5, layout.tag.maxWidth);
+  const tagNaturalWidth = tagText.length * 6.5;
+  const tagScale = Math.min(1, layout.tag.maxWidth / tagNaturalWidth);
 
   const decoTint = layout.deco?.tint;
   const decoFilter =
@@ -174,8 +175,8 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
             textAnchor="end"
             fill={tag.color}
             fontFamily={tag.fontFamily}
-            fontSize="11"
-            textLength={tagTextWidth}
+            fontSize={11 * tagScale}
+            textLength={tagNaturalWidth * tagScale}
             lengthAdjust="spacingAndGlyphs"
             fontWeight="bold"
           >
