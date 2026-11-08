@@ -11,6 +11,11 @@ export function Layout() {
     document.documentElement.lang = i18n.resolvedLanguage ?? "en";
   }, [i18n.resolvedLanguage]);
   const shellClass = pathname === "/books" ? "" : pathname === "/" ? " terminal-shell home-shell" : " terminal-shell";
+  const pageTitle = pathname === "/books" ? t("nav.books") : pathname.startsWith("/citizen-lab") ? t("nav.citizenLab") : t("nav.home");
+
+  useEffect(() => {
+    document.title = `Atelier / ${pageTitle}`;
+  }, [pageTitle]);
 
   return (
     <div className={`app-shell${shellClass}`}>
