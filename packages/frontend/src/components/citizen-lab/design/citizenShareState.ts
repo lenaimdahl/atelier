@@ -10,6 +10,7 @@ import {
   LOGO_STYLES,
   TAG_COLORS,
   TAG_FONTS,
+  type Citizen,
   type CitizenId,
   type Feature,
 } from "src/components/citizen-lab/design/citizenLabOptions";
@@ -24,8 +25,6 @@ export type CitizenDesign = {
   logo: CitizenLogo;
   hardToClassify: boolean;
 };
-
-type Citizen = (typeof CITIZENS)[number];
 
 export function hairPositionFor(citizen: Citizen) {
   return Math.max(0, HAIR.findIndex((hair) => hair.id === citizen.hairId));

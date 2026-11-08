@@ -74,6 +74,7 @@
       "workbench": "CITIZEN_KONSTRUKTOR",
       "localSession": "SITZUNG 042 / NUR LOKAL",
       "previewLabel": "LIVE-VORSCHAU / CITIZEN_01",
+      "portraitTitle": "Citizen-Porträt von {{name}}",
       "downloadSvg": "SVG HERUNTERLADEN",
       "downloadPng": "PNG HERUNTERLADEN",
       "addLogo": "LOGO HINZUFÜGEN",

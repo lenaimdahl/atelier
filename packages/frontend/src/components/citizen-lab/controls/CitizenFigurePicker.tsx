@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
 import { LogoControls } from "src/components/citizen-lab/controls/LogoControls";
 import { SwatchRow } from "src/components/citizen-lab/controls/SwatchRow";
-import { CITIZENS, COLORS, DECO_COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
+import { CITIZENS, COLORS, type Citizen, DECO_COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
 import "src/components/citizen-lab/shared.css";
 import "src/components/citizen-lab/controls/CitizenFigurePicker.css";
 
@@ -14,7 +14,7 @@ type CitizenFigurePickerProps = {
   decoOriginalColor: string | undefined;
   recolorableParts: { eyes: boolean; nose: boolean; mouth: boolean };
   logo: CitizenLogo;
-  onSelectFigure: (citizen: (typeof CITIZENS)[number]) => void;
+  onSelectFigure: (citizen: Citizen) => void;
   onSelectColor: (part: ColorPart, color: string) => void;
   onLogoChange: (change: Partial<CitizenLogo>) => void;
 };

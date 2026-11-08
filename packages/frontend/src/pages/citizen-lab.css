@@ -3,7 +3,13 @@
   --lab-dim: #8d9d89;
   --lab-panel: #061d08;
   --lab-green-bright: #91d35f;
-  --lab-focus: #ffbc40;
+  --lab-teal: #15ada3;
+  --lab-lavender: #9fa4e8;
+  --lab-purple: #c892d6;
+  --lab-pink: #ee5da2;
+  --lab-yellow: #ffbc40;
+  --lab-focus: var(--lab-yellow);
+  --lab-focus-ring: 2px solid var(--lab-focus);
 
   width: min(100%, 1440px);
   margin: 0 auto;

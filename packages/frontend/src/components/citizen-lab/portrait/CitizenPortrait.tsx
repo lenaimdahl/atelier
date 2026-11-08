@@ -12,7 +12,7 @@ import "src/components/citizen-lab/portrait/CitizenPortrait.css";
 
 type CitizenPortraitProps = {
   portraitRef: Ref<SVGSVGElement>;
-  citizenName: string;
+  title: string;
   selection: CitizenSelection;
   colors: CitizenColors;
   tag: CitizenTag;
@@ -24,7 +24,7 @@ const TILT = `translate(${CANVAS.centerX} ${CANVAS.height / 2}) rotate(-4) scale
 
 const filterUrl = (id: string) => `url(#${id})`;
 
-export function CitizenPortrait({ portraitRef, citizenName, selection, colors, tag, logo, tilted }: CitizenPortraitProps) {
+export function CitizenPortrait({ portraitRef, title, selection, colors, tag, logo, tilted }: CitizenPortraitProps) {
   const layout = computePortraitLayout(selection);
   const urls = portraitUrls(selection, colors, logo);
   const filterPrefix = useId();
@@ -61,7 +61,7 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
       viewBox={`0 0 ${CANVAS.width} ${CANVAS.height}`}
       aria-labelledby="citizen-portrait-title"
     >
-      <title id="citizen-portrait-title">{citizenName} citizen portrait</title>
+      <title id="citizen-portrait-title">{title}</title>
       <defs>
         <TintFilter id={filterIds.head} color={colors.head} mode="fill" />
         <TintFilter id={filterIds.hair} color={colors.hair} mode="fill" />

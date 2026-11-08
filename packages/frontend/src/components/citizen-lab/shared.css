@@ -33,7 +33,7 @@
 }
 
 .lab-button:focus-visible {
-  outline: 2px solid var(--lab-focus);
+  outline: var(--lab-focus-ring);
   outline-offset: 2px;
 }
 
@@ -41,7 +41,7 @@
 .figure-option:focus-visible,
 .color-swatch:focus-visible,
 .randomize-button:focus-visible {
-  outline: 2px solid var(--lab-focus);
+  outline: var(--lab-focus-ring);
   outline-offset: 3px;
 }
 

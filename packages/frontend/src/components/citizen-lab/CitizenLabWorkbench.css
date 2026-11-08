@@ -86,7 +86,7 @@
 .orbit-two {
   width: 380px;
   height: 245px;
-  border-color: rgba(159, 164, 232, 0.4);
+  border-color: color-mix(in srgb, var(--lab-lavender) 40%, transparent);
   transform: rotate(-28deg);
 }
 
@@ -96,7 +96,7 @@
 
 .stage-cross {
   position: absolute;
-  color: #9fa4e8;
+  color: var(--lab-lavender);
   font-size: 1.5rem;
 }
 
@@ -108,7 +108,7 @@
 .cross-two {
   bottom: 42px;
   left: 36px;
-  color: #ee5da2;
+  color: var(--lab-pink);
 }
 
 .stage-signal {

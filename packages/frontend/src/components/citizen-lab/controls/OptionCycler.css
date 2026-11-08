@@ -34,7 +34,7 @@
 }
 
 .option-cycler-controls button:focus-visible {
-  outline: 2px solid var(--lab-focus);
+  outline: var(--lab-focus-ring);
   outline-offset: -3px;
 }
 

@@ -52,12 +52,12 @@
 
 .token-barbara {
   border-radius: 50%;
-  background: #c892d6;
+  background: var(--lab-purple);
 }
 
 .token-bip {
   border-radius: 7px;
-  background: #15ada3;
+  background: var(--lab-teal);
 }
 
 .token-adam {

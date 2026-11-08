@@ -72,7 +72,7 @@ export function CitizenLabWorkbench() {
             <span className="stage-cross cross-two" aria-hidden="true">+</span>
             <CitizenPortrait
               portraitRef={portraitRef}
-              citizenName={citizenOf(shownDesign).name}
+              title={t("pages.citizenLab.portraitTitle", { name: citizenOf(shownDesign).name })}
               selection={selectionOf(shownDesign)}
               colors={shownDesign.colors}
               tag={shownDesign.tag}

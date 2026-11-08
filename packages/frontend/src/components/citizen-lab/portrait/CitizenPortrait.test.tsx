@@ -3,17 +3,20 @@ import { describe, expect, test } from "vitest";
 import { assetUrl } from "src/components/citizen-lab/portrait/citizenAssets";
 import { CitizenPortrait } from "src/components/citizen-lab/portrait/CitizenPortrait";
 import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
-import { DECO, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
+import { ASSET_PART_GREEN, COLORS, DECO, DECO_DEFAULT_COLOR, LOGO_COLORS } from "src/components/citizen-lab/design/citizenLabOptions";
 
-const NO_LOGO: CitizenLogo = { style: "none", color: "#75b44b" };
+const [GREEN, TEAL, LAVENDER, PURPLE, PINK, , ORANGE, YELLOW] = COLORS;
+const DARK = LOGO_COLORS[9];
+
+const NO_LOGO: CitizenLogo = { style: "none", color: GREEN };
 const BASE_COLORS: CitizenColors = {
-  body: "#75b44b",
-  head: "#15ada3",
-  hair: "#9fa4e8",
-  deco: "#ee5da2",
-  eyes: "#c892d6",
-  nose: "#ffbc40",
-  mouth: "#f88a30",
+  body: GREEN,
+  head: TEAL,
+  hair: LAVENDER,
+  deco: PINK,
+  eyes: PURPLE,
+  nose: YELLOW,
+  mouth: ORANGE,
 };
 
 function imagesOf(markup: string, assetPath: string) {
@@ -25,10 +28,10 @@ function decoFilters(decoId: number, decoColor: string) {
   const markup = renderToStaticMarkup(
     <CitizenPortrait
       portraitRef={null}
-      citizenName="Test"
+      title="Test"
       selection={{ bodyId: 0, headId: 2, hairId: 0, eyeId: 0, noseId: 0, mouthId: 0, decoId }}
       colors={{ ...BASE_COLORS, deco: decoColor }}
-      tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
+      tag={{ text: "", fontFamily: "Hack, monospace", color: YELLOW }}
       logo={NO_LOGO}
       tilted={false}
     />,
@@ -42,15 +45,15 @@ function decoFilters(decoId: number, decoColor: string) {
 
 describe("deco recoloring", () => {
   test("white decos are multiplied, black decos are filled", () => {
-    expect(decoFilters(2, "#ee5da2")).toEqual(["deco-multiply"]);
-    expect(decoFilters(4, "#ee5da2")).toEqual(["deco-multiply"]);
-    expect(decoFilters(8, "#ee5da2")).toEqual(["deco-multiply"]);
-    expect(decoFilters(6, "#ee5da2")).toEqual(["deco-fill"]);
-    expect(decoFilters(9, "#ee5da2")).toEqual(["deco-fill"]);
+    expect(decoFilters(2, PINK)).toEqual(["deco-multiply"]);
+    expect(decoFilters(4, PINK)).toEqual(["deco-multiply"]);
+    expect(decoFilters(8, PINK)).toEqual(["deco-multiply"]);
+    expect(decoFilters(6, PINK)).toEqual(["deco-fill"]);
+    expect(decoFilters(9, PINK)).toEqual(["deco-fill"]);
   });
 
   test("split decos apply the filter to every cropped piece", () => {
-    expect(decoFilters(10, "#ee5da2")).toEqual(["deco-multiply", "deco-multiply"]);
+    expect(decoFilters(10, PINK)).toEqual(["deco-multiply", "deco-multiply"]);
   });
 
   test("the original color leaves every deco unfiltered", () => {
@@ -63,7 +66,7 @@ describe("deco recoloring", () => {
 
   test("multi-colored decos are never filtered", () => {
     for (const id of [0, 1, 3, 5, 7]) {
-      expect(decoFilters(id, "#ee5da2").every((filter) => filter === undefined), `deco ${id}`).toBe(true);
+      expect(decoFilters(id, PINK).every((filter) => filter === undefined), `deco ${id}`).toBe(true);
     }
   });
 
@@ -71,17 +74,17 @@ describe("deco recoloring", () => {
     const markup = renderToStaticMarkup(
       <CitizenPortrait
         portraitRef={null}
-        citizenName="Test"
+        title="Test"
         selection={{ bodyId: 0, headId: 2, hairId: 0, eyeId: 0, noseId: 0, mouthId: 0, decoId: 6 }}
         colors={BASE_COLORS}
-        tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
+        tag={{ text: "", fontFamily: "Hack, monospace", color: YELLOW }}
         logo={NO_LOGO}
         tilted={false}
       />,
     );
     const filterId = imagesOf(markup, "Deco/Deco6.svg")[0]?.match(/filter:url\(#([^)]+)\)/)?.[1];
     expect(filterId).toBeDefined();
-    expect(markup).toMatch(new RegExp(`<filter id="${filterId}"><feFlood flood-color="#ee5da2"`));
+    expect(markup).toMatch(new RegExp(`<filter id="${filterId}"><feFlood flood-color="${PINK}"`));
   });
 });
 
@@ -90,10 +93,10 @@ describe("40C3 logo", () => {
     return renderToStaticMarkup(
       <CitizenPortrait
         portraitRef={null}
-        citizenName="Test"
+        title="Test"
         selection={{ bodyId: 0, headId: 2, hairId: 0, eyeId: 0, noseId: 0, mouthId: 0, decoId: 0 }}
         colors={BASE_COLORS}
-        tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
+        tag={{ text: "", fontFamily: "Hack, monospace", color: YELLOW }}
         logo={logo}
         tilted={false}
       />,
@@ -108,10 +111,10 @@ describe("40C3 logo", () => {
 
   test("the chosen logo variant is drawn in the chosen color", () => {
     for (const [style, file] of [["icon", "Logo.svg"], ["text", "LogoText.svg"]] as const) {
-      const markup = renderWithLogo({ style, color: "#001300" });
+      const markup = renderWithLogo({ style, color: DARK });
       const filterId = imagesOf(markup, `Logos/${file}`)[0]?.match(/filter:url\(#([^)]+)\)/)?.[1];
       expect(filterId, style).toBeDefined();
-      expect(markup).toMatch(new RegExp(`<filter id="${filterId}"><feFlood flood-color="#001300"`));
+      expect(markup).toMatch(new RegExp(`<filter id="${filterId}"><feFlood flood-color="${DARK}"`));
     }
   });
 });
@@ -121,10 +124,10 @@ describe("part green", () => {
     const markup = renderToStaticMarkup(
       <CitizenPortrait
         portraitRef={null}
-        citizenName="Test"
+        title="Test"
         selection={{ bodyId: 0, headId: 2, hairId: 0, eyeId: 0, noseId: 0, ...selection }}
         colors={{ ...BASE_COLORS, deco }}
-        tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
+        tag={{ text: "", fontFamily: "Hack, monospace", color: YELLOW }}
         logo={NO_LOGO}
         tilted={false}
       />,
@@ -139,7 +142,7 @@ describe("part green", () => {
     expect(hrefs).toContain(assetUrl("Mouths/Mouth2.svg", BASE_COLORS.mouth));
     const mouth = decodeURIComponent(assetUrl("Mouths/Mouth2.svg", BASE_COLORS.mouth));
     expect(mouth).toContain(BASE_COLORS.mouth);
-    expect(mouth).not.toMatch(/#6ab143/i);
+    expect(mouth).not.toMatch(new RegExp(ASSET_PART_GREEN, "i"));
   });
 
   test("green decos take the deco color and keep their green by default", () => {
@@ -157,11 +160,11 @@ describe("hard to classify", () => {
     return renderToStaticMarkup(
       <CitizenPortrait
         portraitRef={null}
-        citizenName="Test"
+        title="Test"
         selection={{ bodyId: 0, headId: 2, hairId: 0, eyeId: 0, noseId: 0, mouthId: 0, decoId: 0 }}
         colors={BASE_COLORS}
-        tag={{ text: "#chaos", fontFamily: "Hack, monospace", color: "#ffbc40" }}
-        logo={{ style: "icon", color: "#75b44b" }}
+        tag={{ text: "#chaos", fontFamily: "Hack, monospace", color: YELLOW }}
+        logo={{ style: "icon", color: GREEN }}
         tilted={tilted}
       />,
     );
@@ -178,10 +181,10 @@ describe("body color", () => {
     const markup = renderToStaticMarkup(
       <CitizenPortrait
         portraitRef={null}
-        citizenName="Test"
+        title="Test"
         selection={{ bodyId, headId: 2, hairId: 0, eyeId: 0, noseId: 0, mouthId: 0, decoId: 0 }}
         colors={BASE_COLORS}
-        tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
+        tag={{ text: "", fontFamily: "Hack, monospace", color: YELLOW }}
         logo={NO_LOGO}
         tilted={false}
       />,

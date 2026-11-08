@@ -74,6 +74,7 @@
       "workbench": "CITIZEN_CONSTRUCTOR",
       "localSession": "SESSION 042 / LOCAL ONLY",
       "previewLabel": "LIVE PREVIEW / CITIZEN_01",
+      "portraitTitle": "{{name}} citizen portrait",
       "downloadSvg": "DOWNLOAD SVG",
       "downloadPng": "DOWNLOAD PNG",
       "addLogo": "ADD LOGO",
