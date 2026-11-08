@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
+    "test": "vitest run",
     "generate:types": "json2ts -i ../../api/models -o src/types/generated --cwd ../../api/models",
     "generate:api-client": "swagger-typescript-api generate --path ../../api/openapi.yaml --output src/api/generated --name generated.ts --axios"
   },
@@ -31,6 +32,7 @@
     "prettier": "catalog:",
     "swagger-typescript-api": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vitest": "catalog:"
   }
 }

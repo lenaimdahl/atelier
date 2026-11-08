@@ -1,7 +1,9 @@
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
+import type { CitizenColors, CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
 import { CITIZENS, COLORS, type CitizenId } from "src/pages/citizenMakerOptions";
 
-type ColorPart = "body" | "head" | "hair" | "deco";
+type ColorPart = keyof CitizenColors;
 // Colorable decos are white by default, so their palette also offers white to switch back.
 export const DECO_DEFAULT_COLOR = "#fffbff";
 const TAG_FONTS = [
@@ -10,39 +12,63 @@ const TAG_FONTS = [
   { value: "Georgia, serif", label: "Georgia" },
 ];
 
+function SwatchRow({
+  className,
+  label,
+  options,
+  selected,
+  onSelect,
+}: {
+  className: string;
+  label: string;
+  options: readonly string[];
+  selected: string;
+  onSelect: (color: string) => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <fieldset className={className}>
+      <legend className="control-label">{label}</legend>
+      {options.map((color) => (
+        <button
+          className={`color-swatch${selected === color ? " selected" : ""}`}
+          key={color}
+          type="button"
+          style={{ "--swatch-color": color } as CSSProperties}
+          aria-label={t("pages.citizenMaker.colorPartOption", { part: label, color })}
+          aria-pressed={selected === color}
+          onClick={() => onSelect(color)}
+        />
+      ))}
+    </fieldset>
+  );
+}
+
 type CitizenFigurePickerProps = {
   selectedId: CitizenId;
-  colors: Record<ColorPart, string>;
+  colors: CitizenColors;
   showDecoColor: boolean;
-  tagText: string;
-  tagFontFamily: string;
-  tagColor: string;
+  tag: CitizenTag;
   onSelectFigure: (citizen: (typeof CITIZENS)[number]) => void;
   onSelectColor: (part: ColorPart, color: string) => void;
-  onTagTextChange: (text: string) => void;
-  onTagFontChange: (fontFamily: string) => void;
-  onTagColorChange: (color: string) => void;
+  onTagChange: (change: Partial<CitizenTag>) => void;
 };
 
 export function CitizenFigurePicker({
   selectedId,
   colors,
   showDecoColor,
-  tagText,
-  tagFontFamily,
-  tagColor,
+  tag,
   onSelectFigure,
   onSelectColor,
-  onTagTextChange,
-  onTagFontChange,
-  onTagColorChange,
+  onTagChange,
 }: CitizenFigurePickerProps) {
   const { t } = useTranslation();
-  const palettes: { part: ColorPart; color: string; options: readonly string[] }[] = [
-    { part: "body", color: colors.body, options: COLORS },
-    { part: "head", color: colors.head, options: COLORS },
-    { part: "hair", color: colors.hair, options: COLORS },
-    ...(showDecoColor ? [{ part: "deco" as const, color: colors.deco, options: [DECO_DEFAULT_COLOR, ...COLORS] }] : []),
+  const palettes: { part: ColorPart; options: readonly string[] }[] = [
+    { part: "body", options: COLORS },
+    { part: "head", options: COLORS },
+    { part: "hair", options: COLORS },
+    ...(showDecoColor ? [{ part: "deco" as const, options: [DECO_DEFAULT_COLOR, ...COLORS] }] : []),
   ];
 
   return (
@@ -64,24 +90,15 @@ export function CitizenFigurePicker({
       </fieldset>
       <div className="figure-colors">
         <div className="color-palettes">
-          {palettes.map(({ part, color: partColor, options }) => (
-            <fieldset className="color-swatches" key={part}>
-              <legend className="control-label">{t(`pages.citizenMaker.colorLabels.${part}`)}</legend>
-              {options.map((color) => (
-                <button
-                  className={`color-swatch${partColor === color ? " selected" : ""}`}
-                  key={color}
-                  type="button"
-                  style={{ "--swatch-color": color } as React.CSSProperties}
-                  aria-label={t("pages.citizenMaker.colorPartOption", {
-                    part: t(`pages.citizenMaker.colorLabels.${part}`),
-                    color,
-                  })}
-                  aria-pressed={partColor === color}
-                  onClick={() => onSelectColor(part, color)}
-                />
-              ))}
-            </fieldset>
+          {palettes.map(({ part, options }) => (
+            <SwatchRow
+              key={part}
+              className="color-swatches"
+              label={t(`pages.citizenMaker.colorLabels.${part}`)}
+              options={options}
+              selected={colors[part]}
+              onSelect={(color) => onSelectColor(part, color)}
+            />
           ))}
         </div>
         <span className="palette-note">{t("pages.citizenMaker.paletteNote")}</span>
@@ -92,35 +109,25 @@ export function CitizenFigurePicker({
               type="text"
               maxLength={20}
               placeholder={t("pages.citizenMaker.tagTextPlaceholder")}
-              value={tagText}
-              onChange={(event) => onTagTextChange(event.currentTarget.value)}
+              value={tag.text}
+              onChange={(event) => onTagChange({ text: event.currentTarget.value })}
             />
           </label>
           <label className="tag-field">
             <span className="control-label">{t("pages.citizenMaker.tagFontLabel")}</span>
-            <select value={tagFontFamily} onChange={(event) => onTagFontChange(event.currentTarget.value)}>
+            <select value={tag.fontFamily} onChange={(event) => onTagChange({ fontFamily: event.currentTarget.value })}>
               {TAG_FONTS.map((font) => (
                 <option key={font.value} value={font.value}>{font.label}</option>
               ))}
             </select>
           </label>
-          <fieldset className="color-swatches tag-color-swatches">
-            <legend className="control-label">{t("pages.citizenMaker.tagColorLabel")}</legend>
-            {COLORS.map((color) => (
-              <button
-                className={`color-swatch${tagColor === color ? " selected" : ""}`}
-                key={color}
-                type="button"
-                style={{ "--swatch-color": color } as React.CSSProperties}
-                aria-label={t("pages.citizenMaker.colorPartOption", {
-                  part: t("pages.citizenMaker.tagColorLabel"),
-                  color,
-                })}
-                aria-pressed={tagColor === color}
-                onClick={() => onTagColorChange(color)}
-              />
-            ))}
-          </fieldset>
+          <SwatchRow
+            className="color-swatches tag-color-swatches"
+            label={t("pages.citizenMaker.tagColorLabel")}
+            options={COLORS}
+            selected={tag.color}
+            onSelect={(color) => onTagChange({ color })}
+          />
         </div>
       </div>
     </div>

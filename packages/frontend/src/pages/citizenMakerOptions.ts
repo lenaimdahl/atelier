@@ -1,8 +1,8 @@
 export const CITIZENS = [
-  { id: "mona", name: "Mona", typeKey: "pages.citizenMaker.figureTypes.unicorn", bodyIndex: 0, hairIndex: 0 },
-  { id: "barbara", name: "Barbara", typeKey: "pages.citizenMaker.figureTypes.shapeShifter", bodyIndex: 1, hairIndex: 1 },
-  { id: "bip", name: "bip", typeKey: "pages.citizenMaker.figureTypes.minimalist", bodyIndex: 2, hairIndex: 2 },
-  { id: "adam", name: "Adam", typeKey: "pages.citizenMaker.figureTypes.freeSpirit", bodyIndex: 3, hairIndex: 0 },
+  { id: "mona", name: "Mona", typeKey: "pages.citizenMaker.figureTypes.unicorn", bodyId: 0, hairId: 0 },
+  { id: "barbara", name: "Barbara", typeKey: "pages.citizenMaker.figureTypes.shapeShifter", bodyId: 1, hairId: 1 },
+  { id: "bip", name: "bip", typeKey: "pages.citizenMaker.figureTypes.minimalist", bodyId: 2, hairId: 2 },
+  { id: "adam", name: "Adam", typeKey: "pages.citizenMaker.figureTypes.freeSpirit", bodyId: 3, hairId: 0 },
 ] as const;
 
 export type CitizenId = (typeof CITIZENS)[number]["id"];

@@ -1,15 +1,17 @@
+import { CANVAS } from "src/components/citizen-maker/citizenLayout";
+
 export async function downloadCitizenSvg(portrait: SVGSVGElement | null, filename: string) {
   if (!portrait) {
     return;
   }
 
-  // Hats, hair and ears can extend past the 320x340 canvas (the page shows them via overflow: visible),
+  // Hats, hair and ears can extend past the canvas (the page shows them via overflow: visible),
   // so grow the exported viewBox to include everything that is drawn.
   const contentBox = portrait.getBBox();
   const minX = Math.floor(Math.min(0, contentBox.x));
   const minY = Math.floor(Math.min(0, contentBox.y));
-  const width = Math.ceil(Math.max(320, contentBox.x + contentBox.width) - minX);
-  const height = Math.ceil(Math.max(340, contentBox.y + contentBox.height) - minY);
+  const width = Math.ceil(Math.max(CANVAS.width, contentBox.x + contentBox.width) - minX);
+  const height = Math.ceil(Math.max(CANVAS.height, contentBox.y + contentBox.height) - minY);
 
   const exportedPortrait = portrait.cloneNode(true) as SVGSVGElement;
   exportedPortrait.setAttribute("xmlns", "http://www.w3.org/2000/svg");
