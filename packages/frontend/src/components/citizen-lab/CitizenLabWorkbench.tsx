@@ -1,91 +1,28 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
 import { CitizenFigurePicker } from "src/components/citizen-lab/controls/CitizenFigurePicker";
 import { CitizenPortrait } from "src/components/citizen-lab/portrait/CitizenPortrait";
-import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
+import type { CitizenColors } from "src/components/citizen-lab/design/citizenTypes";
 import { PreviewActions } from "src/components/citizen-lab/controls/PreviewActions";
 import { ControlsPanel } from "src/components/citizen-lab/controls/ControlsPanel";
-import { citizenOf, cycleOption, randomParts, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
-import { decodeAsset, hasPartGreen, portraitUrls, predecodeAssets } from "src/components/citizen-lab/portrait/citizenAssets";
+import { citizenOf, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
+import { hasPartGreen } from "src/components/citizen-lab/portrait/citizenAssets";
 import { decoTint } from "src/components/citizen-lab/portrait/citizenLayout";
-import {
-  DEFAULT_DESIGN,
-  decodeDesign,
-  encodeDesign,
-  hairPositionFor,
-  type CitizenDesign,
-} from "src/components/citizen-lab/design/citizenShareState";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
 import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/export/downloadCitizen";
-import { type Citizen, type Feature } from "src/components/citizen-lab/design/citizenLabOptions";
+import { useCitizenDesign } from "src/components/citizen-lab/useCitizenDesign";
 
 const MOBILE_QUERY = "(max-width: 720px)";
 
 export function CitizenLabWorkbench() {
   const { t } = useTranslation();
   const portraitRef = useRef<SVGSVGElement>(null);
-  const { code } = useParams();
-  const navigate = useNavigate();
   const isMobile = useMediaQuery(MOBILE_QUERY);
-  const [design, setDesign] = useState<CitizenDesign>(
-    () => (code ? decodeDesign(code) : null) ?? { ...DEFAULT_DESIGN, ...randomParts() },
-  );
+  const { design, shownDesign, updateDesign, updateLogo, selectCitizen, cycleFeature, randomizeCitizen } =
+    useCitizenDesign();
   const { features, colors, tag, logo } = design;
   const selectedCitizen = citizenOf(design);
-
-  useEffect(() => {
-    void predecodeAssets();
-  }, []);
-
-  useEffect(() => {
-    const nextCode = encodeDesign(design);
-    if (nextCode !== code) {
-      void navigate(`/citizen-lab/${nextCode}`, { replace: true });
-    }
-  }, [design, code, navigate]);
-
   const selection = selectionOf(design);
-
-  // Swapping in a design only after its images are decoded keeps parts from flashing empty.
-  const [shownDesign, setShownDesign] = useState(design);
-  useEffect(() => {
-    let current = true;
-    const urls = Object.values(portraitUrls(selectionOf(design), design.colors, design.logo));
-    void Promise.all(urls.filter((url) => url !== null).map(decodeAsset)).then(() => {
-      if (current) {
-        setShownDesign(design);
-      }
-    });
-    return () => {
-      current = false;
-    };
-  }, [design]);
-
-  function updateDesign(change: (current: CitizenDesign) => Partial<CitizenDesign>) {
-    setDesign((current) => ({ ...current, ...change(current) }));
-  }
-
-  function updateLogo(change: Partial<CitizenLogo>) {
-    updateDesign((current) => ({ logo: { ...current.logo, ...change } }));
-  }
-
-  function selectCitizen(citizen: Citizen) {
-    updateDesign((current) => ({
-      citizenId: citizen.id,
-      features: { ...current.features, hair: hairPositionFor(citizen) },
-    }));
-  }
-
-  function cycleFeature(feature: Feature, length: number, direction: -1 | 1) {
-    updateDesign((current) => ({
-      features: { ...current.features, [feature]: cycleOption(current.features[feature], length, direction) },
-    }));
-  }
-
-  function randomizeCitizen() {
-    updateDesign(() => randomParts(design.citizenId));
-  }
 
   const quickActions = (
     <>
