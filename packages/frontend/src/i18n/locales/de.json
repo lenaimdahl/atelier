@@ -17,7 +17,7 @@
     "home": {
       "eyebrow": "ATELIER / PORTFOLIO",
       "title": "Kleine Projekte.",
-      "titleAccent": "Keine Blackboxes.",
+      "titleAccent": "Alles in Arbeit.",
       "subTitle": "Eine Werkstatt für Code, von Frontend über Backend bis Deployment. Alles hier ist in Arbeit, es kann sich also immer mal etwas verändern.",
       "log": {
         "title": "system.log",
@@ -30,7 +30,7 @@
         "title": "Aus der Werkstatt",
         "books": {
           "title": "Bücherregal",
-          "description": "Ein gemeinsames Regal mit Lieblingsbüchern aus meiner Bibliothek von 100 feministischen Büchern. Daten von der Open Library API, Go-Backend, PostgreSQL."
+          "description": "Ein Regal mit Büchern aus einer Beispielbibliothek mit 100 feministischen Titeln. Daten von der Open Library API, Go-Backend, PostgreSQL."
         },
         "citizenLab": {
           "title": "40C3 Citizen Lab",

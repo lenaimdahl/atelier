@@ -30,7 +30,7 @@
         "title": "From the workshop",
         "books": {
           "title": "Bookshelf",
-          "description": "A shared shelf of favorites from my library of 100 feminist books. Data from the Open Library API, Go backend, PostgreSQL."
+          "description": "A shared shelf of books from an example library of 100 feminist titles. Data from the Open Library API, Go backend, PostgreSQL."
         },
         "citizenLab": {
           "title": "40C3 Citizen Lab",
