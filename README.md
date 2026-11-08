@@ -9,7 +9,7 @@ Right now there are two things to play with:
 
 Under the hood it's a pnpm workspace with a React frontend, a Go backend and reusable feature packages. `@atelier/bookshelf` takes care of the shelf, the book search and the dialog; the frontend handles API access and the portfolio shell around it.
 
-The homepage and the Citizen Lab got a dark terminal look based on the 40C3 styleguide. The Bookshelf keeps its own blue/red style on purpose. All pages share the same header, only the colors change per area (the `--frame-*` CSS variables in `packages/frontend/src/index.css`).
+The homepage and the Citizen Lab got a dark terminal look based on the [40C3 styleguide](https://events.ccc.de/congress/2026/infos/styleguide/). The Bookshelf keeps its own blue/red style on purpose. All pages share the same header, only the colors change per area (the `--frame-*` CSS variables in `packages/frontend/src/index.css`).
 
 ## What you need
 
@@ -39,23 +39,6 @@ pnpm test
 `pnpm test` runs the Vitest tests for the Citizen Lab (layout, share links, rendering).
 
 ## Backend API
-
-These are the endpoints:
-
-```text
-GET     /health
-GET     /catalog?q=<text>&language=<en|de>
-GET     /covers/{id}
-GET     /favorites
-POST    /favorites
-OPTIONS /favorites
-```
-
-`POST /favorites` only takes `application/json`, bodies up to 1 KB and at most 10 picks per minute per client. IPv6 clients are counted per /64.
-
-The rate limit is there to keep the shelf usable, not to make the counts tamper-proof. Someone with enough addresses can still push a book up. That's fine for a fun shelf, just don't read the numbers as a real vote.
-
-`GET /health` returns `503` when the database can't be reached.
 
 Run the backend locally without Docker (with the database from Docker Compose running):
 
@@ -113,24 +96,12 @@ Password: your-password
 Database: atelier_db
 ```
 
-These are local dev credentials only, nothing more.
-
 On every start the backend applies all SQL files in `packages/backend/migrations/` in name order. It doesn't keep track of what already ran, so every migration has to be safe to run again (for example `CREATE TABLE IF NOT EXISTS`, `ADD COLUMN IF NOT EXISTS`) and must never delete existing data.
 
 Peek into the database:
 
 ```bash
 docker exec -it atelier-postgres psql -U postgres -d atelier_db
-```
-
-Handy PostgreSQL commands:
-
-```sql
-\dt
-\d catalog_books
-SELECT title, author, language FROM catalog_books;
-SELECT * FROM favorites;
-\q
 ```
 
 Stop everything with `Ctrl+C` while `docker compose up` is running, or:
@@ -172,10 +143,6 @@ pnpm --filter atelier generate:api-client
 
 You can pick from a fixed library of 50 English and 50 German feminist books, listed in `packages/backend/catalog/books.txt` by Open Library work ID.
 
-On startup the backend fetches author and cover for any missing books from the Open Library API in a single search request, downloads the covers and stores everything in PostgreSQL. Covers are served by the backend, so your browser never talks to Open Library. Titles and languages come from `books.txt` on every start, and if I remove a book from the file, it's deleted together with its picks. If Open Library is down, the import retries up to 5 times with longer and longer pauses.
-
-You can only pick books from this library, and picks are simply counted per book.
-
 Generated and local-only stuff like `node_modules/` and `dist/` never gets committed.
 
 ## Citizen Lab
@@ -188,19 +155,8 @@ At `/citizen-maker` you build a citizen from bodies, heads, hair, eyes, noses, m
 
 ## Credits
 
-- The citizen graphics in `packages/frontend/src/assets/40c3-creator/` and the 40C3 logos are unmodified files from the 40C3 styleguide by the 40C3 design team / Chaos Computer Club. All rights stay with them. Thank you for sharing them!
+- The citizen graphics in `packages/frontend/src/assets/40c3-creator/` and the 40C3 logos are unmodified files from the [40C3 styleguide](https://events.ccc.de/congress/2026/infos/styleguide/) by [mcgraw](https://mcgraw.club). All rights stay with them. Thank you for sharing them!
 - Fonts: Jersey 10 (SIL Open Font License) and Hack (MIT / Bitstream Vera License) in `packages/frontend/public/fonts/`, with their license files. VT323 and IBM Plex Mono (SIL Open Font License) come via Fontsource.
-
-## My dev setup
-
-I use two terminals. Compose only starts the database and the backend here, because the Vite dev server needs port 5173, which is also the allowed CORS origin:
-
-```text
-Terminal 1: docker compose up --build postgres backend
-Terminal 2: pnpm dev
-```
-
-The frontend runs at `http://localhost:5173`, the backend at `http://localhost:8080`.
 
 ## Security
 
@@ -216,7 +172,3 @@ Not covered by this license:
 
 - the 40C3 graphics and logos in `packages/frontend/src/assets/40c3-creator/` (40C3 design team / Chaos Computer Club, all rights stay with them)
 - the fonts in `packages/frontend/public/fonts/`, which come with their own license files
-
-## Coming up
-
-- SVG cutting for sheet metal
