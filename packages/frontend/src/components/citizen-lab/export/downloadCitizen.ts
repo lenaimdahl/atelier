@@ -1,4 +1,4 @@
-import { CANVAS } from "src/components/citizen-lab/portrait/citizenLayout";
+import { CANVAS } from "src/components/citizen-lab/portrait/box";
 import { TAG_FONTS } from "src/components/citizen-lab/design/citizenLabOptions";
 
 const SVG_NS = "http://www.w3.org/2000/svg";

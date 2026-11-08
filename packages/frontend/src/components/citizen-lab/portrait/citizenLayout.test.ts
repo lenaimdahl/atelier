@@ -1,15 +1,8 @@
 import { describe, expect, test } from "vitest";
-import {
-  BODY_GEOMETRY,
-  CANVAS,
-  computePortraitLayout,
-  DECO_DEFINITIONS,
-  EYE_GEOMETRY,
-  HEAD_GEOMETRY,
-  decoTint,
-  logoBox,
-  type CitizenSelection,
-} from "src/components/citizen-lab/portrait/citizenLayout";
+import { CANVAS } from "src/components/citizen-lab/portrait/box";
+import { DECO_DEFINITIONS, decoTint } from "src/components/citizen-lab/portrait/decoLayout";
+import { BODY_GEOMETRY, EYE_GEOMETRY, HEAD_GEOMETRY } from "src/components/citizen-lab/portrait/geometry";
+import { computePortraitLayout, logoBox, type CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
 import { assetUrl } from "src/components/citizen-lab/portrait/citizenAssets";
 import { CITIZENS, DECO, EYES, HAIR, HEADS, MOUTHS, NOSES } from "src/components/citizen-lab/design/citizenLabOptions";
 

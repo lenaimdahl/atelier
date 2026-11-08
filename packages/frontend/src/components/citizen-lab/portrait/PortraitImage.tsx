@@ -1,4 +1,4 @@
-import type { Box } from "src/components/citizen-lab/portrait/citizenLayout";
+import type { Box } from "src/components/citizen-lab/portrait/box";
 
 export function PortraitImage({
   href,

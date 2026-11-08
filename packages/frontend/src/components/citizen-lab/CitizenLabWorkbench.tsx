@@ -7,7 +7,7 @@ import { PreviewActions } from "src/components/citizen-lab/controls/PreviewActio
 import { ControlsPanel } from "src/components/citizen-lab/controls/ControlsPanel";
 import { citizenOf, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
 import { hasPartGreen } from "src/components/citizen-lab/portrait/citizenAssets";
-import { decoTint } from "src/components/citizen-lab/portrait/citizenLayout";
+import { decoTint } from "src/components/citizen-lab/portrait/decoLayout";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
 import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/export/downloadCitizen";
 import { useCitizenDesign } from "src/components/citizen-lab/useCitizenDesign";

@@ -1,5 +1,5 @@
 import { PortraitImage } from "src/components/citizen-lab/portrait/PortraitImage";
-import type { DecoPiece } from "src/components/citizen-lab/portrait/citizenLayout";
+import type { DecoPiece } from "src/components/citizen-lab/portrait/decoLayout";
 
 export function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[]; filter: string | undefined }) {
   return pieces.map(({ crop, ...box }) =>

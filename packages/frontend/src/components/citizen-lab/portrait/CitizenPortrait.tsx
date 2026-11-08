@@ -4,13 +4,9 @@ import { PortraitImage } from "src/components/citizen-lab/portrait/PortraitImage
 import { TintFilter } from "src/components/citizen-lab/portrait/TintFilter";
 import { portraitUrls } from "src/components/citizen-lab/portrait/citizenAssets";
 import { DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
-import {
-  CANVAS,
-  computePortraitLayout,
-  type CitizenSelection,
-  type DecoLayer,
-  logoBox,
-} from "src/components/citizen-lab/portrait/citizenLayout";
+import { CANVAS } from "src/components/citizen-lab/portrait/box";
+import type { DecoLayer } from "src/components/citizen-lab/portrait/decoLayout";
+import { computePortraitLayout, logoBox, type CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
 import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
 
 type CitizenPortraitProps = {
