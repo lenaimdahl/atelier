@@ -1,4 +1,4 @@
-import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/CitizenPortrait";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/citizenTypes";
 import { computePortraitLayout, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
 import { ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/citizenLabOptions";
 

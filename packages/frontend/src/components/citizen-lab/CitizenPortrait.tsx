@@ -1,6 +1,6 @@
 import { useId, type Ref } from "react";
 import { portraitUrls } from "src/components/citizen-lab/citizenAssets";
-import { DECO_DEFAULT_COLOR, type LogoStyle } from "src/components/citizen-lab/citizenLabOptions";
+import { DECO_DEFAULT_COLOR } from "src/components/citizen-lab/citizenLabOptions";
 import {
   CANVAS,
   computePortraitLayout,
@@ -10,19 +10,7 @@ import {
   type DecoPiece,
   logoBox,
 } from "src/components/citizen-lab/citizenLayout";
-
-
-export type CitizenColors = {
-  body: string;
-  head: string;
-  hair: string;
-  deco: string;
-  eyes: string;
-  nose: string;
-  mouth: string;
-};
-export type CitizenTag = { text: string; fontFamily: string; color: string };
-export type CitizenLogo = { style: LogoStyle; color: string };
+import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/citizenTypes";
 
 type CitizenPortraitProps = {
   portraitRef: Ref<SVGSVGElement>;

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import type { CitizenTag } from "src/components/citizen-lab/CitizenPortrait";
+import type { CitizenTag } from "src/components/citizen-lab/citizenTypes";
 import { SwatchRow } from "src/components/citizen-lab/SwatchRow";
 import { TAG_MAX_LENGTH } from "src/components/citizen-lab/citizenShareState";
 import { TAG_COLORS, TAG_FONTS } from "src/components/citizen-lab/citizenLabOptions";

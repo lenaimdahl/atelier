@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/CitizenPortrait";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/citizenTypes";
 import { SwatchRow } from "src/components/citizen-lab/SwatchRow";
 import { CITIZENS, COLORS, DECO_COLORS, DECO_DEFAULT_COLOR, LOGO_COLORS, type CitizenId } from "src/components/citizen-lab/citizenLabOptions";
 

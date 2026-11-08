@@ -1,7 +1,8 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vitest";
 import { assetUrl } from "src/components/citizen-lab/citizenAssets";
-import { CitizenPortrait, type CitizenColors, type CitizenLogo } from "src/components/citizen-lab/CitizenPortrait";
+import { CitizenPortrait } from "src/components/citizen-lab/CitizenPortrait";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/citizenTypes";
 import { DECO, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/citizenLabOptions";
 
 const NO_LOGO: CitizenLogo = { style: "none", color: "#75b44b" };

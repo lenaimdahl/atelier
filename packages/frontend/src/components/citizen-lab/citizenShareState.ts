@@ -1,4 +1,4 @@
-import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/CitizenPortrait";
+import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/citizenTypes";
 import {
   CITIZENS,
   COLORS,
