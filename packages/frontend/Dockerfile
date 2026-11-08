@@ -12,7 +12,8 @@ RUN pnpm install --frozen-lockfile
 COPY packages/frontend packages/frontend
 COPY packages/bookshelf packages/bookshelf
 ARG VITE_API_URL
-RUN pnpm --filter atelier build
+RUN if [ -z "$VITE_API_URL" ]; then echo "VITE_API_URL build arg is required" >&2; exit 1; fi \
+    && pnpm --filter atelier build
 
 FROM nginxinc/nginx-unprivileged:1.31.3-alpine
 
@@ -24,4 +25,4 @@ COPY --from=build /app/packages/frontend/dist /usr/share/nginx/html
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=3s CMD curl -fsS http://localhost:8080/ > /dev/null || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 CMD curl -fsS http://localhost:8080/ > /dev/null || exit 1

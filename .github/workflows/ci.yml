@@ -159,6 +159,7 @@ jobs:
           context: .
           file: packages/frontend/Dockerfile
           push: false
+          build-args: VITE_API_URL=https://api.example.org
 
   build_backend_dockerfile:
     name: Build backend Docker image

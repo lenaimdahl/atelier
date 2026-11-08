@@ -208,7 +208,14 @@ Found a problem? See [SECURITY.md](SECURITY.md).
 
 ## License
 
-See [LICENSE](LICENSE). The 40C3 graphics and logos are not covered by it, see Credits.
+Copyright (C) 2026 Lena Imdahl
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3, see [LICENSE](LICENSE).
+
+Not covered by this license:
+
+- the 40C3 graphics and logos in `packages/frontend/src/assets/40c3-creator/` (40C3 design team / Chaos Computer Club, all rights stay with them)
+- the fonts in `packages/frontend/public/fonts/`, which come with their own license files
 
 ## Coming up
 
