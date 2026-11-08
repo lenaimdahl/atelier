@@ -91,7 +91,8 @@
       "figureTypes": {
         "unicorn": "unicorn",
         "shapeShifter": "shape-shifter",
-        "minimalist": "minimalist"
+        "minimalist": "minimalist",
+        "freeSpirit": "free spirit"
       },
       "featureLabels": {
         "head": "HEAD",

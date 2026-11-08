@@ -91,7 +91,8 @@
       "figureTypes": {
         "unicorn": "Einhorn",
         "shapeShifter": "Formwandler",
-        "minimalist": "Minimalist"
+        "minimalist": "Minimalist",
+        "freeSpirit": "Freigeist"
       },
       "featureLabels": {
         "head": "KOPF",

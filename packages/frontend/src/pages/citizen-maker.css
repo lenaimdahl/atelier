@@ -336,7 +336,7 @@
 
 .figure-options {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   margin-top: 10px;
   min-width: 0;
@@ -393,6 +393,11 @@
 .token-bip {
   border-radius: 7px;
   background: #15ada3;
+}
+
+.token-adam {
+  background: #ebedf0;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 
 .citizen-controls {
@@ -736,7 +741,7 @@
   }
 
   .figure-options {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
   }
 

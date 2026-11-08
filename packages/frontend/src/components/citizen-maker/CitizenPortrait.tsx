@@ -151,6 +151,9 @@ function hairBoxFor(hairIndex: number, headIndex: number, headWidth: number, fac
   return { x: 160 - width / 2, y: bottom - height, width, height };
 }
 
+// Body3 is white with black details; the green bodies are recolored with hue-rotate instead.
+const WHITE_BODY_INDEX = 3;
+
 // Chest spot for the round badge deco (Deco2) on each body, in portrait coordinates.
 const BADGE_POSITIONS = [
   { x: 108, y: 292 },
@@ -274,12 +277,18 @@ export function CitizenPortrait({
           <feBlend in="SourceGraphic" in2="tint" mode="multiply" result="tinted" />
           <feComposite in="tinted" in2="SourceAlpha" operator="in" />
         </filter>
+        {/* The white body (Adam) can't be hue-rotated, so it is tinted like the decos. */}
+        <filter id="body-tint" colorInterpolationFilters="sRGB">
+          <feFlood floodColor={bodyColor} result="tint" />
+          <feBlend in="SourceGraphic" in2="tint" mode="multiply" result="tinted" />
+          <feComposite in="tinted" in2="SourceAlpha" operator="in" />
+        </filter>
         <filter id="hair-color">
           <feFlood floodColor={hairColor} result="tint" />
           <feComposite in="tint" in2="SourceAlpha" operator="in" />
         </filter>
       </defs>
-      <image href={`/40c3-creator/Bodies/Body${bodyIndex}.svg`} x="20" y="238" width="280" height="100" preserveAspectRatio="xMidYMid meet" style={{ filter: `hue-rotate(${COLOR_HUES[bodyColor]}deg)` }} />
+      <image href={`/40c3-creator/Bodies/Body${bodyIndex}.svg`} x="20" y="238" width="280" height="100" preserveAspectRatio="xMidYMid meet" style={{ filter: bodyIndex === WHITE_BODY_INDEX ? "url(#body-tint)" : `hue-rotate(${COLOR_HUES[bodyColor]}deg)` }} />
       <image href={`/40c3-creator/Heads/Head${headIndex}.svg`} x={headX} y="0" width={headWidth} height={headHeight} preserveAspectRatio="none" style={{ filter: "url(#head-color)" }} />
       {bodyLayerDeco && <image href={`/40c3-creator/Deco/Deco${decoIndex}.svg`} {...decoBox} preserveAspectRatio="xMidYMid meet" style={tintedDeco ? { filter: "url(#deco-color)" } : undefined} />}
       <image href={`/40c3-creator/Hair/Hair${hairIndex}.svg`} {...hairBox} preserveAspectRatio="none" style={{ filter: "url(#hair-color)" }} />
