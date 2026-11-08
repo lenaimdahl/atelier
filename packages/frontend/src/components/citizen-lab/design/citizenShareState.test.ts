@@ -6,7 +6,7 @@ import {
   FIELD_SIZES,
   TAG_MAX_LENGTH,
   type CitizenDesign,
-} from "src/components/citizen-lab/citizenShareState";
+} from "src/components/citizen-lab/design/citizenShareState";
 import {
   CITIZENS,
   COLORS,
@@ -16,7 +16,7 @@ import {
   LOGO_STYLES,
   TAG_COLORS,
   TAG_FONTS,
-} from "src/pages/citizenLabOptions";
+} from "src/components/citizen-lab/design/citizenLabOptions";
 
 const roundTrip = (design: CitizenDesign) => decodeDesign(encodeDesign(design));
 

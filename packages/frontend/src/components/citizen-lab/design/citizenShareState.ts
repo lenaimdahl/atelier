@@ -1,7 +1,8 @@
-import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/CitizenPortrait";
+import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
 import {
   CITIZENS,
   COLORS,
+  DECO_COLORS,
   DECO_DEFAULT_COLOR,
   FEATURES,
   HAIR,
@@ -9,9 +10,10 @@ import {
   LOGO_STYLES,
   TAG_COLORS,
   TAG_FONTS,
+  type Citizen,
   type CitizenId,
   type Feature,
-} from "src/pages/citizenLabOptions";
+} from "src/components/citizen-lab/design/citizenLabOptions";
 
 export const TAG_MAX_LENGTH = 30;
 
@@ -23,8 +25,6 @@ export type CitizenDesign = {
   logo: CitizenLogo;
   hardToClassify: boolean;
 };
-
-type Citizen = (typeof CITIZENS)[number];
 
 export function hairPositionFor(citizen: Citizen) {
   return Math.max(0, HAIR.findIndex((hair) => hair.id === citizen.hairId));
@@ -42,12 +42,10 @@ export const DEFAULT_DESIGN: CitizenDesign = {
     nose: COLORS[0],
     mouth: COLORS[0],
   },
-  tag: { text: "", fontFamily: TAG_FONTS[0].value, color: "#ffbc40" },
+  tag: { text: "", fontFamily: TAG_FONTS[0].value, color: COLORS[7] },
   logo: { style: "none", color: LOGO_COLORS[0] },
   hardToClassify: false,
 };
-
-const DECO_COLORS: readonly string[] = [DECO_DEFAULT_COLOR, ...COLORS];
 
 // Every shared link depends on this order and these sizes. Never change them, add a new version instead.
 const CODE_VERSION = "1";

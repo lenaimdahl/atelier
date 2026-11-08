@@ -1,7 +1,10 @@
 import { useTranslation } from "react-i18next";
-import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/CitizenPortrait";
-import { SwatchRow } from "src/components/citizen-lab/SwatchRow";
-import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, LOGO_COLORS, type CitizenId } from "src/pages/citizenLabOptions";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
+import { LogoControls } from "src/components/citizen-lab/controls/LogoControls";
+import { SwatchRow } from "src/components/citizen-lab/controls/SwatchRow";
+import { CITIZENS, COLORS, type Citizen, DECO_COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
+import "src/components/citizen-lab/shared.css";
+import "src/components/citizen-lab/controls/CitizenFigurePicker.css";
 
 type ColorPart = keyof CitizenColors;
 
@@ -11,7 +14,7 @@ type CitizenFigurePickerProps = {
   decoOriginalColor: string | undefined;
   recolorableParts: { eyes: boolean; nose: boolean; mouth: boolean };
   logo: CitizenLogo;
-  onSelectFigure: (citizen: (typeof CITIZENS)[number]) => void;
+  onSelectFigure: (citizen: Citizen) => void;
   onSelectColor: (part: ColorPart, color: string) => void;
   onLogoChange: (change: Partial<CitizenLogo>) => void;
 };
@@ -34,7 +37,7 @@ export function CitizenFigurePicker({
       .filter((part) => recolorableParts[part])
       .map((part) => ({ part, options: COLORS })),
     { part: "body", options: COLORS },
-    ...(decoOriginalColor ? [{ part: "deco" as const, options: [DECO_DEFAULT_COLOR, ...COLORS] }] : []),
+    ...(decoOriginalColor ? [{ part: "deco" as const, options: DECO_COLORS }] : []),
   ];
 
   return (
@@ -73,31 +76,7 @@ export function CitizenFigurePicker({
             />
           ))}
         </div>
-        {logo.style !== "none" && (
-          <div className="logo-controls">
-            <fieldset className="logo-styles">
-              <legend className="control-label">{t("pages.citizenLab.logoLabel")}</legend>
-              {(["icon", "text"] as const).map((style) => (
-                <button
-                  key={style}
-                  className="lab-button"
-                  type="button"
-                  aria-pressed={logo.style === style}
-                  onClick={() => onLogoChange({ style })}
-                >
-                  {t(`pages.citizenLab.logoStyles.${style}`)}
-                </button>
-              ))}
-            </fieldset>
-            <SwatchRow
-              className="color-swatches"
-              label={t("pages.citizenLab.logoColorLabel")}
-              options={LOGO_COLORS}
-              selected={logo.color}
-              onSelect={(color) => onLogoChange({ color })}
-            />
-          </div>
-        )}
+        {logo.style !== "none" && <LogoControls logo={logo} onLogoChange={onLogoChange} />}
         <span className="palette-note">{t("pages.citizenLab.paletteNote")}</span>
       </div>
     </div>

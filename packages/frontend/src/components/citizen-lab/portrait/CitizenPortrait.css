@@ -1,0 +1,16 @@
+.citizen-portrait {
+  position: relative;
+  z-index: 1;
+  width: min(56%, 320px);
+  height: 340px;
+  max-height: 340px;
+  margin-top: 20px;
+  overflow: visible;
+  filter: drop-shadow(0 10px 0 color-mix(in srgb, var(--frame-bg) 40%, transparent));
+}
+
+@media (max-width: 720px) {
+  .citizen-portrait {
+    width: min(64%, 250px);
+  }
+}
