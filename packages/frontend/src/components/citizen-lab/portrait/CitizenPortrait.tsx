@@ -1,13 +1,14 @@
 import { useId, type Ref } from "react";
+import { DecoPieces } from "src/components/citizen-lab/portrait/DecoPieces";
+import { PortraitImage } from "src/components/citizen-lab/portrait/PortraitImage";
+import { TintFilter } from "src/components/citizen-lab/portrait/TintFilter";
 import { portraitUrls } from "src/components/citizen-lab/portrait/citizenAssets";
 import { DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
 import {
   CANVAS,
   computePortraitLayout,
-  type Box,
   type CitizenSelection,
   type DecoLayer,
-  type DecoPiece,
   logoBox,
 } from "src/components/citizen-lab/portrait/citizenLayout";
 import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
@@ -25,67 +26,6 @@ type CitizenPortraitProps = {
 const TILT = `translate(${CANVAS.centerX} ${CANVAS.height / 2}) rotate(-4) scale(1.05) translate(${-CANVAS.centerX} ${-CANVAS.height / 2})`;
 
 const filterUrl = (id: string) => `url(#${id})`;
-
-function TintFilter({ id, color, mode }: { id: string; color: string; mode: "fill" | "multiply" }) {
-  if (mode === "fill") {
-    return (
-      <filter id={id}>
-        <feFlood floodColor={color} result="tint" />
-        <feComposite in="tint" in2="SourceAlpha" operator="in" />
-      </filter>
-    );
-  }
-  return (
-    <filter id={id} colorInterpolationFilters="sRGB">
-      <feFlood floodColor={color} result="tint" />
-      <feBlend in="SourceGraphic" in2="tint" mode="multiply" result="tinted" />
-      <feComposite in="tinted" in2="SourceAlpha" operator="in" />
-    </filter>
-  );
-}
-
-function PortraitImage({
-  href,
-  box,
-  fit = "xMidYMid meet",
-  filter,
-}: {
-  href: string;
-  box: Box;
-  fit?: "none" | "xMidYMid meet";
-  filter?: string;
-}) {
-  return (
-    <image
-      href={href}
-      x={box.x}
-      y={box.y}
-      width={box.width}
-      height={box.height}
-      preserveAspectRatio={fit}
-      style={filter ? { filter } : undefined}
-    />
-  );
-}
-
-function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[]; filter: string | undefined }) {
-  return pieces.map(({ crop, ...box }) =>
-    crop ? (
-      <svg key={crop.viewBox} {...box} viewBox={crop.viewBox} preserveAspectRatio={crop.preserveAspectRatio}>
-        <image
-          href={href}
-          x="0"
-          y="0"
-          width={crop.assetWidth}
-          height={crop.assetHeight}
-          style={filter ? { filter } : undefined}
-        />
-      </svg>
-    ) : (
-      <PortraitImage key={`${box.x},${box.y}`} href={href} box={box} filter={filter} />
-    ),
-  );
-}
 
 export function CitizenPortrait({ portraitRef, citizenName, selection, colors, tag, logo, tilted }: CitizenPortraitProps) {
   const layout = computePortraitLayout(selection);
