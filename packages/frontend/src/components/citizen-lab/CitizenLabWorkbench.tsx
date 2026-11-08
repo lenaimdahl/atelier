@@ -11,6 +11,7 @@ import { decoTint } from "src/components/citizen-lab/portrait/decoLayout";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
 import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/export/downloadCitizen";
 import { useCitizenDesign } from "src/components/citizen-lab/useCitizenDesign";
+import "src/components/citizen-lab/CitizenLabWorkbench.css";
 
 const MOBILE_QUERY = "(max-width: 720px)";
 

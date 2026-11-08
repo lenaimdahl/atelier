@@ -8,6 +8,7 @@ import { CANVAS } from "src/components/citizen-lab/portrait/box";
 import type { DecoLayer } from "src/components/citizen-lab/portrait/decoLayout";
 import { computePortraitLayout, logoBox, type CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
 import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
+import "src/components/citizen-lab/portrait/CitizenPortrait.css";
 
 type CitizenPortraitProps = {
   portraitRef: Ref<SVGSVGElement>;

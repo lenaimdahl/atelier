@@ -5,6 +5,8 @@ import { TagControls } from "src/components/citizen-lab/controls/TagControls";
 import { FEATURES, type Citizen, type Feature } from "src/components/citizen-lab/design/citizenLabOptions";
 import type { CitizenDesign } from "src/components/citizen-lab/design/citizenShareState";
 import type { CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
+import "src/components/citizen-lab/shared.css";
+import "src/components/citizen-lab/controls/ControlsPanel.css";
 
 type ControlsPanelProps = {
   citizen: Citizen;

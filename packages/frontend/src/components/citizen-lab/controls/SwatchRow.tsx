@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
+import "src/components/citizen-lab/shared.css";
+import "src/components/citizen-lab/controls/SwatchRow.css";
 
 const identity = (color: string) => color;
 
