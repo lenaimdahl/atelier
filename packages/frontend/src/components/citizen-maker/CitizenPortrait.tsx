@@ -1,4 +1,5 @@
 import { useId, type Ref } from "react";
+import { assetUrl } from "src/components/citizen-maker/citizenAssets";
 import { COLOR_HUES, DECO_DEFAULT_COLOR, type LogoStyle } from "src/pages/citizenMakerOptions";
 import {
   CANVAS,
@@ -9,7 +10,6 @@ import {
   logoBox,
 } from "src/components/citizen-maker/citizenLayout";
 
-const ASSET_ROOT = "/40c3-creator";
 
 export type CitizenColors = { body: string; head: string; hair: string; deco: string };
 export type CitizenTag = { text: string; fontFamily: string; color: string };
@@ -98,7 +98,7 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
       : undefined;
   const decoInLayer = (layer: DecoLayer) =>
     layout.deco?.layer === layer ? (
-      <DecoPieces href={`${ASSET_ROOT}/Deco/Deco${selection.decoId}.svg`} pieces={layout.deco.pieces} filter={decoFilter} />
+      <DecoPieces href={assetUrl(`Deco/Deco${selection.decoId}.svg`)} pieces={layout.deco.pieces} filter={decoFilter} />
     ) : null;
 
   return (
@@ -122,7 +122,7 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
         )}
       </defs>
       <image
-        href={`${ASSET_ROOT}/Bodies/Body${selection.bodyId}.svg`}
+        href={assetUrl(`Bodies/Body${selection.bodyId}.svg`)}
         x={layout.body.x}
         y={layout.body.y}
         width={layout.body.width}
@@ -131,24 +131,24 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
         style={{ filter: `url(#${filterIds.body})` }}
       />
       <image
-        href={`${ASSET_ROOT}/Heads/Head${selection.headId}.svg`}
+        href={assetUrl(`Heads/Head${selection.headId}.svg`)}
         {...layout.head}
         preserveAspectRatio="none"
         style={{ filter: `url(#${filterIds.head})` }}
       />
       {decoInLayer("body")}
       <image
-        href={`${ASSET_ROOT}/Hair/Hair${selection.hairId}.svg`}
+        href={assetUrl(`Hair/Hair${selection.hairId}.svg`)}
         {...layout.hair}
         preserveAspectRatio="none"
         style={{ filter: `url(#${filterIds.hair})` }}
       />
       {decoInLayer("head")}
-      <image href={`${ASSET_ROOT}/Eyes/Eyes${selection.eyeId}.svg`} {...layout.eyes} preserveAspectRatio="xMidYMid meet" />
+      <image href={assetUrl(`Eyes/Eyes${selection.eyeId}.svg`)} {...layout.eyes} preserveAspectRatio="xMidYMid meet" />
       {decoInLayer("eyes")}
-      <image href={`${ASSET_ROOT}/Mouths/Mouth${selection.mouthId}.svg`} {...layout.mouth} preserveAspectRatio="xMidYMid meet" />
+      <image href={assetUrl(`Mouths/Mouth${selection.mouthId}.svg`)} {...layout.mouth} preserveAspectRatio="xMidYMid meet" />
       {decoInLayer("mouth")}
-      <image href={`${ASSET_ROOT}/Noses/Nose${selection.noseId}.svg`} {...layout.nose} preserveAspectRatio="xMidYMid meet" />
+      <image href={assetUrl(`Noses/Nose${selection.noseId}.svg`)} {...layout.nose} preserveAspectRatio="xMidYMid meet" />
       {tagText && (
         <text
           x={layout.tag.x}
@@ -166,7 +166,7 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
       )}
       {logo.style !== "none" && (
         <image
-          href={`${ASSET_ROOT}/Logos/${logo.style === "text" ? "LogoText" : "Logo"}.svg`}
+          href={assetUrl(`Logos/${logo.style === "text" ? "LogoText" : "Logo"}.svg`)}
           {...logoBox(logo.style)}
           preserveAspectRatio="xMidYMid meet"
           style={{ filter: `url(#${filterIds.logo})` }}

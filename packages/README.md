@@ -174,11 +174,11 @@ At `/citizen-maker` you build a citizen from bodies, heads, hair, eyes, noses, m
 
 - **Share links**: the whole citizen lives in the URL (`?citizen=adam&head=2&...`), so whatever is in the address bar is your share link. Only values that differ from the defaults end up in it, and anything invalid quietly falls back to the default. Nothing goes to the backend.
 - **Layout**: all positions are calculated in `packages/frontend/src/components/citizen-maker/citizenLayout.ts`. The geometry of each head, body and eye set and one definition per decoration (layer, recoloring, layout) live there; the portrait component only draws.
-- **Assets**: the SVG parts are in `packages/frontend/public/40c3-creator/`. To add a head, eyes or a decoration, drop in the file and add one entry in `citizenLayout.ts`. The tests complain if an option has no layout data.
+- **Assets**: the SVG parts are in `packages/frontend/src/assets/40c3-creator/`. To add a head, eyes or a decoration, drop in the file and add one entry in `citizenLayout.ts`. The tests complain if an option has no layout data.
 
 ## Credits
 
-- The citizen graphics in `packages/frontend/public/40c3-creator/` and the 40C3 logos are unmodified files from the 40C3 styleguide by the 40C3 design team / Chaos Computer Club. All rights stay with them. Thank you for sharing them!
+- The citizen graphics in `packages/frontend/src/assets/40c3-creator/` and the 40C3 logos are unmodified files from the 40C3 styleguide by the 40C3 design team / Chaos Computer Club. All rights stay with them. Thank you for sharing them!
 - Fonts: Jersey 10 (SIL Open Font License) and Hack (MIT / Bitstream Vera License) in `packages/frontend/public/fonts/`, with their license files. VT323 and IBM Plex Mono (SIL Open Font License) come via Fontsource.
 
 ## My dev setup
