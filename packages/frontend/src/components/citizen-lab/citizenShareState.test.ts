@@ -31,7 +31,7 @@ describe("citizen share links", () => {
       const design: CitizenDesign = {
         citizenId: citizen.id,
         features: { head: 3, eyes: 5, nose: 1, hair: 2, mouth: 7, deco: 4 },
-        colors: { body: COLORS[4], head: COLORS[1], hair: COLORS[7], deco: COLORS[2] },
+        colors: { body: COLORS[4], head: COLORS[1], hair: COLORS[7], deco: COLORS[2], eyes: COLORS[5], nose: COLORS[6], mouth: COLORS[3] },
         tag: { text: "#chaos & co?", fontFamily: TAG_FONTS[1].value, color: COLORS[3] },
         logo: { style: "text", color: LOGO_COLORS[9] },
         hardToClassify: true,

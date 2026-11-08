@@ -11,7 +11,15 @@ import {
 } from "src/components/citizen-lab/citizenLayout";
 
 
-export type CitizenColors = { body: string; head: string; hair: string; deco: string };
+export type CitizenColors = {
+  body: string;
+  head: string;
+  hair: string;
+  deco: string;
+  eyes: string;
+  nose: string;
+  mouth: string;
+};
 export type CitizenTag = { text: string; fontFamily: string; color: string };
 export type CitizenLogo = { style: LogoStyle; color: string };
 
@@ -92,12 +100,19 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
 
   const decoTint = layout.deco?.tint;
   const decoFilter =
-    decoTint && colors.deco !== DECO_DEFAULT_COLOR
+    decoTint && decoTint.mode !== "replace" && colors.deco !== DECO_DEFAULT_COLOR
       ? `url(#${decoTint.mode === "fill" ? filterIds.decoFill : filterIds.decoMultiply})`
       : undefined;
   const decoInLayer = (layer: DecoLayer) =>
     layout.deco?.layer === layer ? (
-      <DecoPieces href={assetUrl(`Deco/Deco${selection.decoId}.svg`)} pieces={layout.deco.pieces} filter={decoFilter} />
+      <DecoPieces
+        href={assetUrl(
+          `Deco/Deco${selection.decoId}.svg`,
+          decoTint?.mode === "replace" && colors.deco !== DECO_DEFAULT_COLOR ? colors.deco : undefined,
+        )}
+        pieces={layout.deco.pieces}
+        filter={decoFilter}
+      />
     ) : null;
 
   return (
@@ -143,11 +158,11 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
         style={{ filter: `url(#${filterIds.hair})` }}
       />
       {decoInLayer("head")}
-      <image href={assetUrl(`Eyes/Eyes${selection.eyeId}.svg`)} {...layout.eyes} preserveAspectRatio="xMidYMid meet" />
+      <image href={assetUrl(`Eyes/Eyes${selection.eyeId}.svg`, colors.eyes)} {...layout.eyes} preserveAspectRatio="xMidYMid meet" />
       {decoInLayer("eyes")}
-      <image href={assetUrl(`Mouths/Mouth${selection.mouthId}.svg`)} {...layout.mouth} preserveAspectRatio="xMidYMid meet" />
+      <image href={assetUrl(`Mouths/Mouth${selection.mouthId}.svg`, colors.mouth)} {...layout.mouth} preserveAspectRatio="xMidYMid meet" />
       {decoInLayer("mouth")}
-      <image href={assetUrl(`Noses/Nose${selection.noseId}.svg`)} {...layout.nose} preserveAspectRatio="xMidYMid meet" />
+      <image href={assetUrl(`Noses/Nose${selection.noseId}.svg`, colors.nose)} {...layout.nose} preserveAspectRatio="xMidYMid meet" />
       {tagText && (
         <text
           x={layout.tag.x}

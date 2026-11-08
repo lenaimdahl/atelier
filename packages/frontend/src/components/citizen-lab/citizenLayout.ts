@@ -62,7 +62,7 @@ type EyeGeometry = {
 };
 
 export const EYE_GEOMETRY: Record<number, EyeGeometry> = {
-  0: { aspectRatio: 500.22 / 207.35, rightEyeCenter: 0.79, scale: 1 },
+  0: { aspectRatio: 500.22 / 207.35, rightEyeCenter: 0.79, scale: 0.8 },
   1: { aspectRatio: 503.3 / 86.71, rightEyeCenter: 0.79, scale: 1 },
   2: { aspectRatio: 221.51 / 78.64, rightEyeCenter: 0.82, scale: 1 },
   4: { aspectRatio: 520.84 / 146.39, rightEyeCenter: 0.78, scale: 1 },
@@ -120,10 +120,11 @@ type DecoContext = {
   eyeBox: Box;
 };
 
-export type DecoTint = { mode: "multiply" | "fill"; originalColor: string };
+export type DecoTint = { mode: "multiply" | "fill" | "replace"; originalColor: string };
 
 const WHITE_TINT: DecoTint = { mode: "multiply", originalColor: "#fffbff" };
 const BLACK_TINT: DecoTint = { mode: "fill", originalColor: "#000000" };
+const GREEN_TINT: DecoTint = { mode: "replace", originalColor: "#6ab143" };
 
 type DecoDefinition = {
   layer: DecoLayer;
@@ -210,11 +211,11 @@ const X = CANVAS.centerX;
 
 export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
   // Ears
-  0: { layer: "head", layout: earPieces },
+  0: { layer: "head", tint: GREEN_TINT, layout: earPieces },
   // Cap
   1: {
     layer: "head",
-   
+    tint: GREEN_TINT,
     layout: ({ headWidth, headHeight }) => [fitBox(X, -headHeight * 0.12, headWidth * 0.88, headHeight * 0.5, DECO_ASPECT_RATIOS[1])],
   },
   // Badge
@@ -222,7 +223,7 @@ export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
   // Mustache
   3: {
     layer: "mouth",
-   
+    tint: GREEN_TINT,
     layout: ({ headWidth, faceHeight }) => [fitBox(X, faceHeight * 0.8, headWidth * 0.42, faceHeight * 0.14, DECO_ASPECT_RATIOS[3])],
   },
   // Fist
@@ -234,7 +235,7 @@ export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
   // Green hat
   5: {
     layer: "head",
-   
+    tint: GREEN_TINT,
     layout: ({ head, headWidth, headHeight }) => [
       head.compactHat
         ? fitBox(X, -headHeight * 0.12, headWidth * 0.72, headHeight * 0.42, DECO_ASPECT_RATIOS[5])
@@ -251,7 +252,7 @@ export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
   // Pointy hat
   7: {
     layer: "head",
-   
+    tint: GREEN_TINT,
     layout: ({ headWidth, headHeight }) => [fitBox(X, -headHeight * 0.12, headWidth * 0.78, headHeight * 0.58, DECO_ASPECT_RATIOS[7])],
   },
   // Tie

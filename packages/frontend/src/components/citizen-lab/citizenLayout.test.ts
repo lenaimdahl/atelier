@@ -49,9 +49,9 @@ describe("asset geometry", () => {
     expect(missing).toEqual([]);
   });
 
-  test("single-colored decos can be recolored with the right mode", () => {
+  test("every deco can be recolored with the right mode", () => {
     const tints = Object.fromEntries(DECO.map(({ id }) => [id, decoTint(id)?.mode ?? null]));
-    expect(tints).toEqual({ 0: null, 1: null, 2: "multiply", 3: null, 4: "multiply", 5: null, 6: "fill", 7: null, 8: "multiply", 9: "fill", 10: "multiply" });
+    expect(tints).toEqual({ 0: "replace", 1: "replace", 2: "multiply", 3: "replace", 4: "multiply", 5: "replace", 6: "fill", 7: "replace", 8: "multiply", 9: "fill", 10: "multiply" });
   });
 });
 

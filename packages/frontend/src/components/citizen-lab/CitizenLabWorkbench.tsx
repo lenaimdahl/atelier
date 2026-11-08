@@ -5,7 +5,7 @@ import { CitizenFigurePicker } from "src/components/citizen-lab/CitizenFigurePic
 import { CitizenPortrait, type CitizenColors, type CitizenLogo, type CitizenTag } from "src/components/citizen-lab/CitizenPortrait";
 import { OptionCycler } from "src/components/citizen-lab/OptionCycler";
 import { TagControls } from "src/components/citizen-lab/TagControls";
-import { predecodeAssets } from "src/components/citizen-lab/citizenAssets";
+import { hasPartGreen, predecodeAssets } from "src/components/citizen-lab/citizenAssets";
 import { decoTint, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
 import {
   designFromSearchParams,
@@ -83,9 +83,20 @@ export function CitizenLabWorkbench() {
   function randomizeCitizen() {
     const otherCitizens = CITIZENS.filter((citizen) => citizen.id !== design.citizenId);
     const nextCitizen = otherCitizens[randomIndex(otherCitizens.length)] ?? selectedCitizen;
+    const head = randomColor();
+    const contrastColors = COLORS.filter((color) => color !== head);
+    const contrastColor = () => contrastColors[randomIndex(contrastColors.length)];
     updateDesign(() => ({
       citizenId: nextCitizen.id,
-      colors: { body: randomColor(), head: randomColor(), hair: randomColor(), deco: randomColor() },
+      colors: {
+        body: randomColor(),
+        head,
+        hair: randomColor(),
+        deco: randomColor(),
+        eyes: contrastColor(),
+        nose: contrastColor(),
+        mouth: contrastColor(),
+      },
       features: Object.fromEntries(
         FEATURES.map(({ key, options }) => [key, randomIndex(options.length)]),
       ) as CitizenDesign["features"],
@@ -149,6 +160,11 @@ export function CitizenLabWorkbench() {
             selectedId={design.citizenId}
             colors={colors}
             decoOriginalColor={decoTint(selection.decoId)?.originalColor}
+            recolorableParts={{
+              eyes: hasPartGreen(`Eyes/Eyes${selection.eyeId}.svg`),
+              nose: hasPartGreen(`Noses/Nose${selection.noseId}.svg`),
+              mouth: hasPartGreen(`Mouths/Mouth${selection.mouthId}.svg`),
+            }}
             logo={logo}
             onLogoChange={updateLogo}
             onSelectFigure={selectCitizen}

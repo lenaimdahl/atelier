@@ -5,12 +5,20 @@ import { CitizenPortrait, type CitizenColors, type CitizenLogo } from "src/compo
 import { DECO, DECO_DEFAULT_COLOR } from "src/pages/citizenLabOptions";
 
 const NO_LOGO: CitizenLogo = { style: "none", color: "#75b44b" };
-function imagesOf(markup: string, assetPath: string) {
-  const href = `href="${assetUrl(assetPath)}"`;
-  return (markup.match(/<image [^>]*>/g) ?? []).filter((image) => image.includes(href));
-}
+const BASE_COLORS: CitizenColors = {
+  body: "#75b44b",
+  head: "#15ada3",
+  hair: "#9fa4e8",
+  deco: "#ee5da2",
+  eyes: "#c892d6",
+  nose: "#ffbc40",
+  mouth: "#f88a30",
+};
 
-const BASE_COLORS: CitizenColors = { body: "#75b44b", head: "#15ada3", hair: "#9fa4e8", deco: "#ee5da2" };
+function imagesOf(markup: string, assetPath: string) {
+  const hrefs = [undefined, BASE_COLORS.deco].map((color) => `href="${assetUrl(assetPath, color)}"`);
+  return (markup.match(/<image [^>]*>/g) ?? []).filter((image) => hrefs.some((href) => image.includes(href)));
+}
 
 function decoFilters(decoId: number, decoColor: string) {
   const markup = renderToStaticMarkup(
@@ -101,5 +109,40 @@ describe("40C3 logo", () => {
       expect(filterId, style).toBeDefined();
       expect(markup).toMatch(new RegExp(`<filter id="${filterId}"><feFlood flood-color="#001300"`));
     }
+  });
+});
+
+describe("part green", () => {
+  function hrefsFor(selection: { mouthId: number; decoId: number; eyeId?: number; noseId?: number }, deco: string) {
+    const markup = renderToStaticMarkup(
+      <CitizenPortrait
+        portraitRef={null}
+        citizenName="Test"
+        selection={{ bodyId: 0, headId: 2, hairId: 0, eyeId: 0, noseId: 0, ...selection }}
+        colors={{ ...BASE_COLORS, deco }}
+        tag={{ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" }}
+        logo={NO_LOGO}
+      />,
+    );
+    return (markup.match(/<image [^>]*>/g) ?? []).map((image) => image.match(/href="([^"]*)"/)?.[1] ?? "");
+  }
+
+  test("eyes, nose and mouth each take their own color", () => {
+    const hrefs = hrefsFor({ mouthId: 2, decoId: 0, eyeId: 1, noseId: 3 }, DECO_DEFAULT_COLOR);
+    expect(hrefs).toContain(assetUrl("Eyes/Eyes1.svg", BASE_COLORS.eyes));
+    expect(hrefs).toContain(assetUrl("Noses/Nose3.svg", BASE_COLORS.nose));
+    expect(hrefs).toContain(assetUrl("Mouths/Mouth2.svg", BASE_COLORS.mouth));
+    const mouth = decodeURIComponent(assetUrl("Mouths/Mouth2.svg", BASE_COLORS.mouth));
+    expect(mouth).toContain(BASE_COLORS.mouth);
+    expect(mouth).not.toMatch(/#6ab143/i);
+  });
+
+  test("green decos take the deco color and keep their green by default", () => {
+    expect(hrefsFor({ mouthId: 0, decoId: 0 }, BASE_COLORS.deco)).toContain(assetUrl("Deco/Deco0.svg", BASE_COLORS.deco));
+    expect(hrefsFor({ mouthId: 0, decoId: 0 }, DECO_DEFAULT_COLOR)).toContain(assetUrl("Deco/Deco0.svg"));
+  });
+
+  test("parts without green keep their url", () => {
+    expect(assetUrl("Mouths/Mouth6.svg", BASE_COLORS.mouth)).toBe(assetUrl("Mouths/Mouth6.svg"));
   });
 });

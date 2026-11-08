@@ -9,6 +9,7 @@ type CitizenFigurePickerProps = {
   selectedId: CitizenId;
   colors: CitizenColors;
   decoOriginalColor: string | undefined;
+  recolorableParts: { eyes: boolean; nose: boolean; mouth: boolean };
   logo: CitizenLogo;
   onSelectFigure: (citizen: (typeof CITIZENS)[number]) => void;
   onSelectColor: (part: ColorPart, color: string) => void;
@@ -19,6 +20,7 @@ export function CitizenFigurePicker({
   selectedId,
   colors,
   decoOriginalColor,
+  recolorableParts,
   logo,
   onSelectFigure,
   onSelectColor,
@@ -28,6 +30,9 @@ export function CitizenFigurePicker({
   const palettes: { part: ColorPart; options: readonly string[] }[] = [
     { part: "body", options: COLORS },
     { part: "head", options: COLORS },
+    ...(["eyes", "nose", "mouth"] as const)
+      .filter((part) => recolorableParts[part])
+      .map((part) => ({ part, options: COLORS })),
     { part: "hair", options: COLORS },
     ...(decoOriginalColor ? [{ part: "deco" as const, options: [DECO_DEFAULT_COLOR, ...COLORS] }] : []),
   ];
