@@ -5,8 +5,7 @@ export async function downloadCitizenSvg(portrait: SVGSVGElement | null, filenam
     return;
   }
 
-  // Hats, hair and ears can extend past the canvas (the page shows them via overflow: visible),
-  // so grow the exported viewBox to include everything that is drawn.
+  // Hats and hair extend past the canvas, so grow the viewBox to include everything drawn.
   const contentBox = portrait.getBBox();
   const minX = Math.floor(Math.min(0, contentBox.x));
   const minY = Math.floor(Math.min(0, contentBox.y));

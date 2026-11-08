@@ -21,10 +21,7 @@ type CitizenPortraitProps = {
   tag: CitizenTag;
 };
 
-/**
- * "fill" paints every visible pixel in the color (hair, head).
- * "multiply" tints white parts while keeping black outlines and shading lines (decos, white body).
- */
+// "fill" paints every visible pixel; "multiply" tints white parts and keeps black/green details.
 function TintFilter({ id, color, mode }: { id: string; color: string; mode: "fill" | "multiply" }) {
   if (mode === "fill") {
     return (
@@ -43,7 +40,7 @@ function TintFilter({ id, color, mode }: { id: string; color: string; mode: "fil
   );
 }
 
-/** Rotates the hue of the green bodies; done as an SVG filter so exported files keep the color everywhere. */
+// An SVG filter instead of CSS hue-rotate, so downloaded files keep the body color in every viewer.
 function HueRotateFilter({ id, degrees }: { id: string; degrees: number }) {
   return (
     <filter id={id} colorInterpolationFilters="sRGB">
@@ -55,7 +52,6 @@ function HueRotateFilter({ id, degrees }: { id: string; degrees: number }) {
 function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[]; filter: string | undefined }) {
   return pieces.map(({ crop, ...box }) =>
     crop ? (
-      // Cropped piece: a nested viewport shows only part of the asset (split decos like ears and studs).
       <svg key={crop.viewBox} {...box} viewBox={crop.viewBox} preserveAspectRatio={crop.preserveAspectRatio}>
         <image
           href={href}
@@ -80,7 +76,6 @@ function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[
 
 export function CitizenPortrait({ portraitRef, citizenName, selection, colors, tag }: CitizenPortraitProps) {
   const layout = computePortraitLayout(selection);
-  // Filter ids are unique per portrait so several portraits on one page don't share filters.
   const filterPrefix = useId();
   const filterIds = {
     head: `${filterPrefix}head-color`,
@@ -92,7 +87,6 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
   const tagText = tag.text.trim();
   const tagTextWidth = Math.min(tagText.length * 6.5, layout.tag.maxWidth);
 
-  // The "original" deco color leaves the asset untouched; otherwise use the deco's tint mode.
   const decoTint = layout.deco?.tint;
   const decoFilter =
     decoTint && colors.deco !== DECO_DEFAULT_COLOR

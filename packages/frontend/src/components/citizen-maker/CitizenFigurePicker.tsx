@@ -8,7 +8,6 @@ type ColorPart = keyof CitizenColors;
 type CitizenFigurePickerProps = {
   selectedId: CitizenId;
   colors: CitizenColors;
-  /** Original color of the selected deco if it can be recolored; hides the deco palette when undefined. */
   decoOriginalColor: string | undefined;
   onSelectFigure: (citizen: (typeof CITIZENS)[number]) => void;
   onSelectColor: (part: ColorPart, color: string) => void;
@@ -58,7 +57,6 @@ export function CitizenFigurePicker({
               onSelect={(color) => onSelectColor(part, color)}
               {...(part === "deco" && decoOriginalColor
                 ? {
-                    // The first deco swatch means "keep the asset's own color".
                     displayColor: (color: string) => (color === DECO_DEFAULT_COLOR ? decoOriginalColor : color),
                     swatchLabel: (color: string) => (color === DECO_DEFAULT_COLOR ? t("pages.citizenMaker.originalColor") : color),
                   }

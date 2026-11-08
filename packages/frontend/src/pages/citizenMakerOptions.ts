@@ -64,7 +64,6 @@ export const COLOR_HUES: Record<string, number> = {
   "#f88a30": -72,
   "#ffbc40": -59,
 };
-// Cyclable features in display order. Positions index into each option list; option ids are asset ids.
 export const FEATURES = [
   { key: "head", options: HEADS },
   { key: "eyes", options: EYES },
@@ -76,11 +75,10 @@ export const FEATURES = [
 
 export type Feature = (typeof FEATURES)[number]["key"];
 
-/** Asset id of the option at `position` in a feature's option list. */
 export function featureOptionId(feature: Feature, position: number): number {
   const options = FEATURES.find(({ key }) => key === feature)?.options ?? FEATURES[0].options;
   return (options[position] ?? options[0]).id;
 }
 
-// Colorable decos are white by default, so their palette also offers white to switch back.
+// Deco color value meaning "keep the asset's original color".
 export const DECO_DEFAULT_COLOR = "#fffbff";

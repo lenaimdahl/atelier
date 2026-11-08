@@ -33,7 +33,6 @@ export function CitizenMakerWorkbench() {
   const { t } = useTranslation();
   const portraitRef = useRef<SVGSVGElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  // The URL in the address bar is the share link: read it once on load, then keep it in sync with every change.
   const [design, setDesign] = useState<CitizenDesign>(() => designFromSearchParams(searchParams));
   const { features, colors, tag } = design;
   const selectedCitizen = CITIZENS.find((citizen) => citizen.id === design.citizenId) ?? CITIZENS[0];
@@ -41,7 +40,7 @@ export function CitizenMakerWorkbench() {
   useEffect(() => {
     const nextParams = designToSearchParams(design);
     if (nextParams.toString() !== searchParams.toString()) {
-      // Replace instead of push so editing doesn't flood the browser history.
+      // Replace, not push, so editing doesn't flood the browser history.
       setSearchParams(nextParams, { replace: true });
     }
   }, [design, searchParams, setSearchParams]);

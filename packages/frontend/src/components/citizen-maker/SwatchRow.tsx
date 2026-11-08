@@ -17,9 +17,7 @@ export function SwatchRow({
   options: readonly string[];
   selected: string;
   onSelect: (color: string) => void;
-  /** Accessible name for a swatch; defaults to its color value. */
   swatchLabel?: (color: string) => string;
-  /** Color shown on the swatch; defaults to its value (used for the deco's "original" swatch). */
   displayColor?: (color: string) => string;
 }) {
   const { t } = useTranslation();

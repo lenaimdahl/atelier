@@ -1,6 +1,3 @@
-// Pure layout math for the citizen portrait: given the chosen asset ids, compute where every
-// part is drawn. All numbers are in portrait (SVG user) coordinates.
-
 export const CANVAS = { width: 320, height: 340, centerX: 160 } as const;
 
 export type Box = { x: number; y: number; width: number; height: number };
@@ -19,24 +16,16 @@ export function fitBox(centerX: number, centerY: number, maxWidth: number, maxHe
   return centeredBox(centerX, centerY, width, width / aspectRatio);
 }
 
-// ---------------------------------------------------------------------------
-// Asset geometry
-// ---------------------------------------------------------------------------
-
 type HeadGeometry = {
   aspectRatio: number;
-  /** Face height as a fraction of the head height (head 7 has a long chin below the face). */
+  /** Head 7 has a long chin below the face. */
   faceHeightRatio: number;
-  /** Silhouette width (fraction of headWidth) at 25% / 38% of the face height, used to fit the hair. */
+  /** Silhouette width (fraction of headWidth) at 25% / 38% of the face height. */
   widthAt25: number;
   widthAt38: number;
-  /** Extra widening of the bowl cut on square heads. */
   bowlCutWidthFactor: number;
-  /** Ears deco: silhouette half-width where the ear attaches and the ear's top edge (fraction of faceHeight). */
   ear: { halfWidth: number; top: number };
-  /** Stud deco: silhouette half-width and stud center y (fraction of faceHeight). */
   stud: { halfWidth: number; y: number };
-  /** Narrow head tops need a smaller green hat. */
   compactHat: boolean;
 };
 
@@ -52,11 +41,9 @@ export const HEAD_GEOMETRY: HeadGeometry[] = [
 ];
 
 type BodyGeometry = {
-  /** Chest spot for the badge deco. */
   badge: { x: number; y: number };
-  /** Right-aligned tag text anchor and its maximum width. */
   tag: { x: number; y: number; maxWidth: number };
-  /** White bodies can't be hue-rotated, so they are tinted with a multiply filter instead. */
+  /** White can't be hue-rotated, so white bodies are tinted instead. */
   white: boolean;
 };
 
@@ -71,9 +58,7 @@ export const BODY_GEOMETRY: BodyGeometry[] = [
 
 type EyeGeometry = {
   aspectRatio: number;
-  /** Right eye's center as a fraction of the asset width (for the eye patch). */
   rightEyeCenter: number;
-  /** Some eye assets are drawn smaller than the default eye box. */
   scale: number;
 };
 
@@ -91,17 +76,12 @@ export const EYE_GEOMETRY: Record<number, EyeGeometry> = {
   11: { aspectRatio: 395.96 / 163.58, rightEyeCenter: 0.75, scale: 0.85 },
 };
 
-/** Nose box size as fractions of headWidth / faceHeight; nose 2 is a wide nose. */
 const NOSE_SIZE: Record<number, { width: number; height: number }> = {
   2: { width: 0.125, height: 0.24 },
 };
 const DEFAULT_NOSE_SIZE = { width: 0.1, height: 0.2 };
 
-// ---------------------------------------------------------------------------
-// Hair
-// ---------------------------------------------------------------------------
-
-// Hair is stretched over the top of the head (preserveAspectRatio="none") so it follows each head's shape.
+// Hair is stretched (preserveAspectRatio="none") so it follows each head's shape.
 function hairBox(hairId: number, head: HeadGeometry, headWidth: number, faceHeight: number): Box {
   const widthAt25 = Math.max(head.widthAt25, 0.4) * headWidth;
   const widthAt38 = Math.max(head.widthAt38, 0.5) * headWidth;
@@ -126,20 +106,8 @@ function hairBox(hairId: number, head: HeadGeometry, headWidth: number, faceHeig
   return { x: CANVAS.centerX - width / 2, y: bottom - height, width, height };
 }
 
-// ---------------------------------------------------------------------------
-// Decos
-// ---------------------------------------------------------------------------
-
-/**
- * Where a deco is drawn in the stack:
- * - body:  over body and head, under the hair (tie, fist, badge)
- * - head:  over the hair, under the eyes (hats, ears)
- * - eyes:  over the eyes (glasses, eye patch, studs)
- * - mouth: over the mouth, under the nose (mustache)
- */
 export type DecoLayer = "body" | "head" | "eyes" | "mouth";
 
-/** A deco is drawn as one or more pieces; a cropped piece shows only part of the asset (split decos). */
 export type DecoPiece = Box & {
   crop?: { viewBox: string; assetWidth: number; assetHeight: number; preserveAspectRatio?: string };
 };
@@ -154,12 +122,6 @@ type DecoContext = {
   eyeBox: Box;
 };
 
-/**
- * How a single-colored deco is recolored with the deco color:
- * - multiply: white parts take the color, black/green details stay (badge, fist, tie, diamonds)
- * - fill: every visible pixel takes the color (black-only decos: glasses, eye patch)
- * originalColor is the asset's own color, shown on the "original" swatch.
- */
 export type DecoTint = { mode: "multiply" | "fill"; originalColor: string };
 
 const WHITE_TINT: DecoTint = { mode: "multiply", originalColor: "#fffbff" };
@@ -167,7 +129,6 @@ const BLACK_TINT: DecoTint = { mode: "fill", originalColor: "#000000" };
 
 type DecoDefinition = {
   layer: DecoLayer;
-  /** Set for decos that can be recolored with the deco color. */
   tint?: DecoTint;
   layout: (context: DecoContext) => DecoPiece[];
 };
@@ -186,16 +147,14 @@ const DECO_ASPECT_RATIOS = [
   414.78 / 108.19,
 ];
 
-// Deco0 (ears with earrings) is drawn as two cropped halves so each ear can be
-// attached to the side of the head independently of the head's width.
+// Ears are drawn as two cropped halves so each attaches to its head side, whatever the head width.
 const EAR_ASSET = { width: 622.57, height: 313.32 };
-const EAR_CROP_WIDTH = 175; // each half: ear wedge + earring
-const EAR_INNER_EDGE = 166; // ear's inner edge, measured from the left of the asset
-const EAR_WEDGE_WIDTH = 164; // width of the ear wedge itself
+const EAR_CROP_WIDTH = 175;
+const EAR_INNER_EDGE = 166;
+const EAR_WEDGE_WIDTH = 164;
 
 function earPieces({ head, headWidth, faceHeight }: DecoContext): DecoPiece[] {
   const innerOffset = head.ear.halfWidth * headWidth;
-  // Ear is ~20% of the head width, but never pushed past the edge of the canvas.
   const earWidth = Math.min(headWidth * 0.2, CANVAS.centerX - 2 - innerOffset);
   const scale = earWidth / EAR_WEDGE_WIDTH;
   const width = EAR_CROP_WIDTH * scale;
@@ -221,7 +180,6 @@ function earPieces({ head, headWidth, faceHeight }: DecoContext): DecoPiece[] {
   ];
 }
 
-// Deco10 (diamond studs) is also split: each diamond sits on the side of the head at ear-lobe height.
 const STUD_ASSET = { width: 414.78, height: 108.19 };
 const STUD_CROPS = [`0 0 108.19 108.19`, `306.59 0 108.19 108.19`];
 
@@ -236,12 +194,12 @@ function studPieces({ head, headWidth, faceHeight }: DecoContext): DecoPiece[] {
   ];
 }
 
-// Deco9 (eye patch): the patch oval's center within the asset, as fractions.
+// Center of the patch oval within the eye patch asset.
 const PATCH_OVAL = { centerX: 0.539, centerY: 0.579 };
 
 function eyePatchBox({ eyeId, eyeBox }: DecoContext): Box {
   const eye = EYE_GEOMETRY[eyeId] ?? EYE_GEOMETRY[0];
-  // The eye image is drawn with "meet", so compute the actually rendered eye size.
+  // Eyes are drawn with "meet", so the rendered eye can be smaller than its box.
   const eyeWidth = Math.min(eyeBox.width, eyeBox.height * eye.aspectRatio);
   const eyeHeight = eyeWidth / eye.aspectRatio;
   const width = Math.max(1.72 * eyeHeight, 0.7 * eyeWidth);
@@ -254,29 +212,29 @@ function eyePatchBox({ eyeId, eyeBox }: DecoContext): Box {
 const X = CANVAS.centerX;
 
 export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
-  // Ears with earrings.
+  // Ears
   0: { layer: "head", layout: earPieces },
-  // Cap.
+  // Cap
   1: {
     layer: "head",
    
     layout: ({ headWidth, headHeight }) => [fitBox(X, -headHeight * 0.12, headWidth * 0.88, headHeight * 0.5, DECO_ASPECT_RATIOS[1])],
   },
-  // Round badge pinned on the chest; the spot depends on the body shape.
+  // Badge
   2: { layer: "body", tint: WHITE_TINT, layout: ({ body }) => [centeredBox(body.badge.x, body.badge.y, 30, 30)] },
-  // Mustache.
+  // Mustache
   3: {
     layer: "mouth",
    
     layout: ({ headWidth, faceHeight }) => [fitBox(X, faceHeight * 0.8, headWidth * 0.42, faceHeight * 0.14, DECO_ASPECT_RATIOS[3])],
   },
-  // Raised fist: rises from the right shoulder next to the head, sleeve tucked into the body.
+  // Fist
   4: {
     layer: "body",
     tint: WHITE_TINT,
     layout: () => [{ x: 316 - 76, y: 292 - 76 / DECO_ASPECT_RATIOS[4], width: 76, height: 76 / DECO_ASPECT_RATIOS[4] }],
   },
-  // Green hat.
+  // Green hat
   5: {
     layer: "head",
    
@@ -286,34 +244,30 @@ export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
         : fitBox(X, -headHeight * 0.12, headWidth * 0.88, headHeight * 0.5, DECO_ASPECT_RATIOS[5]),
     ],
   },
-  // Glasses.
+  // Glasses
   6: {
     layer: "eyes",
     tint: BLACK_TINT,
    
     layout: ({ headWidth, faceHeight }) => [fitBox(X, faceHeight * 0.63, headWidth, faceHeight * 0.5, DECO_ASPECT_RATIOS[6])],
   },
-  // Pointy hat.
+  // Pointy hat
   7: {
     layer: "head",
    
     layout: ({ headWidth, headHeight }) => [fitBox(X, -headHeight * 0.12, headWidth * 0.78, headHeight * 0.58, DECO_ASPECT_RATIOS[7])],
   },
-  // Tie.
+  // Tie
   8: { layer: "body", tint: WHITE_TINT, layout: () => [centeredBox(X, 288, 16, 80)] },
-  // Eye patch.
+  // Eye patch
   9: { layer: "eyes", tint: BLACK_TINT, layout: (context) => [eyePatchBox(context)] },
-  // Diamond studs.
+  // Diamonds
   10: { layer: "eyes", tint: WHITE_TINT, layout: studPieces },
 };
 
 export function decoTint(decoId: number): DecoTint | undefined {
   return DECO_DEFINITIONS[decoId]?.tint;
 }
-
-// ---------------------------------------------------------------------------
-// Whole portrait
-// ---------------------------------------------------------------------------
 
 export type CitizenSelection = {
   bodyId: number;

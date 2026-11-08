@@ -9,7 +9,6 @@ type TagControlsProps = {
   onTagChange: (change: Partial<CitizenTag>) => void;
 };
 
-/** Body tag (hashtag) text, font and color. */
 export function TagControls({ tag, onTagChange }: TagControlsProps) {
   const { t } = useTranslation();
   return (

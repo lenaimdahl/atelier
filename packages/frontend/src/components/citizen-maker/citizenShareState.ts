@@ -1,5 +1,3 @@
-// Encodes a citizen design into URL search params and back, so a citizen can be shared as a link.
-// Decoding validates every value against the real options; anything unknown falls back to the default.
 import type { CitizenColors, CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
 import {
   CITIZENS,
@@ -16,7 +14,6 @@ export const TAG_MAX_LENGTH = 20;
 
 export type CitizenDesign = {
   citizenId: CitizenId;
-  /** Position of the chosen option in each feature's option list. */
   features: Record<Feature, number>;
   colors: CitizenColors;
   tag: CitizenTag;
@@ -40,7 +37,7 @@ export const DEFAULT_DESIGN: CitizenDesign = {
 const COLOR_PARAMS = { body: "bodyColor", head: "headColor", hair: "hairColor", deco: "decoColor" } as const;
 const DECO_COLORS: readonly string[] = [DECO_DEFAULT_COLOR, ...COLORS];
 
-// Colors go into the URL without "#", which would otherwise start the URL fragment.
+// "#" would start the URL fragment, so colors are stored without it.
 const toParamColor = (color: string) => color.replace(/^#/, "");
 const fromParamColor = (value: string | null, allowed: readonly string[]) => {
   const color = value ? `#${value.toLowerCase()}` : null;
@@ -53,12 +50,12 @@ export function designToSearchParams(design: CitizenDesign): URLSearchParams {
     if (value !== defaultValue) params.set(key, value);
   };
 
-  // The hair default depends on the chosen citizen, so compare against that citizen's hair.
+  // The default hair depends on the citizen.
   const citizen = CITIZENS.find(({ id }) => id === design.citizenId) ?? CITIZENS[0];
   setIfChanged("citizen", design.citizenId, DEFAULT_DESIGN.citizenId);
   for (const { key, options } of FEATURES) {
     const defaultPosition = key === "hair" ? hairPositionFor(citizen) : DEFAULT_DESIGN.features[key];
-    // Features are stored as asset ids so links survive reordering of the option lists.
+    // Asset ids, not positions, so links survive reordering of the option lists.
     setIfChanged(key, String(options[design.features[key]].id), String(options[defaultPosition].id));
   }
   for (const part of Object.keys(COLOR_PARAMS) as (keyof CitizenColors)[]) {

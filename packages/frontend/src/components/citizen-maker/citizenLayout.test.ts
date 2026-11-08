@@ -34,7 +34,6 @@ describe("asset geometry", () => {
 
   test("single-colored decos can be recolored with the right mode", () => {
     const tints = Object.fromEntries(DECO.map(({ id }) => [id, decoTint(id)?.mode ?? null]));
-    // White decos are multiplied (details stay), black-only decos are filled.
     expect(tints).toEqual({ 0: null, 1: null, 2: "multiply", 3: null, 4: "multiply", 5: null, 6: "fill", 7: null, 8: "multiply", 9: "fill", 10: "multiply" });
   });
 });
@@ -45,7 +44,6 @@ describe("portrait layout", () => {
       if (selection.decoId !== 0 && selection.decoId !== 10) continue;
       const { deco } = computePortraitLayout(selection);
       for (const piece of deco?.pieces ?? []) {
-        // Ears and studs are attached to the head sides and must not leave the canvas.
         expect(piece.x, JSON.stringify(selection)).toBeGreaterThanOrEqual(-1);
         expect(piece.x + piece.width, JSON.stringify(selection)).toBeLessThanOrEqual(CANVAS.width + 1);
       }
