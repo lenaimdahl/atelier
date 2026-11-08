@@ -1,0 +1,55 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    assignees:
+      - lenaimdahl
+    commit-message:
+      prefix: fix(deps)
+      prefix-development: chore(deps-dev)
+    cooldown:
+      default-days: 5
+    groups:
+      react:
+        patterns:
+          - react
+          - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+      vite:
+        patterns:
+          - vite
+          - vitest
+          - "@vitejs/*"
+    ignore:
+      - dependency-name: "@types/node"
+        update-types:
+          - version-update:semver-major
+    open-pull-requests-limit: 99
+    versioning-strategy: increase
+
+  - package-ecosystem: gomod
+    directory: /packages/backend
+    schedule:
+      interval: weekly
+    assignees:
+      - lenaimdahl
+    commit-message:
+      prefix: fix(deps)
+    cooldown:
+      default-days: 5
+    open-pull-requests-limit: 99
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    assignees:
+      - lenaimdahl
+    commit-message:
+      prefix: ci(deps)
+    cooldown:
+      default-days: 5
+    open-pull-requests-limit: 99
