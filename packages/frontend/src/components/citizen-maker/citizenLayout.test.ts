@@ -10,7 +10,8 @@ import {
   logoBox,
   type CitizenSelection,
 } from "src/components/citizen-maker/citizenLayout";
-import { CITIZENS, DECO, EYES, HAIR, HEADS } from "src/pages/citizenMakerOptions";
+import { assetUrl } from "src/components/citizen-maker/citizenAssets";
+import { CITIZENS, DECO, EYES, HAIR, HEADS, MOUTHS, NOSES } from "src/pages/citizenMakerOptions";
 
 function* allSelections(): Generator<CitizenSelection> {
   for (const bodyId of BODY_GEOMETRY.keys())
@@ -31,6 +32,21 @@ describe("asset geometry", () => {
       expect(BODY_GEOMETRY[citizen.bodyId], `${citizen.id} body`).toBeDefined();
       expect(HAIR.some((hair) => hair.id === citizen.hairId), `${citizen.id} hair`).toBe(true);
     }
+  });
+
+  test("every option has a bundled asset file", () => {
+    const missing = [
+      ...HEADS.map(({ id }) => `Heads/Head${id}.svg`),
+      ...EYES.map(({ id }) => `Eyes/Eyes${id}.svg`),
+      ...HAIR.map(({ id }) => `Hair/Hair${id}.svg`),
+      ...DECO.map(({ id }) => `Deco/Deco${id}.svg`),
+      ...BODY_GEOMETRY.map((_, id) => `Bodies/Body${id}.svg`),
+      ...NOSES.map(({ id }) => `Noses/Nose${id}.svg`),
+      ...MOUTHS.map(({ id }) => `Mouths/Mouth${id}.svg`),
+      "Logos/Logo.svg",
+      "Logos/LogoText.svg",
+    ].filter((path) => !assetUrl(path).startsWith("data:image/svg+xml"));
+    expect(missing).toEqual([]);
   });
 
   test("single-colored decos can be recolored with the right mode", () => {

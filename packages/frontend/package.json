@@ -13,6 +13,8 @@
     "generate:api-client": "swagger-typescript-api generate --path ../../api/openapi.yaml --output src/api/generated --name generated.ts --axios"
   },
   "dependencies": {
+    "@fontsource/ibm-plex-mono": "catalog:",
+    "@fontsource/vt323": "catalog:",
     "@atelier/bookshelf": "workspace:*",
     "@tanstack/react-query": "catalog:",
     "axios": "catalog:",

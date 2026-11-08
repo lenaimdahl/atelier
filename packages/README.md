@@ -1,36 +1,46 @@
 # Atelier
 
-Atelier is a portfolio project. Its first feature is a shared shelf where visitors pick their favorite book from a curated library of 100 feminist books.
+Atelier is my little workshop on the web. Small projects, built properly, and everything is open to look at.
 
-The project is a pnpm workspace with a React frontend, a Go backend, and reusable feature packages. `@atelier/bookshelf` owns the shelf, the book search and the dialog UI; the frontend owns API access and the portfolio shell.
+Right now there are two things to play with:
 
-## Prerequisites
+- **Bookshelf**: a shared shelf where you can pick your favorite book from my library of 100 feminist books.
+- **Citizen Lab**: build your own 40C3 "model citizen" and share it as a link (more below).
+
+Under the hood it's a pnpm workspace with a React frontend, a Go backend and reusable feature packages. `@atelier/bookshelf` takes care of the shelf, the book search and the dialog; the frontend handles API access and the portfolio shell around it.
+
+The homepage and the Citizen Lab got a dark terminal look based on the 40C3 styleguide. The Bookshelf keeps its own blue/red style on purpose. All pages share the same header, only the colors change per area (the `--frame-*` CSS variables in `packages/frontend/src/index.css`).
+
+## What you need
 
 - Node.js and pnpm
-- Go version specified in `backend/go.mod`
+- Go (version in `packages/backend/go.mod`)
 - Docker Desktop
 
 ## Frontend
 
-Install workspace dependencies and start the Vite development server from the repository root:
+Install everything and start the Vite dev server from the repo root:
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-The frontend is normally available at `http://localhost:5173`.
+Then open `http://localhost:5173`.
 
-Frontend checks:
+Before pushing, I run:
 
 ```bash
 pnpm build
 pnpm lint
+pnpm test
 ```
+
+`pnpm test` runs the Vitest tests for the Citizen Lab (layout, share links, rendering).
 
 ## Backend API
 
-The backend provides these endpoints:
+These are the endpoints:
 
 ```text
 GET     /health
@@ -41,25 +51,23 @@ POST    /favorites
 OPTIONS /favorites
 ```
 
-`POST /favorites` only accepts `application/json`, bodies up to 1 KB and at most 10 picks
-per minute per client. The client IP is taken from the last `X-Forwarded-For` entry, so the
-backend must run behind a reverse proxy that sets this header (Coolify does).
+`POST /favorites` only takes `application/json`, bodies up to 1 KB and at most 10 picks per minute per client. The client IP comes from the last `X-Forwarded-For` entry, so the backend has to run behind a reverse proxy that sets this header (Coolify does).
 
-To run the backend locally without Docker:
+Run the backend locally without Docker:
 
 ```bash
 cd packages/backend
 go run .
 ```
 
-The backend listens on `http://localhost:8080` by default. To use another port:
+It listens on `http://localhost:8080`. Want another port?
 
 ```bash
 cd packages/backend
 PORT=8081 go run .
 ```
 
-Run backend checks:
+Backend checks:
 
 ```bash
 cd packages/backend
@@ -70,24 +78,24 @@ gofmt -d .
 
 ## Database and Docker
 
-PostgreSQL, the Go backend and the frontend (served by nginx) run together through Docker Compose.
+PostgreSQL, the Go backend and the frontend (served by nginx) all run together with Docker Compose.
 
-Start all services from the repository root:
+Start everything from the repo root:
 
 ```bash
 docker compose up --build
 ```
 
-Use `--build` after changing Go code, the Dockerfile, `go.mod`, or `go.sum`. If nothing changed, `docker compose up` is sufficient.
+You only need `--build` after changing Go code, the Dockerfile, `go.mod` or `go.sum`. Otherwise `docker compose up` is enough.
 
-The services are available at:
+Where to find things:
 
 ```text
 PostgreSQL: localhost:5432
 Backend:    http://localhost:8080
 ```
 
-The local database uses:
+Local database login:
 
 ```text
 User:     postgres
@@ -95,20 +103,17 @@ Password: your-password
 Database: atelier_db
 ```
 
-These are local development credentials only.
+These are local dev credentials only, nothing more.
 
-The backend applies all SQL files in `packages/backend/migrations/` in name order on every
-start. Applied migrations are not tracked, so every migration must be idempotent (for
-example `CREATE TABLE IF NOT EXISTS`, `ADD COLUMN IF NOT EXISTS`) and must not delete
-existing data.
+On every start the backend applies all SQL files in `packages/backend/migrations/` in name order. It doesn't keep track of what already ran, so every migration has to be safe to run again (for example `CREATE TABLE IF NOT EXISTS`, `ADD COLUMN IF NOT EXISTS`) and must never delete existing data.
 
-Inspect the database directly:
+Peek into the database:
 
 ```bash
 docker exec -it atelier-postgres psql -U postgres -d atelier_db
 ```
 
-Useful PostgreSQL commands:
+Handy PostgreSQL commands:
 
 ```sql
 \dt
@@ -118,13 +123,13 @@ SELECT * FROM favorites;
 \q
 ```
 
-Stop the services with `Ctrl+C` when `docker compose up` is running, or use:
+Stop everything with `Ctrl+C` while `docker compose up` is running, or:
 
 ```bash
 docker compose down
 ```
 
-The database data is kept in the `atelier_pgdata` Docker volume. To delete the data too:
+The data lives in the `atelier_pgdata` Docker volume. To wipe it too:
 
 ```bash
 docker compose down -v
@@ -140,14 +145,14 @@ After changing a schema, regenerate the frontend types:
 pnpm --filter atelier generate:types
 ```
 
-Regenerate the backend model types with:
+And the backend model types:
 
 ```bash
 cd packages/backend
 go generate ./...
 ```
 
-The API contract is defined in `api/openapi.yaml`. After changing it, regenerate the typed frontend API client:
+The API contract lives in `api/openapi.yaml`. After changing it, regenerate the typed frontend API client:
 
 ```bash
 pnpm --filter atelier generate:api-client
@@ -155,30 +160,38 @@ pnpm --filter atelier generate:api-client
 
 ## Book library
 
-Visitors pick favorites from a fixed library of 50 English and 50 German feminist books,
-listed in `packages/backend/catalog/books.txt` by Open Library work ID. On startup the
-backend imports author and cover for missing books from the Open Library API in a single
-search request, downloads the covers and stores everything in PostgreSQL. Covers are served
-by the backend, so visitors' browsers never contact Open Library. Titles and languages are
-taken from `books.txt` on every start, and books removed from the file are deleted together
-with their picks. If Open Library is unreachable, the import retries with increasing delays.
+You can pick from a fixed library of 50 English and 50 German feminist books, listed in `packages/backend/catalog/books.txt` by Open Library work ID.
 
-Visitors can only pick books from this library. Picks are stored as a counter per book.
+On startup the backend fetches author and cover for any missing books from the Open Library API in a single search request, downloads the covers and stores everything in PostgreSQL. Covers are served by the backend, so your browser never talks to Open Library. Titles and languages come from `books.txt` on every start, and if I remove a book from the file, it's deleted together with its picks. If Open Library is down, the import keeps retrying with longer and longer pauses.
 
-Generated and local-only files such as `node_modules/` and `dist/` must not be committed.
+You can only pick books from this library, and picks are simply counted per book.
 
-## Complete development workflow
+Generated and local-only stuff like `node_modules/` and `dist/` never gets committed.
 
-Use separate terminals. Compose starts only the database and the backend here, because the
-Vite dev server needs port 5173, which is also the allowed CORS origin:
+## Citizen Lab
+
+At `/citizen-maker` you build a citizen from bodies, heads, hair, eyes, noses, mouths and decorations, pick the colors, add a hashtag and, if you like, the 40C3 logo. Then download it as SVG.
+
+- **Share links**: the whole citizen lives in the URL (`?citizen=adam&head=2&...`), so whatever is in the address bar is your share link. Only values that differ from the defaults end up in it, and anything invalid quietly falls back to the default. Nothing goes to the backend.
+- **Layout**: all positions are calculated in `packages/frontend/src/components/citizen-maker/citizenLayout.ts`. The geometry of each head, body and eye set and one definition per decoration (layer, recoloring, layout) live there; the portrait component only draws.
+- **Assets**: the SVG parts are in `packages/frontend/src/assets/40c3-creator/`. To add a head, eyes or a decoration, drop in the file and add one entry in `citizenLayout.ts`. The tests complain if an option has no layout data.
+
+## Credits
+
+- The citizen graphics in `packages/frontend/src/assets/40c3-creator/` and the 40C3 logos are unmodified files from the 40C3 styleguide by the 40C3 design team / Chaos Computer Club. All rights stay with them. Thank you for sharing them!
+- Fonts: Jersey 10 (SIL Open Font License) and Hack (MIT / Bitstream Vera License) in `packages/frontend/public/fonts/`, with their license files. VT323 and IBM Plex Mono (SIL Open Font License) come via Fontsource.
+
+## My dev setup
+
+I use two terminals. Compose only starts the database and the backend here, because the Vite dev server needs port 5173, which is also the allowed CORS origin:
 
 ```text
 Terminal 1: docker compose up --build postgres backend
 Terminal 2: pnpm dev
 ```
 
-The frontend runs at `http://localhost:5173` and the backend at `http://localhost:8080`.
+The frontend runs at `http://localhost:5173`, the backend at `http://localhost:8080`.
 
-## Planned features
+## Coming up
 
 - SVG cutting for sheet metal

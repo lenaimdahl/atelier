@@ -1,9 +1,15 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vitest";
+import { assetUrl } from "src/components/citizen-maker/citizenAssets";
 import { CitizenPortrait, type CitizenColors, type CitizenLogo } from "src/components/citizen-maker/CitizenPortrait";
 import { DECO, DECO_DEFAULT_COLOR } from "src/pages/citizenMakerOptions";
 
 const NO_LOGO: CitizenLogo = { style: "none", color: "#75b44b" };
+function imagesOf(markup: string, assetPath: string) {
+  const href = `href="${assetUrl(assetPath)}"`;
+  return (markup.match(/<image [^>]*>/g) ?? []).filter((image) => image.includes(href));
+}
+
 const BASE_COLORS: CitizenColors = { body: "#75b44b", head: "#15ada3", hair: "#9fa4e8", deco: "#ee5da2" };
 
 function decoFilters(decoId: number, decoColor: string) {
@@ -17,7 +23,7 @@ function decoFilters(decoId: number, decoColor: string) {
       logo={NO_LOGO}
     />,
   );
-  const decoImages = markup.match(new RegExp(`<image href="[^"]*/Deco${decoId}\\.svg"[^>]*>`, "g")) ?? [];
+  const decoImages = imagesOf(markup, `Deco/Deco${decoId}.svg`);
   return decoImages.map((image) => {
     const filterId = image.match(/filter:url\(#([^)]+)\)/)?.[1];
     // Filter ids carry a useId prefix; only the suffix identifies the filter type.
@@ -63,7 +69,7 @@ describe("deco recoloring", () => {
         logo={NO_LOGO}
       />,
     );
-    const filterId = markup.match(/Deco6\.svg"[^>]*filter:url\(#([^)]+)\)/)?.[1];
+    const filterId = imagesOf(markup, "Deco/Deco6.svg")[0]?.match(/filter:url\(#([^)]+)\)/)?.[1];
     expect(filterId).toBeDefined();
     expect(markup).toMatch(new RegExp(`<filter id="${filterId}"><feFlood flood-color="#ee5da2"`));
   });
@@ -84,13 +90,15 @@ describe("40C3 logo", () => {
   }
 
   test("no logo is drawn by default", () => {
-    expect(renderWithLogo(NO_LOGO)).not.toContain("/Logos/");
+    const markup = renderWithLogo(NO_LOGO);
+    expect(imagesOf(markup, "Logos/Logo.svg")).toEqual([]);
+    expect(imagesOf(markup, "Logos/LogoText.svg")).toEqual([]);
   });
 
   test("the chosen logo variant is drawn in the chosen color", () => {
     for (const [style, file] of [["icon", "Logo.svg"], ["text", "LogoText.svg"]] as const) {
       const markup = renderWithLogo({ style, color: "#001300" });
-      const filterId = markup.match(new RegExp(`/Logos/${file}"[^>]*filter:url\\(#([^)]+)\\)`))?.[1];
+      const filterId = imagesOf(markup, `Logos/${file}`)[0]?.match(/filter:url\(#([^)]+)\)/)?.[1];
       expect(filterId, style).toBeDefined();
       expect(markup).toMatch(new RegExp(`<filter id="${filterId}"><feFlood flood-color="#001300"`));
     }

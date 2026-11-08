@@ -1,6 +1,6 @@
 import { CANVAS } from "src/components/citizen-maker/citizenLayout";
 
-export async function downloadCitizenSvg(portrait: SVGSVGElement | null, filename: string) {
+export function downloadCitizenSvg(portrait: SVGSVGElement | null, filename: string) {
   if (!portrait) {
     return;
   }
@@ -17,19 +17,6 @@ export async function downloadCitizenSvg(portrait: SVGSVGElement | null, filenam
   exportedPortrait.setAttribute("viewBox", `${minX} ${minY} ${width} ${height}`);
   exportedPortrait.setAttribute("width", String(width));
   exportedPortrait.setAttribute("height", String(height));
-
-  await Promise.all(
-    Array.from(exportedPortrait.querySelectorAll("image")).map(async (image) => {
-      const source = image.getAttribute("href");
-      if (!source || source.startsWith("data:")) {
-        return;
-      }
-
-      const response = await fetch(new URL(source, window.location.href));
-      const asset = await response.text();
-      image.setAttribute("href", `data:image/svg+xml;charset=utf-8,${encodeURIComponent(asset)}`);
-    }),
-  );
 
   const blob = new Blob([new XMLSerializer().serializeToString(exportedPortrait)], {
     type: "image/svg+xml;charset=utf-8",

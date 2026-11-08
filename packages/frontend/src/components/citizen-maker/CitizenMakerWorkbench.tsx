@@ -5,6 +5,7 @@ import { CitizenFigurePicker } from "src/components/citizen-maker/CitizenFigureP
 import { CitizenPortrait, type CitizenColors, type CitizenLogo, type CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
 import { OptionCycler } from "src/components/citizen-maker/OptionCycler";
 import { TagControls } from "src/components/citizen-maker/TagControls";
+import { predecodeAssets } from "src/components/citizen-maker/citizenAssets";
 import { decoTint, type CitizenSelection } from "src/components/citizen-maker/citizenLayout";
 import {
   designFromSearchParams,
@@ -36,6 +37,10 @@ export function CitizenMakerWorkbench() {
   const [design, setDesign] = useState<CitizenDesign>(() => designFromSearchParams(searchParams));
   const { features, colors, tag, logo } = design;
   const selectedCitizen = CITIZENS.find((citizen) => citizen.id === design.citizenId) ?? CITIZENS[0];
+
+  useEffect(() => {
+    void predecodeAssets();
+  }, []);
 
   useEffect(() => {
     const nextParams = designToSearchParams(design);
