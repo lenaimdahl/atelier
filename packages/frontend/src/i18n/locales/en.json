@@ -51,11 +51,72 @@
         "title": "No book here yet.",
         "description": "Be the first and pick a book from my library."
       }
+    },
+    "citizenMaker": {
+      "eyebrow": "ATELIER / 40C3 CITIZEN LAB",
+      "titleFirstLine": "BUILD A",
+      "titleSecondLine": "CITIZEN_",
+      "description": "Somewhere between model citizen and delightful outlier. Configure a face, pick a signal, and head for orbit.",
+      "newCitizen": "NEW CITIZEN: 01",
+      "classification": "CLASSIFICATION: PENDING",
+      "rocketLabel": "NO FIXED ORBIT",
+      "workbench": "CITIZEN_CONSTRUCTOR",
+      "localSession": "SESSION 040 / LOCAL ONLY",
+      "previewLabel": "LIVE PREVIEW / CITIZEN_01",
+      "downloadSvg": "DOWNLOAD SVG",
+      "addLogo": "ADD LOGO",
+      "removeLogo": "REMOVE LOGO",
+      "logoLabel": "40C3 LOGO",
+      "logoColorLabel": "LOGO COLOR",
+      "logoStyles": {
+        "icon": "ICON",
+        "text": "WITH TEXT"
+      },
+      "mood": "MOOD: CURIOUS",
+      "signal": "SIGNAL: UNSTABLE",
+      "chooseFigure": "CHOOSE A FIGURE",
+      "parameters": "01 / SELECT PARAMETERS",
+      "controlsTitle": "Make it yours",
+      "figureType": "FIGURE TYPE",
+      "colorLabels": {
+        "body": "BODY COLOR",
+        "head": "HEAD COLOR",
+        "hair": "HAIR COLOR",
+        "deco": "DECO COLOR"
+      },
+      "paletteNote": "PALETTE / 0–7",
+      "colorPartOption": "Set {{part}} to {{color}}",
+      "originalColor": "original",
+      "tagTextLabel": "HASHTAG",
+      "tagTextPlaceholder": "#YOURTAG",
+      "tagFontLabel": "FONT",
+      "tagColorLabel": "HASHTAG COLOR",
+      "hardToClassify": "I AM HARD TO CLASSIFY",
+      "randomize": "RANDOMIZE",
+      "footerTitle": "CITIZEN LOG / 01",
+      "privacyNote": "Nothing here gets profiled. Your citizen only leaves this device as a link you share.",
+      "figureTypes": {
+        "unicorn": "unicorn",
+        "minimalist": "minimalist",
+        "abCollective": "A/B collective"
+      },
+      "featureLabels": {
+        "head": "HEAD",
+        "eyes": "EYES",
+        "nose": "NOSE",
+        "hair": "HAIR",
+        "mouth": "MOUTH",
+        "deco": "DECO"
+      },
+      "previousOption": "Previous {{option}} option",
+      "nextOption": "Next {{option}} option",
+      "optionNumber": "OPTION {{number}}"
     }
   },
   "nav": {
     "label": "Main menu",
     "home": "Home",
-    "books": "Books"
+    "books": "Books",
+    "citizenMaker": "Citizen Lab"
   }
 }

@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "src/components/Layout";
 import Books from "src/pages/Books";
+import CitizenMaker from "src/pages/CitizenMaker";
 import Home from "src/pages/Home";
 
 export default function Router() {
@@ -10,6 +11,7 @@ export default function Router() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/books" element={<Books />} />
+          <Route path="/citizen-maker" element={<CitizenMaker />} />
         </Route>
       </Routes>
     </BrowserRouter>

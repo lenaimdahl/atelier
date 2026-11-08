@@ -19,3 +19,4 @@ catalog:
   swagger-typescript-api: 13.12.6
   typescript: 6.0.2
   vite: 8.2.4
+  vitest: 5.0.5
