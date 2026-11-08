@@ -1,5 +1,4 @@
-# Build
-FROM node:26-alpine AS build
+FROM node:26.13.0-alpine AS build
 
 WORKDIR /app
 
@@ -15,15 +14,14 @@ COPY packages/bookshelf packages/bookshelf
 ARG VITE_API_URL
 RUN pnpm --filter atelier build
 
-# Serve
-FROM nginx:1.31.3-alpine
+FROM nginxinc/nginx-unprivileged:1.31.3-alpine
 
-# hadolint ignore=DL3018
-RUN apk add --no-cache curl
+ARG VITE_API_URL
+ENV API_ORIGIN=${VITE_API_URL}
 
-COPY packages/frontend/nginx.conf /etc/nginx/conf.d/default.conf
+COPY packages/frontend/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/packages/frontend/dist /usr/share/nginx/html
 
 EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
+HEALTHCHECK --interval=30s --timeout=3s CMD curl -fsS http://localhost:8080/ > /dev/null || exit 1

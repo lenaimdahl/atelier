@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -26,16 +27,42 @@ func TestRateLimiter(t *testing.T) {
 	}
 }
 
-func TestClientIP(t *testing.T) {
+func TestRateLimiterKeepsActiveClientsWhenFull(t *testing.T) {
+	limiter := newRateLimiter(1, time.Minute)
+	now := time.Now()
+
+	limiter.allow("victim", now)
+	for i := range maxTrackedClients {
+		limiter.allow(fmt.Sprint("attacker-", i), now)
+	}
+	if limiter.allow("victim", now) {
+		t.Error("expected filling the table not to reset the limit of an active client")
+	}
+	if limiter.allow("newcomer", now) {
+		t.Error("expected new clients to be refused while the table is full")
+	}
+	if !limiter.allow("newcomer", now.Add(time.Minute)) {
+		t.Error("expected expired windows to be dropped to make room")
+	}
+}
+
+func TestClientKey(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/favorites", nil)
 	request.RemoteAddr = "10.0.0.1:1234"
-	if got := clientIP(request); got != "10.0.0.1" {
-		t.Errorf("expected remote address, got %q", got)
+	request.Header.Set("X-Forwarded-For", "1.1.1.1, 203.0.113.7")
+
+	if got := clientKey(request, false); got != "10.0.0.1" {
+		t.Errorf("expected X-Forwarded-For to be ignored without a trusted proxy, got %q", got)
+	}
+	if got := clientKey(request, true); got != "203.0.113.7" {
+		t.Errorf("expected the entry added by the proxy, got %q", got)
 	}
 
-	request.Header.Set("X-Forwarded-For", "1.1.1.1, 203.0.113.7")
-	if got := clientIP(request); got != "203.0.113.7" {
-		t.Errorf("expected the entry added by the proxy, got %q", got)
+	request.Header.Set("X-Forwarded-For", "2001:db8:1:2:aaaa::1")
+	other := httptest.NewRequest(http.MethodPost, "/favorites", nil)
+	other.Header.Set("X-Forwarded-For", "2001:db8:1:2:bbbb::9")
+	if clientKey(request, true) != clientKey(other, true) {
+		t.Error("expected IPv6 addresses in the same /64 to share a key")
 	}
 }
 
@@ -53,7 +80,7 @@ func TestAddFavoriteRejectsBeforeDatabase(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			handler := addFavoriteHandler(nil, "http://localhost:5173", newRateLimiter(100, time.Minute))
+			handler := addFavoriteHandler(nil, "http://localhost:5173", newRateLimiter(100, time.Minute), false)
 			request := httptest.NewRequest(http.MethodPost, "/favorites", strings.NewReader(test.body))
 			request.Header.Set("Content-Type", test.contentType)
 			response := httptest.NewRecorder()
@@ -68,7 +95,7 @@ func TestAddFavoriteRejectsBeforeDatabase(t *testing.T) {
 }
 
 func TestAddFavoriteRateLimit(t *testing.T) {
-	handler := addFavoriteHandler(nil, "http://localhost:5173", newRateLimiter(1, time.Minute))
+	handler := addFavoriteHandler(nil, "http://localhost:5173", newRateLimiter(1, time.Minute), false)
 
 	var codes []int
 	for range 2 {
