@@ -5,7 +5,7 @@ import { CitizenFigurePicker } from "src/components/citizen-lab/CitizenFigurePic
 import { CitizenPortrait, type CitizenColors, type CitizenLogo, type CitizenTag } from "src/components/citizen-lab/CitizenPortrait";
 import { OptionCycler } from "src/components/citizen-lab/OptionCycler";
 import { TagControls } from "src/components/citizen-lab/TagControls";
-import { hasPartGreen, predecodeAssets } from "src/components/citizen-lab/citizenAssets";
+import { decodeAsset, hasPartGreen, portraitUrls, predecodeAssets } from "src/components/citizen-lab/citizenAssets";
 import { decoTint, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
 import {
   DEFAULT_DESIGN,
@@ -33,6 +33,22 @@ function randomColor() {
 }
 
 const MOBILE_QUERY = "(max-width: 720px)";
+
+function citizenOf(design: CitizenDesign) {
+  return CITIZENS.find((citizen) => citizen.id === design.citizenId) ?? CITIZENS[0];
+}
+
+function selectionOf(design: CitizenDesign): CitizenSelection {
+  return {
+    bodyId: citizenOf(design).bodyId,
+    headId: featureOptionId("head", design.features.head),
+    eyeId: featureOptionId("eyes", design.features.eyes),
+    noseId: featureOptionId("nose", design.features.nose),
+    hairId: featureOptionId("hair", design.features.hair),
+    mouthId: featureOptionId("mouth", design.features.mouth),
+    decoId: featureOptionId("deco", design.features.deco),
+  };
+}
 
 function randomParts(currentCitizenId?: CitizenId): Pick<CitizenDesign, "citizenId" | "colors" | "features"> {
   const otherCitizens = CITIZENS.filter((citizen) => citizen.id !== currentCitizenId);
@@ -65,7 +81,7 @@ export function CitizenLabWorkbench() {
     searchParams.toString() === "" ? { ...DEFAULT_DESIGN, ...randomParts() } : designFromSearchParams(searchParams),
   );
   const { features, colors, tag, logo } = design;
-  const selectedCitizen = CITIZENS.find((citizen) => citizen.id === design.citizenId) ?? CITIZENS[0];
+  const selectedCitizen = citizenOf(design);
 
   useEffect(() => {
     void predecodeAssets();
@@ -78,15 +94,22 @@ export function CitizenLabWorkbench() {
     }
   }, [design, searchParams, setSearchParams]);
 
-  const selection: CitizenSelection = {
-    bodyId: selectedCitizen.bodyId,
-    headId: featureOptionId("head", features.head),
-    eyeId: featureOptionId("eyes", features.eyes),
-    noseId: featureOptionId("nose", features.nose),
-    hairId: featureOptionId("hair", features.hair),
-    mouthId: featureOptionId("mouth", features.mouth),
-    decoId: featureOptionId("deco", features.deco),
-  };
+  const selection = selectionOf(design);
+
+  // Swapping in a design only after its images are decoded keeps parts from flashing empty.
+  const [shownDesign, setShownDesign] = useState(design);
+  useEffect(() => {
+    let current = true;
+    const urls = Object.values(portraitUrls(selectionOf(design), design.colors, design.logo));
+    void Promise.all(urls.filter((url) => url !== null).map(decodeAsset)).then(() => {
+      if (current) {
+        setShownDesign(design);
+      }
+    });
+    return () => {
+      current = false;
+    };
+  }, [design]);
 
   function updateDesign(change: (current: CitizenDesign) => Partial<CitizenDesign>) {
     setDesign((current) => ({ ...current, ...change(current) }));
@@ -164,7 +187,7 @@ export function CitizenLabWorkbench() {
                 className="download-svg-button"
                 type="button"
                 onClick={() =>
-                  void downloadCitizenPng(portraitRef.current, `${selectedCitizen.id}-citizen.png`, tag.fontFamily)
+                  void downloadCitizenPng(portraitRef.current, `${selectedCitizen.id}-citizen.png`, shownDesign.tag.fontFamily)
                 }
               >
                 {t("pages.citizenLab.downloadPng")}
@@ -179,12 +202,12 @@ export function CitizenLabWorkbench() {
             <span className="stage-cross cross-two" aria-hidden="true">+</span>
             <CitizenPortrait
               portraitRef={portraitRef}
-              citizenName={selectedCitizen.name}
-              selection={selection}
-              colors={colors}
-              tag={tag}
-              logo={logo}
-              tilted={design.hardToClassify}
+              citizenName={citizenOf(shownDesign).name}
+              selection={selectionOf(shownDesign)}
+              colors={shownDesign.colors}
+              tag={shownDesign.tag}
+              logo={shownDesign.logo}
+              tilted={shownDesign.hardToClassify}
             />
             <span className="stage-signal">{t("pages.citizenLab.signal")}</span>
           </div>

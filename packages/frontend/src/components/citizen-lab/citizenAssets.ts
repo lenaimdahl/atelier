@@ -1,4 +1,6 @@
-import { COLORS } from "src/pages/citizenLabOptions";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/CitizenPortrait";
+import { computePortraitLayout, type CitizenSelection } from "src/components/citizen-lab/citizenLayout";
+import { DECO_DEFAULT_COLOR } from "src/pages/citizenLabOptions";
 
 const RAW_ASSETS = import.meta.glob<string>("/src/assets/40c3-creator/**/*.svg", {
   query: "?raw",
@@ -33,18 +35,33 @@ export function assetUrl(path: string, greenReplacement?: string): string {
   return url;
 }
 
-let decoded: Promise<unknown> | null = null;
+const IMAGES = new Map<string, HTMLImageElement>();
 
-const GREEN_VARIANTS = [undefined, ...COLORS];
+export function decodeAsset(url: string): Promise<void> {
+  let image = IMAGES.get(url);
+  if (image === undefined) {
+    image = new Image();
+    image.src = url;
+    IMAGES.set(url, image);
+  }
+  return image.decode().catch(() => undefined);
+}
 
 export function predecodeAssets() {
-  const urls = new Set([...SVGS.keys()].flatMap((path) => GREEN_VARIANTS.map((color) => assetUrl(path, color))));
-  decoded ??= Promise.allSettled(
-    [...urls].map((url) => {
-      const image = new Image();
-      image.src = url;
-      return image.decode();
-    }),
-  );
-  return decoded;
+  return Promise.all([...SVGS.keys()].map((path) => decodeAsset(assetUrl(path))));
+}
+
+export function portraitUrls(selection: CitizenSelection, colors: CitizenColors, logo: CitizenLogo) {
+  const layout = computePortraitLayout(selection);
+  const decoReplace = layout.deco?.tint?.mode === "replace" && colors.deco !== DECO_DEFAULT_COLOR;
+  return {
+    body: assetUrl(`Bodies/Body${selection.bodyId}.svg`, layout.body.white ? undefined : colors.body),
+    head: assetUrl(`Heads/Head${selection.headId}.svg`),
+    hair: assetUrl(`Hair/Hair${selection.hairId}.svg`),
+    eyes: assetUrl(`Eyes/Eyes${selection.eyeId}.svg`, colors.eyes),
+    mouth: assetUrl(`Mouths/Mouth${selection.mouthId}.svg`, colors.mouth),
+    nose: assetUrl(`Noses/Nose${selection.noseId}.svg`, colors.nose),
+    deco: assetUrl(`Deco/Deco${selection.decoId}.svg`, decoReplace ? colors.deco : undefined),
+    logo: logo.style === "none" ? null : assetUrl(`Logos/${logo.style === "text" ? "LogoText" : "Logo"}.svg`),
+  };
 }
