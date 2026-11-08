@@ -83,4 +83,9 @@ describe("citizen share links", () => {
     expect(params.get("bodyColor")).toBe("ee5da2");
     expect(designFromSearchParams(new URLSearchParams("bodyColor=EE5DA2")).colors.body).toBe("#ee5da2");
   });
+
+  test("white is a valid tag color", () => {
+    const design = { ...DEFAULT_DESIGN, tag: { ...DEFAULT_DESIGN.tag, text: "#white", color: "#ebedf0" } };
+    expect(roundTrip(design)).toEqual(design);
+  });
 });

@@ -7,6 +7,7 @@ import {
   HAIR,
   LOGO_COLORS,
   LOGO_STYLES,
+  TAG_COLORS,
   TAG_FONTS,
   type CitizenId,
   type Feature,
@@ -112,7 +113,7 @@ export function designFromSearchParams(params: URLSearchParams): CitizenDesign {
     tag: {
       text: (params.get("tag") ?? "").slice(0, TAG_MAX_LENGTH),
       fontFamily: font.value,
-      color: fromParamColor(params.get("tagColor"), COLORS) ?? DEFAULT_DESIGN.tag.color,
+      color: fromParamColor(params.get("tagColor"), TAG_COLORS) ?? DEFAULT_DESIGN.tag.color,
     },
     logo: {
       style: LOGO_STYLES.find((style) => style === params.get("logo")) ?? DEFAULT_DESIGN.logo.style,

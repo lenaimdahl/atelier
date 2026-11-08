@@ -76,3 +76,4 @@ export const DECO_DEFAULT_COLOR = "#fffbff";
 export const LOGO_STYLES = ["none", "icon", "text"] as const;
 export type LogoStyle = (typeof LOGO_STYLES)[number];
 export const LOGO_COLORS = [...COLORS, "#ebedf0", "#001300"] as const;
+export const TAG_COLORS = [...COLORS, "#ebedf0"] as const;
