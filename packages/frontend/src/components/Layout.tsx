@@ -16,7 +16,7 @@ export function Layout() {
     <div className={`app-shell${shellClass}`}>
       <header className="topbar">
         <NavLink to="/" className="brand-mark">
-          ATELIER
+          LENA IMDAHL / ATELIER
         </NavLink>
         <nav className="main-nav" aria-label={t("nav.label")}>
           <NavLink to="/" end>

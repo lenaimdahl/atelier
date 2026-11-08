@@ -47,20 +47,11 @@ function Home() {
             </span>
           </h1>
           <p className="home-subtitle">{t("pages.home.subTitle")}</p>
-          <div className="home-actions">
-            <Link className="home-button primary" to="/books" aria-label={t("pages.home.ctaBooks")}>
-              ./bookshelf
-            </Link>
-            <Link className="home-button" to="/citizen-maker" aria-label={t("pages.home.ctaCitizenLab")}>
-              ./citizen-lab
-            </Link>
-          </div>
         </div>
 
         <div className="home-log" aria-label={t("pages.home.log.title")}>
           <div className="home-log-bar">
             <span>{t("pages.home.log.title")}</span>
-            <span aria-hidden="true">0x00</span>
           </div>
           <ul>
             <li>
@@ -110,7 +101,12 @@ function Home() {
 
       <footer className="home-footer">
         <span>EOF</span>
-        <span>{t("pages.home.footer")}</span>
+        <span>
+          {t("pages.home.footer")}
+          <svg className="home-heart" viewBox="0 0 16 14" aria-hidden="true">
+            <path d="M8 14 1.2 7.2A4 4 0 0 1 8 2.1a4 4 0 0 1 6.8 5.1Z" />
+          </svg>
+        </span>
       </footer>
     </main>
   );
