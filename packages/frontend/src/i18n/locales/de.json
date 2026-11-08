@@ -15,22 +15,35 @@
   },
   "pages": {
     "home": {
-      "eyebrow": "ATELIER / PORTFOLIO",
-      "title": "Kleine Projekte, sauber gebaut.",
-      "subTitle": "Eine Werkstatt für Ideen rund um Frontend, Backend und Deployment.",
-      "cta": "Zum Bücherregal",
+      "eyebrow": "ATELIER / 0x00 / PORTFOLIO",
+      "title": "Kleine Projekte.",
+      "titleAccent": "Keine Blackboxes.",
+      "subTitle": "Eine Werkstatt für Code, von Frontend über Backend bis Deployment. Alles hier ist gebaut, um geöffnet, untersucht und auseinandergenommen zu werden.",
+      "ctaBooks": "Zum Bücherregal",
+      "ctaCitizenLab": "Zum Citizen Lab",
+      "log": {
+        "title": "system.log",
+        "bookshelf": "bücherregal online",
+        "citizenLab": "citizen lab online",
+        "next": "nächstes projekt kompiliert"
+      },
       "projects": {
-        "eyebrow": "PROJEKTE",
+        "eyebrow": "0x01 / PROJEKTE",
         "title": "Aus der Werkstatt",
         "books": {
           "title": "Bücherregal",
           "description": "Ein gemeinsames Regal mit Lieblingsbüchern aus meiner Bibliothek von 100 feministischen Büchern. Daten von der Open Library API, Go-Backend, PostgreSQL."
+        },
+        "citizenLab": {
+          "title": "Citizen Lab",
+          "description": "Bau deinen eigenen Model Citizen für den 40C3: Gesicht, Farben und Deko wählen, dann als Link teilen oder als SVG herunterladen."
         }
       },
       "stack": {
-        "eyebrow": "WERKZEUGE",
-        "title": "Womit hier gebaut wird"
-      }
+        "eyebrow": "0x02 / STACK",
+        "title": "Worauf das läuft"
+      },
+      "footer": "happy hacking"
     },
     "books": {
       "title": "Bücher, die wir lieben",

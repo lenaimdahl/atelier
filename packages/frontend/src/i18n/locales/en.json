@@ -15,22 +15,35 @@
   },
   "pages": {
     "home": {
-      "eyebrow": "ATELIER / PORTFOLIO",
-      "title": "Small projects, carefully built.",
-      "subTitle": "A workshop for ideas across frontend, backend and deployment.",
-      "cta": "Open the bookshelf",
+      "eyebrow": "ATELIER / 0x00 / PORTFOLIO",
+      "title": "Small projects.",
+      "titleAccent": "No black boxes.",
+      "subTitle": "A workshop for code, from frontend to backend to deployment. Everything here is built to be opened, inspected and taken apart.",
+      "ctaBooks": "Open the bookshelf",
+      "ctaCitizenLab": "Open the Citizen Lab",
+      "log": {
+        "title": "system.log",
+        "bookshelf": "bookshelf online",
+        "citizenLab": "citizen lab online",
+        "next": "next project compiling"
+      },
       "projects": {
-        "eyebrow": "PROJECTS",
+        "eyebrow": "0x01 / PROJECTS",
         "title": "From the workshop",
         "books": {
           "title": "Bookshelf",
           "description": "A shared shelf of favorites from my library of 100 feminist books. Data from the Open Library API, Go backend, PostgreSQL."
+        },
+        "citizenLab": {
+          "title": "Citizen Lab",
+          "description": "Build your own model citizen for 40C3: pick a face, colors and decorations, then share it as a link or download it as SVG."
         }
       },
       "stack": {
-        "eyebrow": "TOOLS",
-        "title": "What this is built with"
-      }
+        "eyebrow": "0x02 / STACK",
+        "title": "What this runs on"
+      },
+      "footer": "happy hacking"
     },
     "books": {
       "title": "Books we love",

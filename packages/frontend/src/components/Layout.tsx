@@ -4,10 +4,11 @@ import { LanguageSwitcher } from "src/components/LanguageSwitcher";
 
 export function Layout() {
   const { t } = useTranslation();
-  const isCitizenMaker = useLocation().pathname === "/citizen-maker";
+  const { pathname } = useLocation();
+  const shellClass = pathname === "/books" ? "" : pathname === "/" ? " terminal-shell home-shell" : " terminal-shell";
 
   return (
-    <div className={`app-shell${isCitizenMaker ? " citizen-shell" : ""}`}>
+    <div className={`app-shell${shellClass}`}>
       <header className="topbar">
         <NavLink to="/" className="brand-mark">
           ATELIER
