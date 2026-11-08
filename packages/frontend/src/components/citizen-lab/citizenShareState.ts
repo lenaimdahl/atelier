@@ -2,6 +2,7 @@ import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citi
 import {
   CITIZENS,
   COLORS,
+  DECO_COLORS,
   DECO_DEFAULT_COLOR,
   FEATURES,
   HAIR,
@@ -46,8 +47,6 @@ export const DEFAULT_DESIGN: CitizenDesign = {
   logo: { style: "none", color: LOGO_COLORS[0] },
   hardToClassify: false,
 };
-
-const DECO_COLORS: readonly string[] = [DECO_DEFAULT_COLOR, ...COLORS];
 
 // Every shared link depends on this order and these sizes. Never change them, add a new version instead.
 const CODE_VERSION = "1";

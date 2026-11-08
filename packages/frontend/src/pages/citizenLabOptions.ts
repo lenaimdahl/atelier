@@ -54,6 +54,8 @@ export const DECO_DEFAULT_COLOR = "#fffbff";
 
 export const ASSET_PART_GREEN = "#6ab143";
 
+export const DECO_COLORS: readonly string[] = [DECO_DEFAULT_COLOR, ...COLORS];
+
 export const LOGO_STYLES = ["none", "icon", "text"] as const;
 export type LogoStyle = (typeof LOGO_STYLES)[number];
 export const LOGO_COLORS = [...COLORS, "#ebedf0", "#001300"] as const;

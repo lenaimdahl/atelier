@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/CitizenPortrait";
 import { SwatchRow } from "src/components/citizen-lab/SwatchRow";
-import { CITIZENS, COLORS, DECO_DEFAULT_COLOR, LOGO_COLORS, type CitizenId } from "src/pages/citizenLabOptions";
+import { CITIZENS, COLORS, DECO_COLORS, DECO_DEFAULT_COLOR, LOGO_COLORS, type CitizenId } from "src/pages/citizenLabOptions";
 
 type ColorPart = keyof CitizenColors;
 
@@ -34,7 +34,7 @@ export function CitizenFigurePicker({
       .filter((part) => recolorableParts[part])
       .map((part) => ({ part, options: COLORS })),
     { part: "body", options: COLORS },
-    ...(decoOriginalColor ? [{ part: "deco" as const, options: [DECO_DEFAULT_COLOR, ...COLORS] }] : []),
+    ...(decoOriginalColor ? [{ part: "deco" as const, options: DECO_COLORS }] : []),
   ];
 
   return (
