@@ -80,6 +80,7 @@
       "paletteNote": "PALETTE / KEY 0 + A + B",
       "colorOption": "Farbe {{color}} auswählen",
       "colorPartOption": "{{part}} auf {{color}} setzen",
+      "originalColor": "Original",
       "tagTextLabel": "TEXT AUF DEM KÖRPER",
       "tagTextPlaceholder": "#DEINHASHTAG",
       "tagFontLabel": "SCHRIFT",

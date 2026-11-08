@@ -154,10 +154,21 @@ type DecoContext = {
   eyeBox: Box;
 };
 
+/**
+ * How a single-colored deco is recolored with the deco color:
+ * - multiply: white parts take the color, black/green details stay (badge, fist, tie, diamonds)
+ * - fill: every visible pixel takes the color (black-only decos: glasses, eye patch)
+ * originalColor is the asset's own color, shown on the "original" swatch.
+ */
+export type DecoTint = { mode: "multiply" | "fill"; originalColor: string };
+
+const WHITE_TINT: DecoTint = { mode: "multiply", originalColor: "#fffbff" };
+const BLACK_TINT: DecoTint = { mode: "fill", originalColor: "#000000" };
+
 type DecoDefinition = {
   layer: DecoLayer;
-  /** White parts can be recolored with the deco color. */
-  tintable: boolean;
+  /** Set for decos that can be recolored with the deco color. */
+  tint?: DecoTint;
   layout: (context: DecoContext) => DecoPiece[];
 };
 
@@ -244,31 +255,31 @@ const X = CANVAS.centerX;
 
 export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
   // Ears with earrings.
-  0: { layer: "head", tintable: false, layout: earPieces },
+  0: { layer: "head", layout: earPieces },
   // Cap.
   1: {
     layer: "head",
-    tintable: false,
+   
     layout: ({ headWidth, headHeight }) => [fitBox(X, -headHeight * 0.12, headWidth * 0.88, headHeight * 0.5, DECO_ASPECT_RATIOS[1])],
   },
   // Round badge pinned on the chest; the spot depends on the body shape.
-  2: { layer: "body", tintable: true, layout: ({ body }) => [centeredBox(body.badge.x, body.badge.y, 30, 30)] },
+  2: { layer: "body", tint: WHITE_TINT, layout: ({ body }) => [centeredBox(body.badge.x, body.badge.y, 30, 30)] },
   // Mustache.
   3: {
     layer: "mouth",
-    tintable: false,
+   
     layout: ({ headWidth, faceHeight }) => [fitBox(X, faceHeight * 0.8, headWidth * 0.42, faceHeight * 0.14, DECO_ASPECT_RATIOS[3])],
   },
   // Raised fist: rises from the right shoulder next to the head, sleeve tucked into the body.
   4: {
     layer: "body",
-    tintable: true,
+    tint: WHITE_TINT,
     layout: () => [{ x: 316 - 76, y: 292 - 76 / DECO_ASPECT_RATIOS[4], width: 76, height: 76 / DECO_ASPECT_RATIOS[4] }],
   },
   // Green hat.
   5: {
     layer: "head",
-    tintable: false,
+   
     layout: ({ head, headWidth, headHeight }) => [
       head.compactHat
         ? fitBox(X, -headHeight * 0.12, headWidth * 0.72, headHeight * 0.42, DECO_ASPECT_RATIOS[5])
@@ -278,25 +289,26 @@ export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
   // Glasses.
   6: {
     layer: "eyes",
-    tintable: false,
+    tint: BLACK_TINT,
+   
     layout: ({ headWidth, faceHeight }) => [fitBox(X, faceHeight * 0.63, headWidth, faceHeight * 0.5, DECO_ASPECT_RATIOS[6])],
   },
   // Pointy hat.
   7: {
     layer: "head",
-    tintable: false,
+   
     layout: ({ headWidth, headHeight }) => [fitBox(X, -headHeight * 0.12, headWidth * 0.78, headHeight * 0.58, DECO_ASPECT_RATIOS[7])],
   },
   // Tie.
-  8: { layer: "body", tintable: false, layout: () => [centeredBox(X, 288, 16, 80)] },
+  8: { layer: "body", tint: WHITE_TINT, layout: () => [centeredBox(X, 288, 16, 80)] },
   // Eye patch.
-  9: { layer: "eyes", tintable: false, layout: (context) => [eyePatchBox(context)] },
+  9: { layer: "eyes", tint: BLACK_TINT, layout: (context) => [eyePatchBox(context)] },
   // Diamond studs.
-  10: { layer: "eyes", tintable: false, layout: studPieces },
+  10: { layer: "eyes", tint: WHITE_TINT, layout: studPieces },
 };
 
-export function isTintableDeco(decoId: number) {
-  return DECO_DEFINITIONS[decoId]?.tintable ?? false;
+export function decoTint(decoId: number): DecoTint | undefined {
+  return DECO_DEFINITIONS[decoId]?.tint;
 }
 
 // ---------------------------------------------------------------------------
@@ -321,7 +333,7 @@ export type PortraitLayout = {
   nose: Box;
   mouth: Box;
   tag: BodyGeometry["tag"];
-  deco: { layer: DecoLayer; tinted: boolean; pieces: DecoPiece[] } | null;
+  deco: { layer: DecoLayer; tint: DecoTint | undefined; pieces: DecoPiece[] } | null;
 };
 
 export function computePortraitLayout(selection: CitizenSelection): PortraitLayout {
@@ -339,7 +351,7 @@ export function computePortraitLayout(selection: CitizenSelection): PortraitLayo
   const deco = decoDefinition
     ? {
         layer: decoDefinition.layer,
-        tinted: decoDefinition.tintable,
+        tint: decoDefinition.tint,
         pieces: decoDefinition.layout({ head, body, headWidth, headHeight, faceHeight, eyeId: selection.eyeId, eyeBox }),
       }
     : null;

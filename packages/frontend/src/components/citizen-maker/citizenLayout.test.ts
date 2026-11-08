@@ -6,7 +6,7 @@ import {
   DECO_DEFINITIONS,
   EYE_GEOMETRY,
   HEAD_GEOMETRY,
-  isTintableDeco,
+  decoTint,
   type CitizenSelection,
 } from "src/components/citizen-maker/citizenLayout";
 import { CITIZENS, DECO, EYES, HAIR, HEADS } from "src/pages/citizenMakerOptions";
@@ -32,8 +32,10 @@ describe("asset geometry", () => {
     }
   });
 
-  test("only the badge and the fist can be recolored", () => {
-    expect(DECO.map(({ id }) => id).filter(isTintableDeco)).toEqual([2, 4]);
+  test("single-colored decos can be recolored with the right mode", () => {
+    const tints = Object.fromEntries(DECO.map(({ id }) => [id, decoTint(id)?.mode ?? null]));
+    // White decos are multiplied (details stay), black-only decos are filled.
+    expect(tints).toEqual({ 0: null, 1: null, 2: "multiply", 3: null, 4: "multiply", 5: null, 6: "fill", 7: null, 8: "multiply", 9: "fill", 10: "multiply" });
   });
 });
 

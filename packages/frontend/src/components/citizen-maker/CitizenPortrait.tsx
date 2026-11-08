@@ -1,5 +1,5 @@
 import { useId, type Ref } from "react";
-import { COLOR_HUES } from "src/pages/citizenMakerOptions";
+import { COLOR_HUES, DECO_DEFAULT_COLOR } from "src/pages/citizenMakerOptions";
 import {
   CANVAS,
   computePortraitLayout,
@@ -57,7 +57,14 @@ function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[
     crop ? (
       // Cropped piece: a nested viewport shows only part of the asset (split decos like ears and studs).
       <svg key={crop.viewBox} {...box} viewBox={crop.viewBox} preserveAspectRatio={crop.preserveAspectRatio}>
-        <image href={href} x="0" y="0" width={crop.assetWidth} height={crop.assetHeight} />
+        <image
+          href={href}
+          x="0"
+          y="0"
+          width={crop.assetWidth}
+          height={crop.assetHeight}
+          style={filter ? { filter } : undefined}
+        />
       </svg>
     ) : (
       <image
@@ -78,15 +85,22 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
   const filterIds = {
     head: `${filterPrefix}head-color`,
     hair: `${filterPrefix}hair-color`,
-    deco: `${filterPrefix}deco-color`,
+    decoMultiply: `${filterPrefix}deco-multiply`,
+    decoFill: `${filterPrefix}deco-fill`,
     body: `${filterPrefix}body-color`,
   };
   const tagText = tag.text.trim();
   const tagTextWidth = Math.min(tagText.length * 6.5, layout.tag.maxWidth);
 
+  // The "original" deco color leaves the asset untouched; otherwise use the deco's tint mode.
+  const decoTint = layout.deco?.tint;
+  const decoFilter =
+    decoTint && colors.deco !== DECO_DEFAULT_COLOR
+      ? `url(#${decoTint.mode === "fill" ? filterIds.decoFill : filterIds.decoMultiply})`
+      : undefined;
   const decoInLayer = (layer: DecoLayer) =>
     layout.deco?.layer === layer ? (
-      <DecoPieces href={`${ASSET_ROOT}/Deco/Deco${selection.decoId}.svg`} pieces={layout.deco.pieces} filter={layout.deco.tinted ? `url(#${filterIds.deco})` : undefined} />
+      <DecoPieces href={`${ASSET_ROOT}/Deco/Deco${selection.decoId}.svg`} pieces={layout.deco.pieces} filter={decoFilter} />
     ) : null;
 
   return (
@@ -100,7 +114,8 @@ export function CitizenPortrait({ portraitRef, citizenName, selection, colors, t
       <defs>
         <TintFilter id={filterIds.head} color={colors.head} mode="fill" />
         <TintFilter id={filterIds.hair} color={colors.hair} mode="fill" />
-        <TintFilter id={filterIds.deco} color={colors.deco} mode="multiply" />
+        <TintFilter id={filterIds.decoMultiply} color={colors.deco} mode="multiply" />
+        <TintFilter id={filterIds.decoFill} color={colors.deco} mode="fill" />
         {layout.body.white ? (
           <TintFilter id={filterIds.body} color={colors.body} mode="multiply" />
         ) : (

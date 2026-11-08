@@ -1,35 +1,20 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CitizenFigurePicker, DECO_DEFAULT_COLOR } from "src/components/citizen-maker/CitizenFigurePicker";
+import { useSearchParams } from "react-router-dom";
+import { CitizenFigurePicker } from "src/components/citizen-maker/CitizenFigurePicker";
 import { CitizenPortrait, type CitizenColors, type CitizenTag } from "src/components/citizen-maker/CitizenPortrait";
 import { OptionCycler } from "src/components/citizen-maker/OptionCycler";
-import { isTintableDeco, type CitizenSelection } from "src/components/citizen-maker/citizenLayout";
-import { downloadCitizenSvg } from "src/components/citizen-maker/downloadCitizenSvg";
+import { TagControls } from "src/components/citizen-maker/TagControls";
+import { decoTint, type CitizenSelection } from "src/components/citizen-maker/citizenLayout";
 import {
-  CITIZENS,
-  COLORS,
-  DECO,
-  EYES,
-  HAIR,
-  HEADS,
-  MOUTHS,
-  NOSES,
-  type CitizenId,
-} from "src/pages/citizenMakerOptions";
+  designFromSearchParams,
+  designToSearchParams,
+  hairPositionFor,
+  type CitizenDesign,
+} from "src/components/citizen-maker/citizenShareState";
+import { downloadCitizenSvg } from "src/components/citizen-maker/downloadCitizenSvg";
+import { CITIZENS, COLORS, FEATURES, featureOptionId, type Feature } from "src/pages/citizenMakerOptions";
 
-// Cyclable features in display order. State stores each feature's position in its option list;
-// the portrait receives the option's asset id.
-const FEATURES = [
-  { key: "head", options: HEADS },
-  { key: "eyes", options: EYES },
-  { key: "nose", options: NOSES },
-  { key: "hair", options: HAIR },
-  { key: "mouth", options: MOUTHS },
-  { key: "deco", options: DECO },
-] as const;
-
-type Feature = (typeof FEATURES)[number]["key"];
-type FeaturePositions = Record<Feature, number>;
 type Citizen = (typeof CITIZENS)[number];
 
 function cycleOption(index: number, length: number, direction: -1 | 1) {
@@ -44,61 +29,60 @@ function randomColor() {
   return COLORS[randomIndex(COLORS.length)];
 }
 
-function hairPosition(citizen: Citizen) {
-  return Math.max(0, HAIR.findIndex((hair) => hair.id === citizen.hairId));
-}
-
 export function CitizenMakerWorkbench() {
   const { t } = useTranslation();
   const portraitRef = useRef<SVGSVGElement>(null);
-  const [selectedId, setSelectedId] = useState<CitizenId>(CITIZENS[0].id);
-  const [features, setFeatures] = useState<FeaturePositions>({
-    head: 0,
-    eyes: 0,
-    nose: 4,
-    hair: hairPosition(CITIZENS[0]),
-    mouth: 1,
-    deco: 0,
-  });
-  const [colors, setColors] = useState<CitizenColors>({
-    body: COLORS[0],
-    head: COLORS[0],
-    hair: COLORS[0],
-    deco: DECO_DEFAULT_COLOR,
-  });
-  const [tag, setTag] = useState<CitizenTag>({ text: "", fontFamily: "Hack, monospace", color: "#ffbc40" });
-  const [isHardToClassify, setIsHardToClassify] = useState(false);
-  const selectedCitizen = CITIZENS.find((citizen) => citizen.id === selectedId) ?? CITIZENS[0];
+  const [searchParams, setSearchParams] = useSearchParams();
+  // The URL in the address bar is the share link: read it once on load, then keep it in sync with every change.
+  const [design, setDesign] = useState<CitizenDesign>(() => designFromSearchParams(searchParams));
+  const { features, colors, tag } = design;
+  const selectedCitizen = CITIZENS.find((citizen) => citizen.id === design.citizenId) ?? CITIZENS[0];
+
+  useEffect(() => {
+    const nextParams = designToSearchParams(design);
+    if (nextParams.toString() !== searchParams.toString()) {
+      // Replace instead of push so editing doesn't flood the browser history.
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [design, searchParams, setSearchParams]);
 
   const selection: CitizenSelection = {
     bodyId: selectedCitizen.bodyId,
-    headId: HEADS[features.head].id,
-    hairId: HAIR[features.hair].id,
-    eyeId: EYES[features.eyes].id,
-    noseId: NOSES[features.nose].id,
-    mouthId: MOUTHS[features.mouth].id,
-    decoId: DECO[features.deco].id,
+    headId: featureOptionId("head", features.head),
+    eyeId: featureOptionId("eyes", features.eyes),
+    noseId: featureOptionId("nose", features.nose),
+    hairId: featureOptionId("hair", features.hair),
+    mouthId: featureOptionId("mouth", features.mouth),
+    decoId: featureOptionId("deco", features.deco),
   };
 
+  function updateDesign(change: (current: CitizenDesign) => Partial<CitizenDesign>) {
+    setDesign((current) => ({ ...current, ...change(current) }));
+  }
+
   function selectCitizen(citizen: Citizen) {
-    setSelectedId(citizen.id);
-    setFeatures((current) => ({ ...current, hair: hairPosition(citizen) }));
+    updateDesign((current) => ({
+      citizenId: citizen.id,
+      features: { ...current.features, hair: hairPositionFor(citizen) },
+    }));
   }
 
   function cycleFeature(feature: Feature, length: number, direction: -1 | 1) {
-    setFeatures((current) => ({ ...current, [feature]: cycleOption(current[feature], length, direction) }));
+    updateDesign((current) => ({
+      features: { ...current.features, [feature]: cycleOption(current.features[feature], length, direction) },
+    }));
   }
 
   function randomizeCitizen() {
-    const otherCitizens = CITIZENS.filter((citizen) => citizen.id !== selectedId);
-    const nextCitizen = otherCitizens[randomIndex(otherCitizens.length)];
-    if (nextCitizen) {
-      setSelectedId(nextCitizen.id);
-    }
-    setColors({ body: randomColor(), head: randomColor(), hair: randomColor(), deco: randomColor() });
-    setFeatures(
-      Object.fromEntries(FEATURES.map(({ key, options }) => [key, randomIndex(options.length)])) as FeaturePositions,
-    );
+    const otherCitizens = CITIZENS.filter((citizen) => citizen.id !== design.citizenId);
+    const nextCitizen = otherCitizens[randomIndex(otherCitizens.length)] ?? selectedCitizen;
+    updateDesign(() => ({
+      citizenId: nextCitizen.id,
+      colors: { body: randomColor(), head: randomColor(), hair: randomColor(), deco: randomColor() },
+      features: Object.fromEntries(
+        FEATURES.map(({ key, options }) => [key, randomIndex(options.length)]),
+      ) as CitizenDesign["features"],
+    }));
   }
 
   return (
@@ -122,7 +106,7 @@ export function CitizenMakerWorkbench() {
               </button>
             </div>
           </div>
-          <div className={`citizen-stage${isHardToClassify ? " hard-to-classify" : ""}`}>
+          <div className={`citizen-stage${design.hardToClassify ? " hard-to-classify" : ""}`}>
             <div className="stage-orbit orbit-one" />
             <div className="stage-orbit orbit-two" />
             <span className="stage-cross cross-one" aria-hidden="true">+</span>
@@ -137,13 +121,13 @@ export function CitizenMakerWorkbench() {
             <span className="stage-signal">{t("pages.citizenMaker.signal")}</span>
           </div>
           <CitizenFigurePicker
-            selectedId={selectedId}
+            selectedId={design.citizenId}
             colors={colors}
-            showDecoColor={isTintableDeco(selection.decoId)}
-            tag={tag}
+            decoOriginalColor={decoTint(selection.decoId)?.originalColor}
             onSelectFigure={selectCitizen}
-            onSelectColor={(part, color) => setColors((current) => ({ ...current, [part]: color }))}
-            onTagChange={(change) => setTag((current) => ({ ...current, ...change }))}
+            onSelectColor={(part: keyof CitizenColors, color) =>
+              updateDesign((current) => ({ colors: { ...current.colors, [part]: color } }))
+            }
           />
         </section>
 
@@ -176,8 +160,11 @@ export function CitizenMakerWorkbench() {
           <label className="classification-toggle">
             <input
               type="checkbox"
-              checked={isHardToClassify}
-              onChange={(event) => setIsHardToClassify(event.currentTarget.checked)}
+              checked={design.hardToClassify}
+              onChange={(event) => {
+                const hardToClassify = event.currentTarget.checked;
+                updateDesign(() => ({ hardToClassify }));
+              }}
             />
             <span>{t("pages.citizenMaker.hardToClassify")}</span>
           </label>
@@ -185,6 +172,10 @@ export function CitizenMakerWorkbench() {
             <span aria-hidden="true">*</span>
             {t("pages.citizenMaker.randomize")}
           </button>
+          <TagControls
+            tag={tag}
+            onTagChange={(change: Partial<CitizenTag>) => updateDesign((current) => ({ tag: { ...current.tag, ...change } }))}
+          />
         </aside>
       </div>
     </section>

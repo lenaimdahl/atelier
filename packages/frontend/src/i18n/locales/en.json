@@ -80,6 +80,7 @@
       "paletteNote": "PALETTE / KEY 0 + A + B",
       "colorOption": "Choose color {{color}}",
       "colorPartOption": "Set {{part}} to {{color}}",
+      "originalColor": "original",
       "tagTextLabel": "BODY TAG",
       "tagTextPlaceholder": "#YOURTAG",
       "tagFontLabel": "FONT",
