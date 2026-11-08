@@ -5,6 +5,7 @@ export const CITIZENS = [
   { id: "adam", name: "Adam", typeKey: "pages.citizenLab.figureTypes.abCollective", bodyId: 3, hairId: 0 },
 ] as const;
 
+export type Citizen = (typeof CITIZENS)[number];
 export type CitizenId = (typeof CITIZENS)[number]["id"];
 
 export const TAG_FONTS = [

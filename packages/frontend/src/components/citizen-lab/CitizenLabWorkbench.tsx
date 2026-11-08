@@ -3,10 +3,9 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { CitizenFigurePicker } from "src/components/citizen-lab/controls/CitizenFigurePicker";
 import { CitizenPortrait } from "src/components/citizen-lab/portrait/CitizenPortrait";
-import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
+import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
 import { PreviewActions } from "src/components/citizen-lab/controls/PreviewActions";
-import { OptionCycler } from "src/components/citizen-lab/controls/OptionCycler";
-import { TagControls } from "src/components/citizen-lab/controls/TagControls";
+import { ControlsPanel } from "src/components/citizen-lab/controls/ControlsPanel";
 import { citizenOf, cycleOption, randomParts, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
 import { decodeAsset, hasPartGreen, portraitUrls, predecodeAssets } from "src/components/citizen-lab/portrait/citizenAssets";
 import { decoTint } from "src/components/citizen-lab/portrait/citizenLayout";
@@ -19,9 +18,7 @@ import {
 } from "src/components/citizen-lab/design/citizenShareState";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
 import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/export/downloadCitizen";
-import { CITIZENS, FEATURES, type Feature } from "src/components/citizen-lab/design/citizenLabOptions";
-
-type Citizen = (typeof CITIZENS)[number];
+import { type Citizen, type Feature } from "src/components/citizen-lab/design/citizenLabOptions";
 
 const MOBILE_QUERY = "(max-width: 720px)";
 
@@ -164,38 +161,14 @@ export function CitizenLabWorkbench() {
           />
         </section>
 
-        <aside className="citizen-controls">
-          <p className="citizen-eyebrow">{t("pages.citizenLab.parameters")}</p>
-          <h2>{t("pages.citizenLab.controlsTitle")}</h2>
-          <div className="control-group">
-            <span className="control-label">{t("pages.citizenLab.figureType")}</span>
-            <div className="control-readout">
-              <span>{selectedCitizen.name}</span>
-              <span>{t(selectedCitizen.typeKey)}</span>
-            </div>
-          </div>
-          <div className="feature-cyclers">
-            {FEATURES.map(({ key, options }) => {
-              const label = t(`pages.citizenLab.featureLabels.${key}`);
-              return (
-                <OptionCycler
-                  key={key}
-                  label={label}
-                  value={t("pages.citizenLab.optionNumber", { number: options[features[key]].number })}
-                  previousLabel={t("pages.citizenLab.previousOption", { option: label })}
-                  nextLabel={t("pages.citizenLab.nextOption", { option: label })}
-                  onPrevious={() => cycleFeature(key, options.length, -1)}
-                  onNext={() => cycleFeature(key, options.length, 1)}
-                />
-              );
-            })}
-          </div>
-          {!isMobile && quickActions}
-          <TagControls
-            tag={tag}
-            onTagChange={(change: Partial<CitizenTag>) => updateDesign((current) => ({ tag: { ...current.tag, ...change } }))}
-          />
-        </aside>
+        <ControlsPanel
+          citizen={selectedCitizen}
+          features={features}
+          tag={tag}
+          quickActions={isMobile ? null : quickActions}
+          onCycleFeature={cycleFeature}
+          onTagChange={(change) => updateDesign((current) => ({ tag: { ...current.tag, ...change } }))}
+        />
       </div>
     </section>
   );
