@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
 import { LogoControls } from "src/components/citizen-lab/controls/LogoControls";
 import { SwatchRow } from "src/components/citizen-lab/controls/SwatchRow";
-import { CITIZENS, COLORS, type Citizen, DECO_COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
+import { ASSET_PART_GREEN, CITIZENS, COLORS, type Citizen, DECO_COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
 import "src/components/citizen-lab/shared.css";
 import "src/components/citizen-lab/controls/CitizenFigurePicker.css";
 
@@ -37,7 +37,14 @@ export function CitizenFigurePicker({
       .filter((part) => recolorableParts[part])
       .map((part) => ({ part, options: COLORS })),
     { part: "body", options: COLORS },
-    ...(decoOriginalColor ? [{ part: "deco" as const, options: DECO_COLORS }] : []),
+    ...(decoOriginalColor
+      ? [
+          {
+            part: "deco" as const,
+            options: decoOriginalColor === ASSET_PART_GREEN ? DECO_COLORS.filter((color) => color !== COLORS[0]) : DECO_COLORS,
+          },
+        ]
+      : []),
   ];
 
   return (
