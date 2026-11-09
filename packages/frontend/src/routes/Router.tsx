@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "src/components/Layout";
 import Books from "src/pages/Books";
 import Home from "src/pages/Home";
+import { PATHS } from "src/routes/paths";
 
 const CitizenLab = lazy(() => import("src/pages/CitizenLab"));
 
@@ -11,10 +12,10 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/books" element={<Books />} />
+          <Route path={PATHS.HOME} element={<Home />} />
+          <Route path={PATHS.BOOKS} element={<Books />} />
           <Route
-            path="/citizen-lab/:code?"
+            path={`${PATHS.CITIZENLAB}/:code?`}
             element={
               <Suspense fallback={null}>
                 <CitizenLab />

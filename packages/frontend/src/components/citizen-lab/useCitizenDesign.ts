@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Citizen, Feature } from "src/components/citizen-lab/design/citizenLabOptions";
-import { cycleOption, randomParts, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
+import { PATHS } from "src/routes/paths";
+import type {
+  Citizen,
+  Feature,
+} from "src/components/citizen-lab/design/citizenLabOptions";
+import {
+  cycleOption,
+  randomParts,
+  selectionOf,
+} from "src/components/citizen-lab/design/citizenDesign";
 import {
   DEFAULT_DESIGN,
   decodeDesign,
@@ -10,13 +18,21 @@ import {
   type CitizenDesign,
 } from "src/components/citizen-lab/design/citizenShareState";
 import type { CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
-import { decodeAsset, portraitUrls, predecodeAssets } from "src/components/citizen-lab/portrait/citizenAssets";
+import {
+  decodeAsset,
+  portraitUrls,
+  predecodeAssets,
+} from "src/components/citizen-lab/portrait/citizenAssets";
 
 export function useCitizenDesign() {
   const { code } = useParams();
   const navigate = useNavigate();
   const [design, setDesign] = useState<CitizenDesign>(
-    () => (code ? decodeDesign(code) : null) ?? { ...DEFAULT_DESIGN, ...randomParts() },
+    () =>
+      (code ? decodeDesign(code) : null) ?? {
+        ...DEFAULT_DESIGN,
+        ...randomParts(),
+      },
   );
 
   useEffect(() => {
@@ -26,7 +42,7 @@ export function useCitizenDesign() {
   useEffect(() => {
     const nextCode = encodeDesign(design);
     if (nextCode !== code) {
-      void navigate(`/citizen-lab/${nextCode}`, { replace: true });
+      void navigate(`${PATHS.CITIZENLAB}/${nextCode}`, { replace: true });
     }
   }, [design, code, navigate]);
 
@@ -34,18 +50,24 @@ export function useCitizenDesign() {
   const [shownDesign, setShownDesign] = useState(design);
   useEffect(() => {
     let current = true;
-    const urls = Object.values(portraitUrls(selectionOf(design), design.colors, design.logo));
-    void Promise.all(urls.filter((url) => url !== null).map(decodeAsset)).then(() => {
-      if (current) {
-        setShownDesign(design);
-      }
-    });
+    const urls = Object.values(
+      portraitUrls(selectionOf(design), design.colors, design.logo),
+    );
+    void Promise.all(urls.filter((url) => url !== null).map(decodeAsset)).then(
+      () => {
+        if (current) {
+          setShownDesign(design);
+        }
+      },
+    );
     return () => {
       current = false;
     };
   }, [design]);
 
-  function updateDesign(change: (current: CitizenDesign) => Partial<CitizenDesign>) {
+  function updateDesign(
+    change: (current: CitizenDesign) => Partial<CitizenDesign>,
+  ) {
     setDesign((current) => ({ ...current, ...change(current) }));
   }
 
@@ -62,7 +84,10 @@ export function useCitizenDesign() {
 
   function cycleFeature(feature: Feature, length: number, direction: -1 | 1) {
     updateDesign((current) => ({
-      features: { ...current.features, [feature]: cycleOption(current.features[feature], length, direction) },
+      features: {
+        ...current.features,
+        [feature]: cycleOption(current.features[feature], length, direction),
+      },
     }));
   }
 
@@ -70,5 +95,13 @@ export function useCitizenDesign() {
     updateDesign(() => randomParts(design.citizenId));
   }
 
-  return { design, shownDesign, updateDesign, updateLogo, selectCitizen, cycleFeature, randomizeCitizen };
+  return {
+    design,
+    shownDesign,
+    updateDesign,
+    updateLogo,
+    selectCitizen,
+    cycleFeature,
+    randomizeCitizen,
+  };
 }

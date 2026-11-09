@@ -1,10 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "src/components/Button";
+import { LANGUAGES } from "src/i18n/config";
 
 export function LanguageSwitcher() {
   const { i18n, t } = useTranslation();
-  const isGerman = i18n.language.startsWith("de");
-  const nextLanguage = isGerman ? "en" : "de";
+  const isGerman = i18n.language.startsWith(LANGUAGES.DE);
+  const nextLanguage = isGerman ? LANGUAGES.EN : LANGUAGES.DE;
 
   function changeLanguage() {
     void i18n.changeLanguage(nextLanguage);

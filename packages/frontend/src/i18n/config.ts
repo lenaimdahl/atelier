@@ -4,21 +4,26 @@ import { initReactI18next } from "react-i18next";
 import enTranslations from "src/i18n/locales/en.json";
 import deTranslations from "src/i18n/locales/de.json";
 
+export const LANGUAGES = {
+  EN: "en",
+  DE: "de",
+} as const;
+
 const resources = {
-  de: {
+  [LANGUAGES.DE]: {
     translation: deTranslations,
   },
-  en: {
+  [LANGUAGES.EN]: {
     translation: enTranslations,
   },
 };
 
 i18next.use(initReactI18next).init({
-  fallbackLng: "en",
+  fallbackLng: LANGUAGES.EN,
   interpolation: {
     escapeValue: false,
   },
-  lng: "en",
+  lng: LANGUAGES.EN,
   resources,
 });
 

@@ -4,6 +4,7 @@ import "@fontsource/vt323/400.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/700.css";
 import "src/pages/home.css";
+import { PATHS } from "src/routes/paths";
 
 const STACK = [
   "React",
@@ -18,14 +19,15 @@ const STACK = [
 ];
 
 const PROJECTS = [
-  { id: "books", path: "/books", number: "0x01" },
-  { id: "citizenLab", path: "/citizen-lab", number: "0x02" },
+  { id: "books", path: PATHS.BOOKS, number: "0x01" },
+  { id: "citizenLab", path: PATHS.CITIZENLAB, number: "0x02" },
 ] as const;
 
 function Prompt({ command }: { command: string }) {
   return (
     <p className="terminal-prompt">
-      <span className="terminal-user">guest@atelier</span>:<span className="terminal-path">~</span>$ {command}
+      <span className="terminal-user">guest@atelier</span>:
+      <span className="terminal-path">~</span>$ {command}
     </p>
   );
 }
@@ -55,13 +57,16 @@ function Home() {
           </div>
           <ul>
             <li>
-              <span className="log-ok">[ OK ]</span> {t("pages.home.log.bookshelf")}
+              <span className="log-ok">[ OK ]</span>{" "}
+              {t("pages.home.log.bookshelf")}
             </li>
             <li>
-              <span className="log-ok">[ OK ]</span> {t("pages.home.log.citizenLab")}
+              <span className="log-ok">[ OK ]</span>{" "}
+              {t("pages.home.log.citizenLab")}
             </li>
             <li>
-              <span className="log-pending">[ .. ]</span> {t("pages.home.log.next")}
+              <span className="log-pending">[ .. ]</span>{" "}
+              {t("pages.home.log.next")}
             </li>
           </ul>
         </div>

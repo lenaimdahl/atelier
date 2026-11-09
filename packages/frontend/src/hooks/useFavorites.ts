@@ -1,10 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { isAxiosError } from "axios";
+import { HttpStatusCode, isAxiosError } from "axios";
 import { api, withApiUrl } from "src/api/client";
+
+const FAVORITES_QUERY_KEY = ["favorites"];
 
 export function useFavorites() {
   return useQuery({
-    queryKey: ["favorites"],
+    queryKey: FAVORITES_QUERY_KEY,
     queryFn: async () => {
       const favorites = (await api.favorites.listFavorites()).data;
       for (const favorite of favorites) {
@@ -21,7 +23,7 @@ export function useAddFavorite() {
   const addFavoriteMutation = useMutation({
     mutationFn: async (bookId: string) =>
       (await api.favorites.addFavorite({ bookId })).data,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["favorites"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY }),
   });
 
   return {
@@ -30,7 +32,7 @@ export function useAddFavorite() {
     hasAddFavoriteError: addFavoriteMutation.isError,
     isRateLimited:
       isAxiosError(addFavoriteMutation.error) &&
-      addFavoriteMutation.error.response?.status === 429,
+      addFavoriteMutation.error.response?.status === HttpStatusCode.TooManyRequests,
     resetAddFavorite: addFavoriteMutation.reset,
   };
 }
