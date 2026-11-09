@@ -1,16 +1,18 @@
 import type { Box } from "src/components/citizen-lab/portrait/box";
 
+interface PortraitImageProps {
+  href: string;
+  box: Box;
+  fit?: "none" | "xMidYMid meet";
+  filter?: string;
+}
+
 export function PortraitImage({
   href,
   box,
   fit = "xMidYMid meet",
   filter,
-}: {
-  href: string;
-  box: Box;
-  fit?: "none" | "xMidYMid meet";
-  filter?: string;
-}) {
+}: PortraitImageProps) {
   return (
     <image
       href={href}

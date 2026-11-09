@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import type { FavoriteBook } from "./types";
 
-type BookListProps = {
+interface BookListProps {
   favorites: FavoriteBook[];
-};
+}
 
 export function BookList({ favorites }: BookListProps) {
   const { t } = useTranslation();

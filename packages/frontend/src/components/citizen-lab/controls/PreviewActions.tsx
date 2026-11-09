@@ -2,12 +2,12 @@ import { useTranslation } from "react-i18next";
 import type { LogoStyle } from "src/components/citizen-lab/design/citizenLabOptions";
 import "src/components/citizen-lab/shared.css";
 
-type PreviewActionsProps = {
+interface PreviewActionsProps {
   logoStyle: LogoStyle;
   onToggleLogo: () => void;
   onDownloadSvg: () => void;
   onDownloadPng: () => void;
-};
+}
 
 export function PreviewActions({ logoStyle, onToggleLogo, onDownloadSvg, onDownloadPng }: PreviewActionsProps) {
   const { t } = useTranslation();

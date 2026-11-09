@@ -8,7 +8,7 @@ import "src/components/citizen-lab/controls/CitizenFigurePicker.css";
 
 type ColorPart = keyof CitizenColors;
 
-type CitizenFigurePickerProps = {
+interface CitizenFigurePickerProps {
   selectedId: CitizenId;
   colors: CitizenColors;
   decoOriginalColor: string | undefined;
@@ -17,7 +17,7 @@ type CitizenFigurePickerProps = {
   onSelectFigure: (citizen: Citizen) => void;
   onSelectColor: (part: ColorPart, color: string) => void;
   onLogoChange: (change: Partial<CitizenLogo>) => void;
-};
+}
 
 export function CitizenFigurePicker({
   selectedId,

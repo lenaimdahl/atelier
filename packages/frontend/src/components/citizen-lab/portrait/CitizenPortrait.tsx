@@ -10,7 +10,7 @@ import { computePortraitLayout, logoBox, type CitizenSelection } from "src/compo
 import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
 import "src/components/citizen-lab/portrait/CitizenPortrait.css";
 
-type CitizenPortraitProps = {
+interface CitizenPortraitProps {
   portraitRef: Ref<SVGSVGElement>;
   title: string;
   selection: CitizenSelection;
@@ -18,7 +18,7 @@ type CitizenPortraitProps = {
   tag: CitizenTag;
   logo: CitizenLogo;
   tilted: boolean;
-};
+}
 
 const TILT = `translate(${CANVAS.centerX} ${CANVAS.height / 2}) rotate(-4) scale(1.05) translate(${-CANVAS.centerX} ${-CANVAS.height / 2})`;
 

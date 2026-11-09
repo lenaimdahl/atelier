@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { Book } from "./types";
 
-type BookPickerProps = {
+interface BookPickerProps {
   query: string;
   onQueryChange: (query: string) => void;
   books: Book[];
@@ -9,7 +9,7 @@ type BookPickerProps = {
   hasError: boolean;
   isSaving: boolean;
   onPick: (book: Book) => void;
-};
+}
 
 export function BookPicker({
   query,

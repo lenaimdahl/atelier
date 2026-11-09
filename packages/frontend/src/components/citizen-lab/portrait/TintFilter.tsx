@@ -1,4 +1,10 @@
-export function TintFilter({ id, color, mode }: { id: string; color: string; mode: "fill" | "multiply" }) {
+interface TintFilterProps {
+  id: string;
+  color: string;
+  mode: "fill" | "multiply";
+}
+
+export function TintFilter({ id, color, mode }: TintFilterProps) {
   if (mode === "fill") {
     return (
       <filter id={id}>

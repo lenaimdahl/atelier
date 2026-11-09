@@ -5,10 +5,10 @@ import type { CitizenLogo } from "src/components/citizen-lab/design/citizenTypes
 import "src/components/citizen-lab/shared.css";
 import "src/components/citizen-lab/controls/LogoControls.css";
 
-type LogoControlsProps = {
+interface LogoControlsProps {
   logo: CitizenLogo;
   onLogoChange: (change: Partial<CitizenLogo>) => void;
-};
+}
 
 export function LogoControls({ logo, onLogoChange }: LogoControlsProps) {
   const { t } = useTranslation();

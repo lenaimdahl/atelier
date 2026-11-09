@@ -8,14 +8,14 @@ import type { CitizenTag } from "src/components/citizen-lab/design/citizenTypes"
 import "src/components/citizen-lab/shared.css";
 import "src/components/citizen-lab/controls/ControlsPanel.css";
 
-type ControlsPanelProps = {
+interface ControlsPanelProps {
   citizen: Citizen;
   features: CitizenDesign["features"];
   tag: CitizenTag;
   quickActions: ReactNode;
   onCycleFeature: (feature: Feature, length: number, direction: -1 | 1) => void;
   onTagChange: (change: Partial<CitizenTag>) => void;
-};
+}
 
 export function ControlsPanel({ citizen, features, tag, quickActions, onCycleFeature, onTagChange }: ControlsPanelProps) {
   const { t } = useTranslation();

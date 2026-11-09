@@ -23,7 +23,11 @@ const PROJECTS = [
   { id: "citizenLab", path: PATHS.CITIZENLAB, number: "0x02" },
 ] as const;
 
-function Prompt({ command }: { command: string }) {
+interface PromptProps {
+  command: string;
+}
+
+function Prompt({ command }: PromptProps) {
   return (
     <p className="terminal-prompt">
       <span className="terminal-user">guest@atelier</span>:

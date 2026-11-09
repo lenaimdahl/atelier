@@ -1,14 +1,14 @@
 import "src/components/citizen-lab/shared.css";
 import "src/components/citizen-lab/controls/OptionCycler.css";
 
-type OptionCyclerProps = {
+interface OptionCyclerProps {
   label: string;
   value: string;
   previousLabel: string;
   nextLabel: string;
   onPrevious: () => void;
   onNext: () => void;
-};
+}
 
 export function OptionCycler({
   label,

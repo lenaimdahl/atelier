@@ -5,6 +5,16 @@ import "src/components/citizen-lab/controls/SwatchRow.css";
 
 const identity = (color: string) => color;
 
+interface SwatchRowProps {
+  className: string;
+  label: string;
+  options: readonly string[];
+  selected: string;
+  onSelect: (color: string) => void;
+  swatchLabel?: (color: string) => string;
+  displayColor?: (color: string) => string;
+}
+
 export function SwatchRow({
   className,
   label,
@@ -13,15 +23,7 @@ export function SwatchRow({
   onSelect,
   swatchLabel,
   displayColor = identity,
-}: {
-  className: string;
-  label: string;
-  options: readonly string[];
-  selected: string;
-  onSelect: (color: string) => void;
-  swatchLabel?: (color: string) => string;
-  displayColor?: (color: string) => string;
-}) {
+}: SwatchRowProps) {
   const { t } = useTranslation();
   return (
     <fieldset className={className}>

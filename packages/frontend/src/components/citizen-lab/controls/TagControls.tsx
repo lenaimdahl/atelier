@@ -6,10 +6,10 @@ import { TAG_COLORS, TAG_FONTS } from "src/components/citizen-lab/design/citizen
 import "src/components/citizen-lab/shared.css";
 import "src/components/citizen-lab/controls/TagControls.css";
 
-type TagControlsProps = {
+interface TagControlsProps {
   tag: CitizenTag;
   onTagChange: (change: Partial<CitizenTag>) => void;
-};
+}
 
 export function TagControls({ tag, onTagChange }: TagControlsProps) {
   const { t } = useTranslation();

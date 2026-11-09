@@ -1,7 +1,13 @@
 import { PortraitImage } from "src/components/citizen-lab/portrait/PortraitImage";
 import type { DecoPiece } from "src/components/citizen-lab/portrait/decoLayout";
 
-export function DecoPieces({ href, pieces, filter }: { href: string; pieces: DecoPiece[]; filter: string | undefined }) {
+interface DecoPiecesProps {
+  href: string;
+  pieces: DecoPiece[];
+  filter: string | undefined;
+}
+
+export function DecoPieces({ href, pieces, filter }: DecoPiecesProps) {
   return pieces.map(({ crop, ...box }) =>
     crop ? (
       <svg key={crop.viewBox} {...box} viewBox={crop.viewBox} preserveAspectRatio={crop.preserveAspectRatio}>
