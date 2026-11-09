@@ -1,6 +1,6 @@
 import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
 import { computePortraitLayout, type CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
-import { ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
+import { ASSET_PART_GREEN, COLORS, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
 
 const RAW_ASSETS = import.meta.glob<string>("/src/assets/40c3-creator/**/*.svg", {
   query: "?raw",
@@ -53,7 +53,9 @@ export function predecodeAssets() {
 
 export function portraitUrls(selection: CitizenSelection, colors: CitizenColors, logo: CitizenLogo) {
   const layout = computePortraitLayout(selection);
-  const decoReplace = layout.deco?.tint?.mode === "replace" && colors.deco !== DECO_DEFAULT_COLOR;
+  // The picker hides COLORS[0] for green decos, so it is drawn as the original green.
+  const decoReplace =
+    layout.deco?.tint?.mode === "replace" && colors.deco !== DECO_DEFAULT_COLOR && colors.deco !== COLORS[0];
   return {
     body: assetUrl(`Bodies/Body${selection.bodyId}.svg`, layout.body.white ? undefined : colors.body),
     head: assetUrl(`Heads/Head${selection.headId}.svg`),

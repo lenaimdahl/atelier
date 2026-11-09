@@ -72,7 +72,11 @@ export function CitizenFigurePicker({
               className="color-swatches"
               label={t(`pages.citizenLab.colorLabels.${part}`)}
               options={options}
-              selected={colors[part]}
+              selected={
+                part === "deco" && decoOriginalColor === ASSET_PART_GREEN && colors.deco === COLORS[0]
+                  ? DECO_DEFAULT_COLOR
+                  : colors[part]
+              }
               onSelect={(color) => onSelectColor(part, color)}
               {...(part === "deco" && decoOriginalColor
                 ? {
