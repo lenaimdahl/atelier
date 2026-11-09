@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { citizenOf, cycleOption, randomParts, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
-import { CITIZENS, COLORS, FEATURES } from "src/components/citizen-lab/design/citizenLabOptions";
+import { PARTS, CITIZENS, COLORS, FEATURES } from "src/components/citizen-lab/design/citizenLabOptions";
 import { DEFAULT_DESIGN } from "src/components/citizen-lab/design/citizenShareState";
 
 describe("cycleOption", () => {
@@ -29,7 +29,7 @@ describe("selectionOf", () => {
   test("takes the body from the citizen and the other ids from the feature options", () => {
     const selection = selectionOf({ ...DEFAULT_DESIGN, citizenId: "adam" });
     expect(selection.bodyId).toBe(CITIZENS[3].bodyId);
-    expect(selection.eyeId).toBe(FEATURES.find(({ key }) => key === "eyes")?.options[DEFAULT_DESIGN.features.eyes].id);
+    expect(selection.eyeId).toBe(FEATURES.find(({ key }) => key === PARTS.EYES)?.options[DEFAULT_DESIGN.features.eyes].id);
   });
 });
 

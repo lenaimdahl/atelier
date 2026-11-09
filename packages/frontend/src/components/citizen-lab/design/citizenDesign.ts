@@ -1,4 +1,4 @@
-import { CITIZENS, COLORS, FEATURES, featureOptionId, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
+import { PARTS, CITIZENS, COLORS, FEATURES, featureOptionId, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
 import type { CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
 import type { CitizenDesign } from "src/components/citizen-lab/design/citizenShareState";
 
@@ -21,12 +21,12 @@ export function citizenOf(design: CitizenDesign) {
 export function selectionOf(design: CitizenDesign): CitizenSelection {
   return {
     bodyId: citizenOf(design).bodyId,
-    headId: featureOptionId("head", design.features.head),
-    eyeId: featureOptionId("eyes", design.features.eyes),
-    noseId: featureOptionId("nose", design.features.nose),
-    hairId: featureOptionId("hair", design.features.hair),
-    mouthId: featureOptionId("mouth", design.features.mouth),
-    decoId: featureOptionId("deco", design.features.deco),
+    headId: featureOptionId(PARTS.HEAD, design.features.head),
+    eyeId: featureOptionId(PARTS.EYES, design.features.eyes),
+    noseId: featureOptionId(PARTS.NOSE, design.features.nose),
+    hairId: featureOptionId(PARTS.HAIR, design.features.hair),
+    mouthId: featureOptionId(PARTS.MOUTH, design.features.mouth),
+    decoId: featureOptionId(PARTS.DECO, design.features.deco),
   };
 }
 

@@ -35,13 +35,25 @@ export const HAIR = toOptions(firstIds(3));
 export const MOUTHS = toOptions(firstIds(11));
 export const DECO = toOptions(firstIds(11));
 
+export const PARTS = {
+  BODY: "body",
+  HEAD: "head",
+  HAIR: "hair",
+  EYES: "eyes",
+  NOSE: "nose",
+  MOUTH: "mouth",
+  DECO: "deco",
+} as const;
+
+export type Part = (typeof PARTS)[keyof typeof PARTS];
+
 export const FEATURES = [
-  { key: "hair", options: HAIR },
-  { key: "head", options: HEADS },
-  { key: "eyes", options: EYES },
-  { key: "nose", options: NOSES },
-  { key: "mouth", options: MOUTHS },
-  { key: "deco", options: DECO },
+  { key: PARTS.HAIR, options: HAIR },
+  { key: PARTS.HEAD, options: HEADS },
+  { key: PARTS.EYES, options: EYES },
+  { key: PARTS.NOSE, options: NOSES },
+  { key: PARTS.MOUTH, options: MOUTHS },
+  { key: PARTS.DECO, options: DECO },
 ] as const;
 
 export type Feature = (typeof FEATURES)[number]["key"];

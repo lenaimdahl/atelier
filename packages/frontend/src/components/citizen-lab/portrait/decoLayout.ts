@@ -1,8 +1,8 @@
-import { ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
+import { PARTS, ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
 import { CANVAS, centeredBox, fitBox, type Box } from "src/components/citizen-lab/portrait/box";
 import { EYE_GEOMETRY, type BodyGeometry, type HeadGeometry } from "src/components/citizen-lab/portrait/geometry";
 
-export type DecoLayer = "body" | "head" | "eyes" | "mouth";
+export type DecoLayer = typeof PARTS.BODY | typeof PARTS.HEAD | typeof PARTS.EYES | typeof PARTS.MOUTH;
 
 export type DecoPiece = Box & {
   crop?: { viewBox: string; assetWidth: number; assetHeight: number; preserveAspectRatio?: string };
@@ -109,30 +109,30 @@ const X = CANVAS.centerX;
 
 export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
   // Ears
-  0: { layer: "head", tint: GREEN_TINT, layout: earPieces },
+  0: { layer: PARTS.HEAD, tint: GREEN_TINT, layout: earPieces },
   // Cap
   1: {
-    layer: "head",
+    layer: PARTS.HEAD,
     tint: GREEN_TINT,
     layout: ({ headWidth, headHeight }) => [fitBox(X, -headHeight * 0.12, headWidth * 0.88, headHeight * 0.5, DECO_ASPECT_RATIOS[1])],
   },
   // Badge
-  2: { layer: "body", tint: WHITE_TINT, layout: ({ body }) => [centeredBox(body.badge.x, body.badge.y, 30, 30)] },
+  2: { layer: PARTS.BODY, tint: WHITE_TINT, layout: ({ body }) => [centeredBox(body.badge.x, body.badge.y, 30, 30)] },
   // Mustache
   3: {
-    layer: "mouth",
+    layer: PARTS.MOUTH,
     tint: GREEN_TINT,
     layout: ({ headWidth, faceHeight }) => [fitBox(X, faceHeight * 0.8, headWidth * 0.42, faceHeight * 0.14, DECO_ASPECT_RATIOS[3])],
   },
   // Fist
   4: {
-    layer: "body",
+    layer: PARTS.BODY,
     tint: WHITE_TINT,
     layout: () => [{ x: 316 - 76, y: 292 - 76 / DECO_ASPECT_RATIOS[4], width: 76, height: 76 / DECO_ASPECT_RATIOS[4] }],
   },
   // Green hat
   5: {
-    layer: "head",
+    layer: PARTS.HEAD,
     tint: GREEN_TINT,
     layout: ({ head, headWidth, headHeight }) => [
       head.compactHat
@@ -142,23 +142,23 @@ export const DECO_DEFINITIONS: Record<number, DecoDefinition> = {
   },
   // Glasses
   6: {
-    layer: "eyes",
+    layer: PARTS.EYES,
     tint: BLACK_TINT,
    
     layout: ({ headWidth, faceHeight }) => [fitBox(X, faceHeight * 0.63, headWidth, faceHeight * 0.5, DECO_ASPECT_RATIOS[6])],
   },
   // Pointy hat
   7: {
-    layer: "head",
+    layer: PARTS.HEAD,
     tint: GREEN_TINT,
     layout: ({ headWidth, headHeight }) => [fitBox(X, -headHeight * 0.12, headWidth * 0.78, headHeight * 0.58, DECO_ASPECT_RATIOS[7])],
   },
   // Tie
-  8: { layer: "body", tint: WHITE_TINT, layout: () => [centeredBox(X, 288, 16, 80)] },
+  8: { layer: PARTS.BODY, tint: WHITE_TINT, layout: () => [centeredBox(X, 288, 16, 80)] },
   // Eye patch
-  9: { layer: "eyes", tint: BLACK_TINT, layout: (context) => [eyePatchBox(context)] },
+  9: { layer: PARTS.EYES, tint: BLACK_TINT, layout: (context) => [eyePatchBox(context)] },
   // Diamonds
-  10: { layer: "eyes", tint: WHITE_TINT, layout: studPieces },
+  10: { layer: PARTS.EYES, tint: WHITE_TINT, layout: studPieces },
 };
 
 export function decoTint(decoId: number): DecoTint | undefined {

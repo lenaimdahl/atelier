@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { CitizenColors, CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
 import { LogoControls } from "src/components/citizen-lab/controls/LogoControls";
 import { SwatchRow } from "src/components/citizen-lab/controls/SwatchRow";
-import { ASSET_PART_GREEN, CITIZENS, COLORS, type Citizen, DECO_COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
+import { PARTS, ASSET_PART_GREEN, CITIZENS, COLORS, type Citizen, DECO_COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/components/citizen-lab/design/citizenLabOptions";
 import "src/components/citizen-lab/shared.css";
 import "src/components/citizen-lab/controls/CitizenFigurePicker.css";
 
@@ -31,16 +31,16 @@ export function CitizenFigurePicker({
 }: CitizenFigurePickerProps) {
   const { t } = useTranslation();
   const palettes: { part: ColorPart; options: readonly string[] }[] = [
-    { part: "hair", options: COLORS },
-    { part: "head", options: COLORS },
-    ...(["eyes", "nose", "mouth"] as const)
+    { part: PARTS.HAIR, options: COLORS },
+    { part: PARTS.HEAD, options: COLORS },
+    ...[PARTS.EYES, PARTS.NOSE, PARTS.MOUTH]
       .filter((part) => recolorableParts[part])
       .map((part) => ({ part, options: COLORS })),
-    { part: "body", options: COLORS },
+    { part: PARTS.BODY, options: COLORS },
     ...(decoOriginalColor
       ? [
           {
-            part: "deco" as const,
+            part: PARTS.DECO,
             options: decoOriginalColor === ASSET_PART_GREEN ? DECO_COLORS.filter((color) => color !== COLORS[0]) : DECO_COLORS,
           },
         ]
@@ -73,12 +73,12 @@ export function CitizenFigurePicker({
               label={t(`pages.citizenLab.colorLabels.${part}`)}
               options={options}
               selected={
-                part === "deco" && decoOriginalColor === ASSET_PART_GREEN && colors.deco === COLORS[0]
+                part === PARTS.DECO && decoOriginalColor === ASSET_PART_GREEN && colors.deco === COLORS[0]
                   ? DECO_DEFAULT_COLOR
                   : colors[part]
               }
               onSelect={(color) => onSelectColor(part, color)}
-              {...(part === "deco" && decoOriginalColor
+              {...(part === PARTS.DECO && decoOriginalColor
                 ? {
                     displayColor: (color: string) => (color === DECO_DEFAULT_COLOR ? decoOriginalColor : color),
                     swatchLabel: (color: string) => (color === DECO_DEFAULT_COLOR ? t("pages.citizenLab.originalColor") : color),

@@ -3,7 +3,7 @@ import { DecoPieces } from "src/components/citizen-lab/portrait/DecoPieces";
 import { PortraitImage } from "src/components/citizen-lab/portrait/PortraitImage";
 import { TintFilter } from "src/components/citizen-lab/portrait/TintFilter";
 import { portraitUrls } from "src/components/citizen-lab/portrait/citizenAssets";
-import { DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
+import { PARTS, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
 import { CANVAS } from "src/components/citizen-lab/portrait/box";
 import type { DecoLayer } from "src/components/citizen-lab/portrait/decoLayout";
 import { computePortraitLayout, logoBox, type CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
@@ -77,13 +77,13 @@ export function CitizenPortrait({ portraitRef, title, selection, colors, tag, lo
           filter={layout.body.white ? filterUrl(filterIds.body) : undefined}
         />
         <PortraitImage href={urls.head} box={layout.head} fit="none" filter={filterUrl(filterIds.head)} />
-        {decoInLayer("body")}
+        {decoInLayer(PARTS.BODY)}
         <PortraitImage href={urls.hair} box={layout.hair} fit="none" filter={filterUrl(filterIds.hair)} />
-        {decoInLayer("head")}
+        {decoInLayer(PARTS.HEAD)}
         <PortraitImage href={urls.eyes} box={layout.eyes} />
-        {decoInLayer("eyes")}
+        {decoInLayer(PARTS.EYES)}
         <PortraitImage href={urls.mouth} box={layout.mouth} />
-        {decoInLayer("mouth")}
+        {decoInLayer(PARTS.MOUTH)}
         <PortraitImage href={urls.nose} box={layout.nose} />
         {tagText && (
           <text
