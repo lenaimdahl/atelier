@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { CitizenLabWorkbench } from "src/components/citizen-lab/CitizenLabWorkbench";
 import { RocketIllustration } from "src/components/citizen-lab/RocketIllustration";
 import "src/pages/citizen-lab.css";
-import "src/components/citizen-lab/shared.css";
+import "src/components/citizen-lab/styles.css";
 
 function CitizenLab() {
   const { t } = useTranslation();

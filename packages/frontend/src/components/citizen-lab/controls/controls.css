@@ -1,0 +1,334 @@
+.control-label {
+  display: block;
+  margin: 0;
+  color: var(--frame-muted);
+  font-family: Hack, monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.lab-button {
+  padding: 6px 10px;
+  border: 1px solid var(--frame-line);
+  background: transparent;
+  color: var(--frame-text);
+  font: 0.62rem Hack, monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.lab-button:hover,
+.lab-button[aria-pressed="true"] {
+  border-color: var(--frame-accent);
+}
+
+.lab-button[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--frame-accent) 18%, transparent);
+}
+
+.lab-button:not([aria-pressed="true"]):hover {
+  background: var(--frame-accent);
+  color: var(--frame-bg);
+}
+
+.lab-button:focus-visible {
+  outline: var(--lab-focus-ring);
+  outline-offset: 2px;
+}
+
+.figure-option:focus-visible,
+.color-swatch:focus-visible {
+  outline: var(--lab-focus-ring);
+  outline-offset: 3px;
+}
+
+.figure-picker {
+  margin-top: 20px;
+}
+
+.figure-colors {
+  margin-top: 16px;
+}
+
+.figure-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+.figure-options legend {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+.figure-option {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--frame-line);
+  background: transparent;
+  color: var(--frame-text);
+  font: 0.75rem Hack, monospace;
+  text-align: left;
+}
+
+.figure-option:hover,
+.figure-option.selected {
+  border-color: var(--frame-accent);
+  background: color-mix(in srgb, var(--frame-accent) 12%, transparent);
+}
+
+.figure-token {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border: 2px solid var(--frame-bg);
+  outline: 1px solid var(--frame-accent);
+  background: var(--frame-accent);
+  clip-path: polygon(50% 0, 92% 18%, 100% 65%, 78% 100%, 22% 100%, 0 65%, 8% 18%);
+}
+
+.token-barbara {
+  border-radius: 50%;
+  background: var(--lab-purple);
+}
+
+.token-bip {
+  border-radius: 7px;
+  background: var(--lab-teal);
+}
+
+.token-adam {
+  background: var(--frame-text);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.color-palettes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.palette-note {
+  display: block;
+  margin-top: 12px;
+  color: var(--lab-dim);
+  font-size: 0.6rem;
+}
+
+.citizen-controls {
+  min-width: 0;
+  padding: 26px;
+  border-left: 1px solid color-mix(in srgb, var(--frame-accent) 65%, transparent);
+}
+
+.citizen-controls h2 {
+  margin: 12px 0 26px;
+  font-family: "Jersey 10", monospace;
+  font-size: 2.2rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.control-group {
+  margin-top: 22px;
+}
+
+.feature-cyclers {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.control-readout {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 0 12px;
+  border: 1px solid var(--frame-accent);
+  background: var(--lab-panel);
+  font-size: 0.76rem;
+}
+
+.control-readout span:last-child {
+  color: var(--frame-muted);
+  font-size: 0.65rem;
+}
+
+.logo-controls {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.logo-styles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.logo-styles legend {
+  margin-bottom: 6px;
+}
+
+.option-cycler-controls {
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  border: 1px solid color-mix(in srgb, var(--frame-accent) 65%, transparent);
+  background: var(--lab-panel);
+}
+
+.option-cycler-controls > span {
+  overflow: hidden;
+  color: var(--frame-text);
+  font-size: 0.72rem;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option-cycler-controls button {
+  width: 36px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--frame-accent);
+}
+
+.option-cycler-controls button:hover {
+  background: color-mix(in srgb, var(--frame-accent) 16%, transparent);
+  color: var(--frame-text);
+}
+
+.option-cycler-controls button:focus-visible {
+  outline: var(--lab-focus-ring);
+  outline-offset: -3px;
+}
+
+.option-cycler-controls svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.tag-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(120px, 0.7fr);
+  gap: 12px 10px;
+  margin-top: 16px;
+}
+
+.tag-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.tag-field input,
+.tag-field select {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  padding: 8px;
+  border: 1px solid color-mix(in srgb, var(--frame-accent) 65%, transparent);
+  background: var(--lab-panel);
+  color: var(--frame-text);
+  font: 0.72rem Hack, monospace;
+}
+
+.tag-field input::placeholder {
+  color: var(--lab-dim);
+}
+
+.tag-color-swatches {
+  grid-column: 1 / -1;
+}
+
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 0;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+.color-swatches legend {
+  flex-basis: 100%;
+}
+
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border: 2px solid transparent;
+  background: var(--swatch-color);
+}
+
+.color-swatch.selected {
+  outline: 2px solid var(--frame-text);
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .figure-options {
+    gap: 6px;
+  }
+
+  .figure-option {
+    gap: 7px;
+    padding: 8px;
+  }
+
+  .citizen-controls {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 720px) {
+  .figure-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .figure-option {
+    min-height: 54px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 4px;
+    font-size: 0.65rem;
+    text-align: center;
+  }
+
+  .citizen-controls {
+    padding: 22px 16px;
+    border-top: 1px solid color-mix(in srgb, var(--frame-accent) 65%, transparent);
+    border-left: 0;
+  }
+}
