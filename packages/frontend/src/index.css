@@ -6,6 +6,14 @@
   text-rendering: optimizeLegibility;
 }
 
+:root:has(.terminal-shell) {
+  background: #001300;
+}
+
+:root:has(.home-shell) {
+  background: #14291e;
+}
+
 * {
   box-sizing: border-box;
 }

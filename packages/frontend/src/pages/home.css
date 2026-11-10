@@ -1,8 +1,9 @@
 .app-shell.terminal-shell.home-shell {
+  --frame-bg: #14291e;
   --home-accent: #ee5da2;
   --home-accent-2: #15ada3;
   --home-light: #ebedf0;
-  --home-dark: #001300;
+  --home-dark: #14291e;
   --home-text: #c8d1c5;
   --home-muted: #a4b39f;
   --home-line: color-mix(in srgb, var(--home-accent) 55%, transparent);
