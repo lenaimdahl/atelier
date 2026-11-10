@@ -4,6 +4,9 @@
   background: #fff;
   border-top: 6px solid #fa3b30;
 }
+body:has(.dialog-panel[open]) {
+  overflow: hidden;
+}
 .dialog-panel::backdrop {
   background: rgba(0, 51, 254, 0.72);
 }
@@ -13,6 +16,7 @@
   max-height: calc(100svh - 40px);
   margin: auto;
   overflow: auto;
+  overscroll-behavior: contain;
   box-shadow: 12px 12px 0 #fa3b30;
 }
 .icon-button {
@@ -52,6 +56,7 @@
   margin: 14px 0 0;
   padding: 0;
   overflow: auto;
+  overscroll-behavior: contain;
   list-style: none;
 }
 .book-picker-item {

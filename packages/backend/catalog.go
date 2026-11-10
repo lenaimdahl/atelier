@@ -265,7 +265,7 @@ func searchCatalogHandler(database *pgxpool.Pool, allowedOrigin string) http.Han
 			WHERE ($1 = '' OR title ILIKE '%' || $1 || '%' OR author ILIKE '%' || $1 || '%')
 				AND ($2 = '' OR language = $2)
 			ORDER BY title
-			LIMIT 20
+			LIMIT 100
 		`, query, language)
 		if err != nil {
 			log.Printf("could not search catalog: %v", err)

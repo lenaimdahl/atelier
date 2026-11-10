@@ -274,7 +274,7 @@ export class Api<
   };
   catalog = {
     /**
-     * @description The library holds 50 English and 50 German books imported from the Open Library API. Matches title and author. Without a query, the first 20 books ordered by title are returned. Returns 400 for a query longer than 100 characters or an unknown language.
+     * @description The library holds 50 English and 50 German books imported from the Open Library API. Matches title and author. Without a query, all books ordered by title are returned. Returns 400 for a query longer than 100 characters or an unknown language.
      *
      * @name SearchCatalog
      * @summary Search the library of 100 feminist books
