@@ -2,8 +2,7 @@ import { useTranslation } from "react-i18next";
 import { SwatchRow } from "src/components/citizen-lab/controls/SwatchRow";
 import { LOGO_COLORS } from "src/components/citizen-lab/design/citizenLabOptions";
 import type { CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
-import "src/components/citizen-lab/shared.css";
-import "src/components/citizen-lab/controls/LogoControls.css";
+import "src/components/citizen-lab/controls/controls.css";
 
 interface LogoControlsProps {
   logo: CitizenLogo;

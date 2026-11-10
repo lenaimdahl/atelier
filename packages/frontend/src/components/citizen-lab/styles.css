@@ -1,3 +1,12 @@
+.citizen-eyebrow {
+  margin: 0;
+  color: var(--frame-accent);
+  font-family: Hack, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 .citizen-workbench {
   border: 1px solid var(--frame-accent);
 }
@@ -161,6 +170,43 @@
 
 .randomize-button span {
   font-size: 1.1rem;
+}
+
+.randomize-button:focus-visible {
+  outline: var(--lab-focus-ring);
+  outline-offset: 3px;
+}
+
+.rocket-stroke-accent {
+  stroke: var(--frame-accent);
+}
+
+.rocket-stroke-lavender {
+  stroke: var(--lab-lavender);
+}
+
+.rocket-stroke-yellow {
+  stroke: var(--lab-yellow);
+}
+
+.rocket-fill-accent {
+  fill: var(--frame-accent);
+}
+
+.rocket-fill-dark {
+  fill: var(--frame-bg);
+}
+
+.rocket-fill-light {
+  fill: var(--frame-text);
+}
+
+.rocket-fill-yellow {
+  fill: var(--lab-yellow);
+}
+
+.rocket-fill-pink {
+  fill: var(--lab-pink);
 }
 
 @media (max-width: 900px) {

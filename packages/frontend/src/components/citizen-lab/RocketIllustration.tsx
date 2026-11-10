@@ -1,4 +1,4 @@
-import "src/components/citizen-lab/RocketIllustration.css";
+import "src/components/citizen-lab/styles.css";
 
 export function RocketIllustration() {
   return (

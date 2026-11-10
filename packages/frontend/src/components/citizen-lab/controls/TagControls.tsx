@@ -3,8 +3,7 @@ import type { CitizenTag } from "src/components/citizen-lab/design/citizenTypes"
 import { SwatchRow } from "src/components/citizen-lab/controls/SwatchRow";
 import { TAG_MAX_LENGTH } from "src/components/citizen-lab/design/citizenShareState";
 import { TAG_COLORS, TAG_FONTS } from "src/components/citizen-lab/design/citizenLabOptions";
-import "src/components/citizen-lab/shared.css";
-import "src/components/citizen-lab/controls/TagControls.css";
+import "src/components/citizen-lab/controls/controls.css";
 
 interface TagControlsProps {
   tag: CitizenTag;
