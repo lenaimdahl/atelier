@@ -1,14 +1,14 @@
 import { useId, type Ref } from "react";
-import { DecoPieces } from "src/components/citizen-lab/portrait/DecoPieces";
-import { PortraitImage } from "src/components/citizen-lab/portrait/PortraitImage";
-import { TintFilter } from "src/components/citizen-lab/portrait/TintFilter";
-import { portraitUrls } from "src/components/citizen-lab/portrait/citizenAssets";
-import { PARTS, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
-import { CANVAS } from "src/components/citizen-lab/portrait/box";
-import type { DecoLayer } from "src/components/citizen-lab/portrait/decoLayout";
-import { computePortraitLayout, logoBox, type CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
-import type { CitizenColors, CitizenLogo, CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
-import "src/components/citizen-lab/portrait/CitizenPortrait.css";
+import { DecoPieces } from "src/features/citizen-lab/portrait/DecoPieces";
+import { PortraitImage } from "src/features/citizen-lab/portrait/PortraitImage";
+import { TintFilter } from "src/features/citizen-lab/portrait/TintFilter";
+import { portraitUrls } from "src/features/citizen-lab/portrait/citizenAssets";
+import { PARTS, DECO_DEFAULT_COLOR } from "src/features/citizen-lab/design/citizenLabOptions";
+import { CANVAS } from "src/features/citizen-lab/portrait/box";
+import type { DecoLayer } from "src/features/citizen-lab/portrait/decoLayout";
+import { computePortraitLayout, logoBox, type CitizenSelection } from "src/features/citizen-lab/portrait/citizenLayout";
+import type { CitizenColors, CitizenLogo, CitizenTag } from "src/features/citizen-lab/design/citizenTypes";
+import "src/features/citizen-lab/portrait/CitizenPortrait.css";
 
 interface CitizenPortraitProps {
   portraitRef: Ref<SVGSVGElement>;

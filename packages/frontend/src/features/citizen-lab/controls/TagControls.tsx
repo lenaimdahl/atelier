@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
-import type { CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
-import { SwatchRow } from "src/components/citizen-lab/controls/SwatchRow";
-import { TAG_MAX_LENGTH } from "src/components/citizen-lab/design/citizenShareState";
-import { TAG_COLORS, TAG_FONTS } from "src/components/citizen-lab/design/citizenLabOptions";
-import "src/components/citizen-lab/controls/controls.css";
+import type { CitizenTag } from "src/features/citizen-lab/design/citizenTypes";
+import { SwatchRow } from "src/features/citizen-lab/controls/SwatchRow";
+import { TAG_MAX_LENGTH } from "src/features/citizen-lab/design/citizenShareState";
+import { TAG_COLORS, TAG_FONTS } from "src/features/citizen-lab/design/citizenLabOptions";
+import "src/features/citizen-lab/controls/controls.css";
 
 interface TagControlsProps {
   tag: CitizenTag;

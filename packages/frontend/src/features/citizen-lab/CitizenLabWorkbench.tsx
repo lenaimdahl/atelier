@@ -1,17 +1,17 @@
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { CitizenFigurePicker } from "src/components/citizen-lab/controls/CitizenFigurePicker";
-import { CitizenPortrait } from "src/components/citizen-lab/portrait/CitizenPortrait";
-import type { CitizenColors } from "src/components/citizen-lab/design/citizenTypes";
-import { PreviewActions } from "src/components/citizen-lab/controls/PreviewActions";
-import { ControlsPanel } from "src/components/citizen-lab/controls/ControlsPanel";
-import { citizenOf, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
-import { hasPartGreen } from "src/components/citizen-lab/portrait/citizenAssets";
-import { decoTint } from "src/components/citizen-lab/portrait/decoLayout";
+import { CitizenFigurePicker } from "src/features/citizen-lab/controls/CitizenFigurePicker";
+import { CitizenPortrait } from "src/features/citizen-lab/portrait/CitizenPortrait";
+import type { CitizenColors } from "src/features/citizen-lab/design/citizenTypes";
+import { PreviewActions } from "src/features/citizen-lab/controls/PreviewActions";
+import { ControlsPanel } from "src/features/citizen-lab/controls/ControlsPanel";
+import { citizenOf, selectionOf } from "src/features/citizen-lab/design/citizenDesign";
+import { hasPartGreen } from "src/features/citizen-lab/portrait/citizenAssets";
+import { decoTint } from "src/features/citizen-lab/portrait/decoLayout";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
-import { downloadCitizenPng, downloadCitizenSvg } from "src/components/citizen-lab/export/downloadCitizen";
-import { useCitizenDesign } from "src/components/citizen-lab/useCitizenDesign";
-import "src/components/citizen-lab/styles.css";
+import { downloadCitizenPng, downloadCitizenSvg } from "src/features/citizen-lab/export/downloadCitizen";
+import { useCitizenDesign } from "src/features/citizen-lab/useCitizenDesign";
+import "src/features/citizen-lab/styles.css";
 
 const MOBILE_QUERY = "(max-width: 720px)";
 

@@ -62,7 +62,10 @@ packages/
   backend/           # Go HTTP server, PostgreSQL, migrations, embedded book catalog
 ```
 
-Frontend `src/`: `api/`, `components/`, `hooks/`, `i18n/`, `pages/`, `routes/`, `types/`, `assets/`.
+Frontend `src/`: `api/`, `components/`, `features/`, `hooks/`, `i18n/`, `pages/`, `routes/`, `types/`, `assets/`.
+
+- `features/<name>/` holds everything of one feature: page, components, styles, logic and tests (e.g. `features/citizen-lab/`).
+- `components/`, `hooks/` and `pages/` hold shared code and simple pages that are not a feature of their own.
 
 Generated files, never edit by hand:
 

@@ -1,6 +1,6 @@
-import { CANVAS, centeredBox, type Box } from "src/components/citizen-lab/portrait/box";
-import { DECO_DEFINITIONS, type DecoLayer, type DecoPiece, type DecoTint } from "src/components/citizen-lab/portrait/decoLayout";
-import { HEAD_GEOMETRY, BODY_GEOMETRY, EYE_GEOMETRY, NOSE_SIZE, DEFAULT_NOSE_SIZE, type BodyGeometry, type HeadGeometry } from "src/components/citizen-lab/portrait/geometry";
+import { CANVAS, centeredBox, type Box } from "src/features/citizen-lab/portrait/box";
+import { DECO_DEFINITIONS, type DecoLayer, type DecoPiece, type DecoTint } from "src/features/citizen-lab/portrait/decoLayout";
+import { HEAD_GEOMETRY, BODY_GEOMETRY, EYE_GEOMETRY, NOSE_SIZE, DEFAULT_NOSE_SIZE, type BodyGeometry, type HeadGeometry } from "src/features/citizen-lab/portrait/geometry";
 
 function hairBox(hairId: number, head: HeadGeometry, headWidth: number, faceHeight: number): Box {
   const widthAt25 = Math.max(head.widthAt25, 0.4) * headWidth;

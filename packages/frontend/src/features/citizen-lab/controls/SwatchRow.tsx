@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import "src/components/citizen-lab/controls/controls.css";
+import "src/features/citizen-lab/controls/controls.css";
 
 const identity = (color: string) => color;
 

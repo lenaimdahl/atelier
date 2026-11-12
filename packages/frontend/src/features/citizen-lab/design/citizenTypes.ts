@@ -1,4 +1,4 @@
-import type { LogoStyle, Part } from "src/components/citizen-lab/design/citizenLabOptions";
+import type { LogoStyle, Part } from "src/features/citizen-lab/design/citizenLabOptions";
 
 export type CitizenColors = Record<Part, string>;
 export type CitizenTag = { text: string; fontFamily: string; color: string };

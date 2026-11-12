@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { citizenOf, cycleOption, randomParts, selectionOf } from "src/components/citizen-lab/design/citizenDesign";
-import { PARTS, CITIZENS, COLORS, FEATURES } from "src/components/citizen-lab/design/citizenLabOptions";
-import { DEFAULT_DESIGN } from "src/components/citizen-lab/design/citizenShareState";
+import { citizenOf, cycleOption, randomParts, selectionOf } from "src/features/citizen-lab/design/citizenDesign";
+import { PARTS, CITIZENS, COLORS, FEATURES } from "src/features/citizen-lab/design/citizenLabOptions";
+import { DEFAULT_DESIGN } from "src/features/citizen-lab/design/citizenShareState";
 
 describe("cycleOption", () => {
   test("moves one step in either direction", () => {
