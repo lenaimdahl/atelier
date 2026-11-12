@@ -23,8 +23,8 @@ export default function Router() {
               </Suspense>
             }
           />
+          <Route path={PATHS.LOGOMOTION} element={<LogoMotion />} />
         </Route>
-        <Route path={PATHS.LOGOMOTION} element={<LogoMotion />} />
       </Routes>
     </BrowserRouter>
   );

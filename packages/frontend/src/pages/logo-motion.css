@@ -1,0 +1,97 @@
+.logo-motion-page {
+  width: min(100%, 1440px);
+  margin: 0 auto;
+  padding: 34px 48px 48px;
+}
+
+.logo-motion-intro {
+  max-width: 62ch;
+  padding-bottom: 28px;
+}
+
+.logo-motion-eyebrow {
+  margin: 0;
+  color: var(--frame-accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.logo-motion-intro h1 {
+  margin: 14px 0 12px;
+  font-family: "Jersey 10", monospace;
+  font-size: 4rem;
+  font-weight: 400;
+  line-height: 0.9;
+}
+
+.logo-motion-intro p:last-child {
+  margin: 0;
+  color: var(--frame-muted);
+  line-height: 1.6;
+}
+
+.logo-motion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.logo-motion-card {
+  display: grid;
+  border: 1px solid var(--frame-line);
+}
+
+.logo-motion-stage {
+  aspect-ratio: 5 / 4;
+  border-bottom: 1px solid var(--frame-line);
+}
+
+.logo-motion-card-text {
+  padding: 16px 18px 20px;
+}
+
+.logo-motion-card-text h2 {
+  margin: 0 0 8px;
+  color: var(--frame-accent);
+  font-family: "Jersey 10", monospace;
+  font-size: 1.8rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.logo-motion-card-text p {
+  margin: 0;
+  color: var(--frame-muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 1100px) {
+  .logo-motion-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .logo-motion-page {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+
+@media (max-width: 720px) {
+  .logo-motion-page {
+    padding: 24px 16px 40px;
+  }
+
+  .logo-motion-intro h1 {
+    font-size: 3rem;
+  }
+
+  .logo-motion-grid {
+    grid-template-columns: 1fr;
+  }
+}

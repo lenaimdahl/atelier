@@ -127,6 +127,25 @@
       "previousOption": "Vorherige {{option}}-Option",
       "nextOption": "Nächste {{option}}-Option",
       "optionNumber": "VARIANTE {{number}}"
+    },
+    "logoMotion": {
+      "eyebrow": "ATELIER / 40C3 LOGO MOTION",
+      "title": "LOGO IN BEWEGUNG_",
+      "description": "Ein Logo, drei Stimmungen. Ich habe das 40C3-Logo auseinandergenommen und mit Code in Bewegung gebracht. Noch in Arbeit, es darf also ruhig mal flackern.",
+      "variants": {
+        "ledWall": {
+          "title": "LED-WAND",
+          "description": "Jeder Punkt ist eine kleine Lampe. Eine Farbwelle rollt über das Logo und hört einfach nicht auf."
+        },
+        "assembly": {
+          "title": "MONTAGE",
+          "description": "Teil für Teil gleitet das Logo an seinen Platz. Wie ein Möbel zum Selbstaufbauen, nur ohne Schrauben."
+        },
+        "glitch": {
+          "title": "STÖRSIGNAL",
+          "description": "Meistens ruhig, dann bricht kurz das Signal weg. Farben verrutschen, Streifen springen, und das Logo fängt sich wieder."
+        }
+      }
     }
   },
   "nav": {
