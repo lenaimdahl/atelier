@@ -9,6 +9,7 @@ const HOME_PAGE = { titleKey: "nav.home", shellClass: "app-shell terminal-shell 
 const PAGES = [
   { path: PATHS.BOOKS, titleKey: "nav.books", shellClass: "app-shell" },
   { path: PATHS.CITIZENLAB, titleKey: "nav.citizenLab", shellClass: "app-shell terminal-shell" },
+  { path: PATHS.LOGOMOTION, titleKey: "nav.logoMotion", shellClass: "app-shell terminal-shell" },
 ] as const;
 
 export function Layout() {
@@ -37,6 +38,7 @@ export function Layout() {
           </NavLink>
           <NavLink to={PATHS.BOOKS}>{t("nav.books")}</NavLink>
           <NavLink to={PATHS.CITIZENLAB}>{t("nav.citizenLab")}</NavLink>
+          <NavLink to={PATHS.LOGOMOTION}>{t("nav.logoMotion")}</NavLink>
         </nav>
         <LanguageSwitcher />
       </header>

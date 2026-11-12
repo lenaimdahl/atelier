@@ -1,3 +1,7 @@
 export const LogoMotion = () => {
-    return;
+    return  (
+    <main>
+      <h1>Logo Motion</h1>
+    </main>
+  );;
 }
