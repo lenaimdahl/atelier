@@ -39,36 +39,6 @@
   list-style: none;
 }
 
-.logo-motion-card {
-  display: grid;
-  border: 1px solid var(--frame-line);
-}
-
-.logo-motion-stage {
-  aspect-ratio: 5 / 4;
-  border-bottom: 1px solid var(--frame-line);
-}
-
-.logo-motion-card-text {
-  padding: 16px 18px 20px;
-}
-
-.logo-motion-card-text h2 {
-  margin: 0 0 8px;
-  color: var(--frame-accent);
-  font-family: "Jersey 10", monospace;
-  font-size: 1.8rem;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.logo-motion-card-text p {
-  margin: 0;
-  color: var(--frame-muted);
-  font-size: 0.8rem;
-  line-height: 1.6;
-}
-
 @media (max-width: 1100px) {
   .logo-motion-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

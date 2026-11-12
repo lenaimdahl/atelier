@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { VariantCard } from "src/features/logo-motion/VariantCard";
 import "src/pages/logo-motion.css";
 
 const VARIANTS = ["ledWall", "assembly", "glitch"] as const;
@@ -16,13 +17,7 @@ export const LogoMotion = () => {
 
       <ul className="logo-motion-grid">
         {VARIANTS.map((variant) => (
-          <li key={variant} className="logo-motion-card">
-            <div className="logo-motion-stage" />
-            <div className="logo-motion-card-text">
-              <h2>{t(`pages.logoMotion.variants.${variant}.title`)}</h2>
-              <p>{t(`pages.logoMotion.variants.${variant}.description`)}</p>
-            </div>
-          </li>
+         <VariantCard key={variant} variant={variant} />
         ))}
       </ul>
     </main>
