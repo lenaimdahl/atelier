@@ -64,8 +64,9 @@ packages/
 
 Frontend `src/`: `api/`, `components/`, `features/`, `hooks/`, `i18n/`, `pages/`, `routes/`, `types/`, `assets/`.
 
-- `features/<name>/` holds everything of one feature: page, components, styles, logic and tests (e.g. `features/citizen-lab/`).
-- `components/`, `hooks/` and `pages/` hold shared code and simple pages that are not a feature of their own.
+- `pages/` holds one thin page per route, with its page stylesheet (e.g. `pages/CitizenLab.tsx`).
+- `features/<name>/` holds the feature's components, logic, styles and tests (e.g. `features/citizen-lab/`).
+- `components/` and `hooks/` hold code shared across pages and features.
 
 Generated files, never edit by hand:
 
