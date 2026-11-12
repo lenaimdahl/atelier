@@ -4,25 +4,25 @@ import { PATHS } from "src/routes/paths";
 import type {
   Citizen,
   Feature,
-} from "src/components/citizen-lab/design/citizenLabOptions";
+} from "src/features/citizen-lab/design/citizenLabOptions";
 import {
   cycleOption,
   randomParts,
   selectionOf,
-} from "src/components/citizen-lab/design/citizenDesign";
+} from "src/features/citizen-lab/design/citizenDesign";
 import {
   DEFAULT_DESIGN,
   decodeDesign,
   encodeDesign,
   hairPositionFor,
   type CitizenDesign,
-} from "src/components/citizen-lab/design/citizenShareState";
-import type { CitizenLogo } from "src/components/citizen-lab/design/citizenTypes";
+} from "src/features/citizen-lab/design/citizenShareState";
+import type { CitizenLogo } from "src/features/citizen-lab/design/citizenTypes";
 import {
   decodeAsset,
   portraitUrls,
   predecodeAssets,
-} from "src/components/citizen-lab/portrait/citizenAssets";
+} from "src/features/citizen-lab/portrait/citizenAssets";
 
 export function useCitizenDesign() {
   const { code } = useParams();

@@ -1,6 +1,6 @@
-import { PARTS, ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/components/citizen-lab/design/citizenLabOptions";
-import { CANVAS, centeredBox, fitBox, type Box } from "src/components/citizen-lab/portrait/box";
-import { EYE_GEOMETRY, type BodyGeometry, type HeadGeometry } from "src/components/citizen-lab/portrait/geometry";
+import { PARTS, ASSET_PART_GREEN, DECO_DEFAULT_COLOR } from "src/features/citizen-lab/design/citizenLabOptions";
+import { CANVAS, centeredBox, fitBox, type Box } from "src/features/citizen-lab/portrait/box";
+import { EYE_GEOMETRY, type BodyGeometry, type HeadGeometry } from "src/features/citizen-lab/portrait/geometry";
 
 export type DecoLayer = typeof PARTS.BODY | typeof PARTS.HEAD | typeof PARTS.EYES | typeof PARTS.MOUTH;
 

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import type { LogoStyle } from "src/components/citizen-lab/design/citizenLabOptions";
-import "src/components/citizen-lab/controls/controls.css";
+import type { LogoStyle } from "src/features/citizen-lab/design/citizenLabOptions";
+import "src/features/citizen-lab/controls/controls.css";
 
 interface PreviewActionsProps {
   logoStyle: LogoStyle;

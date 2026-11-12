@@ -1,4 +1,4 @@
-import type { Box } from "src/components/citizen-lab/portrait/box";
+import type { Box } from "src/features/citizen-lab/portrait/box";
 
 interface PortraitImageProps {
   href: string;

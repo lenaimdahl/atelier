@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { OptionCycler } from "src/components/citizen-lab/controls/OptionCycler";
-import { TagControls } from "src/components/citizen-lab/controls/TagControls";
-import { FEATURES, type Citizen, type Feature } from "src/components/citizen-lab/design/citizenLabOptions";
-import type { CitizenDesign } from "src/components/citizen-lab/design/citizenShareState";
-import type { CitizenTag } from "src/components/citizen-lab/design/citizenTypes";
-import "src/components/citizen-lab/controls/controls.css";
+import { OptionCycler } from "src/features/citizen-lab/controls/OptionCycler";
+import { TagControls } from "src/features/citizen-lab/controls/TagControls";
+import { FEATURES, type Citizen, type Feature } from "src/features/citizen-lab/design/citizenLabOptions";
+import type { CitizenDesign } from "src/features/citizen-lab/design/citizenShareState";
+import type { CitizenTag } from "src/features/citizen-lab/design/citizenTypes";
+import "src/features/citizen-lab/controls/controls.css";
 
 interface ControlsPanelProps {
   citizen: Citizen;

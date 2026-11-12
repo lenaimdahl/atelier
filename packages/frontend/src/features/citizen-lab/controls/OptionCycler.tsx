@@ -1,4 +1,4 @@
-import "src/components/citizen-lab/controls/controls.css";
+import "src/features/citizen-lab/controls/controls.css";
 
 interface OptionCyclerProps {
   label: string;

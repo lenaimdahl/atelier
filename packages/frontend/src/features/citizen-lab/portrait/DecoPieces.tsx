@@ -1,5 +1,5 @@
-import { PortraitImage } from "src/components/citizen-lab/portrait/PortraitImage";
-import type { DecoPiece } from "src/components/citizen-lab/portrait/decoLayout";
+import { PortraitImage } from "src/features/citizen-lab/portrait/PortraitImage";
+import type { DecoPiece } from "src/features/citizen-lab/portrait/decoLayout";
 
 interface DecoPiecesProps {
   href: string;

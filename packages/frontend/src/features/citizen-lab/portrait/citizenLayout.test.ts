@@ -1,10 +1,10 @@
 import { describe, expect, test } from "vitest";
-import { CANVAS } from "src/components/citizen-lab/portrait/box";
-import { DECO_DEFINITIONS, decoTint } from "src/components/citizen-lab/portrait/decoLayout";
-import { BODY_GEOMETRY, EYE_GEOMETRY, HEAD_GEOMETRY } from "src/components/citizen-lab/portrait/geometry";
-import { computePortraitLayout, logoBox, type CitizenSelection } from "src/components/citizen-lab/portrait/citizenLayout";
-import { assetUrl } from "src/components/citizen-lab/portrait/citizenAssets";
-import { CITIZENS, DECO, EYES, HAIR, HEADS, MOUTHS, NOSES } from "src/components/citizen-lab/design/citizenLabOptions";
+import { CANVAS } from "src/features/citizen-lab/portrait/box";
+import { DECO_DEFINITIONS, decoTint } from "src/features/citizen-lab/portrait/decoLayout";
+import { BODY_GEOMETRY, EYE_GEOMETRY, HEAD_GEOMETRY } from "src/features/citizen-lab/portrait/geometry";
+import { computePortraitLayout, logoBox, type CitizenSelection } from "src/features/citizen-lab/portrait/citizenLayout";
+import { assetUrl } from "src/features/citizen-lab/portrait/citizenAssets";
+import { CITIZENS, DECO, EYES, HAIR, HEADS, MOUTHS, NOSES } from "src/features/citizen-lab/design/citizenLabOptions";
 
 function* allSelections(): Generator<CitizenSelection> {
   for (const bodyId of BODY_GEOMETRY.keys())

@@ -5,7 +5,7 @@ import Books from "src/pages/Books";
 import Home from "src/pages/Home";
 import { PATHS } from "src/routes/paths";
 
-const CitizenLab = lazy(() => import("src/pages/CitizenLab"));
+const CitizenLab = lazy(() => import("src/features/citizen-lab/CitizenLab"));
 
 export default function Router() {
   return (
