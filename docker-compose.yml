@@ -30,17 +30,5 @@ services:
       postgres:
         condition: service_healthy
 
-  frontend:
-    build:
-      context: .
-      dockerfile: packages/frontend/Dockerfile
-      args:
-        VITE_API_URL: http://localhost:8080
-    container_name: atelier-frontend
-    ports:
-      - "127.0.0.1:5173:8080"
-    depends_on:
-      - backend
-
 volumes:
   atelier_pgdata:
