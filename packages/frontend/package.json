@@ -19,6 +19,7 @@
     "@tanstack/react-query": "catalog:",
     "axios": "catalog:",
     "i18next": "catalog:",
+    "p5": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-i18next": "catalog:",
