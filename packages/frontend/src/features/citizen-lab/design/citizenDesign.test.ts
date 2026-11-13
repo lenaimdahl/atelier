@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { citizenOf, cycleOption, randomParts, selectionOf } from "src/features/citizen-lab/design/citizenDesign";
-import { PARTS, CITIZENS, COLORS, FEATURES } from "src/features/citizen-lab/design/citizenLabOptions";
+import { COLORS } from "src/features/40c3/palette";
+import { PARTS, CITIZENS, FEATURES } from "src/features/citizen-lab/design/citizenLabOptions";
 import { DEFAULT_DESIGN } from "src/features/citizen-lab/design/citizenShareState";
 
 describe("cycleOption", () => {

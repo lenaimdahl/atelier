@@ -2,7 +2,8 @@ import { useTranslation } from "react-i18next";
 import type { CitizenColors, CitizenLogo } from "src/features/citizen-lab/design/citizenTypes";
 import { LogoControls } from "src/features/citizen-lab/controls/LogoControls";
 import { SwatchRow } from "src/features/citizen-lab/controls/SwatchRow";
-import { PARTS, ASSET_PART_GREEN, CITIZENS, COLORS, type Citizen, DECO_COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/features/citizen-lab/design/citizenLabOptions";
+import { COLORS } from "src/features/40c3/palette";
+import { PARTS, ASSET_PART_GREEN, CITIZENS, type Citizen, DECO_COLORS, DECO_DEFAULT_COLOR, type CitizenId } from "src/features/citizen-lab/design/citizenLabOptions";
 import "src/features/citizen-lab/controls/controls.css";
 
 type ColorPart = keyof CitizenColors;

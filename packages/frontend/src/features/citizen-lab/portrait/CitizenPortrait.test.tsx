@@ -3,7 +3,8 @@ import { describe, expect, test } from "vitest";
 import { assetUrl } from "src/features/citizen-lab/portrait/citizenAssets";
 import { CitizenPortrait } from "src/features/citizen-lab/portrait/CitizenPortrait";
 import type { CitizenColors, CitizenLogo } from "src/features/citizen-lab/design/citizenTypes";
-import { ASSET_PART_GREEN, COLORS, DECO, DECO_DEFAULT_COLOR, LOGO_COLORS } from "src/features/citizen-lab/design/citizenLabOptions";
+import { COLORS } from "src/features/40c3/palette";
+import { ASSET_PART_GREEN, DECO, DECO_DEFAULT_COLOR, LOGO_COLORS } from "src/features/citizen-lab/design/citizenLabOptions";
 
 const [GREEN, TEAL, LAVENDER, PURPLE, PINK, , ORANGE, YELLOW] = COLORS;
 const DARK = LOGO_COLORS[9];

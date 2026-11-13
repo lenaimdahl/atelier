@@ -1,7 +1,7 @@
 import type { CitizenColors, CitizenLogo, CitizenTag } from "src/features/citizen-lab/design/citizenTypes";
+import { COLORS } from "src/features/40c3/palette";
 import {
   CITIZENS,
-  COLORS,
   DECO_COLORS,
   DECO_DEFAULT_COLOR,
   FEATURES,

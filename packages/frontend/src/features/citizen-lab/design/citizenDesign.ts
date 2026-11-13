@@ -1,4 +1,5 @@
-import { PARTS, CITIZENS, COLORS, FEATURES, featureOptionId, type CitizenId } from "src/features/citizen-lab/design/citizenLabOptions";
+import { COLORS } from "src/features/40c3/palette";
+import { PARTS, CITIZENS, FEATURES, featureOptionId, type CitizenId } from "src/features/citizen-lab/design/citizenLabOptions";
 import type { CitizenSelection } from "src/features/citizen-lab/portrait/citizenLayout";
 import type { CitizenDesign } from "src/features/citizen-lab/design/citizenShareState";
 

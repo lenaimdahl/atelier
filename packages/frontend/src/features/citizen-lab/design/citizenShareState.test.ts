@@ -7,9 +7,9 @@ import {
   TAG_MAX_LENGTH,
   type CitizenDesign,
 } from "src/features/citizen-lab/design/citizenShareState";
+import { COLORS } from "src/features/40c3/palette";
 import {
   CITIZENS,
-  COLORS,
   DECO_DEFAULT_COLOR,
   FEATURES,
   LOGO_COLORS,

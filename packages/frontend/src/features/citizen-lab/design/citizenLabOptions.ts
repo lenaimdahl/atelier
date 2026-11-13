@@ -1,3 +1,5 @@
+import { COLORS } from "src/features/40c3/palette";
+
 export const CITIZENS = [
   { id: "mona", name: "Mona", typeKey: "pages.citizenLab.figureTypes.unicorn", bodyId: 0, hairId: 0 },
   { id: "barbara", name: "Barbara", typeKey: "pages.citizenLab.figureTypes.abCollective", bodyId: 1, hairId: 1 },
@@ -13,17 +15,6 @@ export const TAG_FONTS = [
   { value: "\"Jersey 10\", monospace", label: "Jersey 10", file: "/fonts/jersey-10-latin-400-normal.woff2", weight: 400 },
   { value: "Georgia, serif", label: "Georgia" },
 ] as const;
-
-export const COLORS = [
-  "#75b44b",
-  "#15ada3",
-  "#9fa4e8",
-  "#c892d6",
-  "#ee5da2",
-  "#ea6f82",
-  "#f88a30",
-  "#ffbc40",
-];
 
 const firstIds = (count: number) => Array.from({ length: count }, (_, id) => id);
 const toOptions = (ids: readonly number[]) => ids.map((id) => ({ id, number: id + 1 }));
