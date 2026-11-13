@@ -4,7 +4,7 @@ import "src/pages/logo-motion.css";
 
 const VARIANTS = ["ledWall", "assembly", "glitch"] as const;
 
-export const LogoMotion = () => {
+const LogoMotion = () => {
   const { t } = useTranslation();
 
   return (
@@ -17,9 +17,11 @@ export const LogoMotion = () => {
 
       <ul className="logo-motion-grid">
         {VARIANTS.map((variant) => (
-         <VariantCard key={variant} variant={variant} />
+          <VariantCard key={variant} variant={variant} />
         ))}
       </ul>
     </main>
   );
 };
+
+export default LogoMotion;

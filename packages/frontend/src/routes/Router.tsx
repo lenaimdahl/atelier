@@ -3,10 +3,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "src/components/Layout";
 import Books from "src/pages/Books";
 import Home from "src/pages/Home";
-import { LogoMotion } from "src/pages/LogoMotion";
 import { PATHS } from "src/routes/paths";
 
 const CitizenLab = lazy(() => import("src/pages/CitizenLab"));
+const LogoMotion = lazy(() => import("src/pages/LogoMotion"));
 
 export default function Router() {
   return (
@@ -23,7 +23,14 @@ export default function Router() {
               </Suspense>
             }
           />
-          <Route path={PATHS.LOGOMOTION} element={<LogoMotion />} />
+          <Route
+            path={PATHS.LOGOMOTION}
+            element={
+              <Suspense fallback={null}>
+                <LogoMotion />
+              </Suspense>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
