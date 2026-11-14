@@ -9,7 +9,20 @@ export function useP5Sketch(ref: RefObject<HTMLElement | null>, sketch: Sketch) 
     if (!container) {
       return;
     }
-    const instance = new p5((p) => sketch(p, container), container);
-    return () => instance.remove();
+    const cleanup = new AbortController();
+    const instance = new p5((p) => {
+      sketch(p, container);
+      const userSetup = p.setup;
+      p.setup = () => {
+        userSetup?.();
+        if (cleanup.signal.aborted) {
+          void p.remove();
+        }
+      };
+    }, container);
+    return () => {
+      cleanup.abort();
+      void instance.remove();
+    };
   }, [ref, sketch]);
 }

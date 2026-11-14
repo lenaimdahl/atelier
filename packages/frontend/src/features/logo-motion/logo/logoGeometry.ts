@@ -1,14 +1,10 @@
-export interface Fit {
-  scale: number;
-  x: number;
-  y: number;
-}
+type Size = { width: number; height: number };
 
-export function fit([logoWidth, logoHeight]: [number, number], width: number, height: number, padding: number): Fit {
-  const scale = Math.min((width - 2 * padding) / logoWidth, (height - 2 * padding) / logoHeight);
+export function fitLogo(logo: Size, box: Size) {
+  const scale = Math.min(box.width / logo.width, box.height / logo.height) * 0.8;
   return {
     scale,
-    x: (width - logoWidth * scale) / 2,
-    y: (height - logoHeight * scale) / 2,
+    x: (box.width - logo.width * scale) / 2,
+    y: (box.height - logo.height * scale) / 2,
   };
 }
